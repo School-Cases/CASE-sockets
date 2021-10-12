@@ -20,6 +20,7 @@ import {
   create_chatroom,
   update_chatroom,
   delete_chatroom,
+  join_chatroom,
 } from "../Controllers/chatroom-controller";
 import {
   get_message,
@@ -53,6 +54,7 @@ router.get("/get-all-chatrooms", get_all_chatrooms);
 router.post("/create-chatroom", create_chatroom);
 router.post("/update-chatroom/:id", update_chatroom);
 router.get("/delete-chatroom/:id", delete_chatroom);
+router.post("/join-chatroom/:chatroomId/:userId", join_chatroom);
 
 router.get("/get-message/:id", get_message);
 router.get("/get-chatroom-messages/:id", get_chatroom_messages);

@@ -21,6 +21,39 @@ export const get_chatroom = async (req, res) => {
   }
 };
 
+export const join_chatroom = async (req, res) => {
+  const chatroomId = req.params.chatroomId;
+  const userId = req.params.userId;
+  try {
+    let chatroom = await chatroomModel.findByIdAndUpdate(req.params.chatroomId, {
+      $push: {
+        members: await userModel.findById(req.params.userId),
+      },
+    });
+    let user = await userModel.findByIdAndUpdate(req.params.userId, {
+      $push: {
+        chatrooms: await chatroomModel.findById(req.params.chatroomId),
+      },
+    });
+    chatroom.save();
+    user.save();
+
+    // res.redirect()
+
+    return res.json({
+      message: "find chatroom success",
+      success: true,
+      data: chatroom,
+    });
+  } catch (err) {
+    return res.json({
+      message: "find chatroom fail",
+      success: false,
+      data: null,
+    });
+  }
+};
+
 export const get_all_chatrooms = async (req, res) => {
   try {
     let allChatrooms = await chatroomModel.find().exec();
