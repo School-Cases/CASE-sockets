@@ -10,102 +10,155 @@
     min-width: 100%;
     min-height: 100vh;
     background-image: url(../images/Olf-pattern.png), linear-gradient(#F6C658, #FF997D);
-  
-  &.page-dashboard {
-  
-    //   BOTH MOBILE AND DESKTOP
-    .dashboard-con {
-      min-height: 100vh;
 
-      .user-con-avatar {
-        &:after {
-          content: "";
-          background-color: hotpink;
-          width: 1rem;
-          height: 1rem;
-          position: absolute;
-        }
-      }
+    &.page-dashboard {
 
-      .dashboard-con-col2 {
-        .dash-settings-chatrooms {
-          flex-direction: column;
+        //   BOTH MOBILE AND DESKTOP
+        .dashboard-con {
+            min-height: 100vh;
 
-          .col2-chatroom-con {
-            background: linear-gradient(235deg,
-                rgba(7, 109, 255, 1) 25%,
-                rgba(255, 255, 255, 1) 25%);
-          }
-        }
-
-        .dash-home-chatrooms {
-          flex-direction: column;
-
-          .col2-chatroom-con {
-            background: linear-gradient(235deg,
-                rgba(7, 109, 255, 1) 25%,
-                rgba(255, 255, 255, 1) 25%);
-
-            .chatroom-con-title-fav-con {
-              justify-content: space-between;
+            .user-con-avatar {
+                &:after {
+                    content: "";
+                    background-color: hotpink;
+                    width: 1rem;
+                    height: 1rem;
+                    position: absolute;
+                }
             }
-          }
+
+            .dashboard-con-col2 {
+
+                h4 {
+                    display: none;
+                }
+
+                input {
+                    margin-bottom: 1rem;
+                }
+
+                input[type="text"i] {
+                    width: 50%;
+                    border-style: none;
+                    border-radius: 23px;
+                    padding: 0.3rem 0 0.3rem 0.8rem;
+                }
+
+                input[type="text"i]:focus {
+                    outline: none;
+                    color: $greyD;
+                }
+
+                .dash-settings-chatrooms {
+                    flex-direction: column;
+
+                    .col2-chatroom-con {
+                        cursor: pointer;
+                        background: linear-gradient(235deg,
+                                rgba(7, 109, 255, 1) 25%,
+                                rgba(255, 255, 255, 1) 25%);
+                    }
+                }
+
+                .dash-home-chatrooms {
+                    flex-direction: column;
+                    width: 100%;
+
+
+                    .col2-chatroom-con {
+                        cursor: pointer;
+                        border-radius: 23px;
+                        margin-bottom: 1rem;
+                        padding: 1rem 1rem 1rem 1rem;
+                        background: linear-gradient(235deg,
+                                rgba(7, 109, 255, 1) 25%,
+                                rgba(255, 255, 255, 1) 25%);
+
+                        .chatroom-con-title-fav-con {
+                            justify-content: space-between;
+                        }
+                    }
+                }
+            }
+
+            .dashboard-con-col3 {
+                .col3-chat-con {
+                    flex-direction: column;
+                    justify-content: space-between;
+
+                    .chat-con-top {
+                        justify-content: space-between;
+                    }
+
+                    .chat-con-mid {}
+
+                    .chat-con-bot {}
+                }
+            }
         }
-      }
 
-      .dashboard-con-col3 {
-        .col3-chat-con {
-          flex-direction: column;
-          justify-content: space-between;
+        //   ONLY ON WIDTH > MEDIUM (DESKTOP)
+        &.page-dashboard-desktop {
+            .dashboard-con-col1 {
+                flex-direction: column;
+                margin: 3rem 0 0 3rem;
+                border-right: 3px solid white;
 
-          .chat-con-top {
-            justify-content: space-between;
-          }
+                .col1-user-con {
+                    @include font-white-basic;
+                    height: 30%;
+                    flex-direction: column;
+                    justify-content: space-between;
+                }
 
-          .chat-con-mid {
+                .col1-nav-con {
+                    @include font-nav-basic;
+                    cursor: pointer;
 
-          }
+                    height: 70%;
+                    padding-top: 3rem;
+                    flex-direction: column;
+                    gap: 2rem;
 
-          .chat-con-bot {
+                    a {
+                        @include font-nav-basic;
+                        text-decoration: none;
+                        cursor: pointer;
 
-          }
+                    }
+                }
+
+            }
+
+            .dashboard-con-col2 {
+                margin-top: 3rem;
+                margin-left: 2rem;
+                width: 25%;
+                
+                .dash-home-chatrooms {
+                    height: 30rem;
+                    overflow: scroll;
+                    -ms-overflow-style: none;  /* IE and Edge */
+                    scrollbar-width: none;  /* Firefox */
+                }
+
+                .dash-home-chatrooms::-webkit-scrollbar {
+                    display: none;
+                  }
+                
+
+            }
         }
-      }
+
+        //   ONLY ON WIDTH < MEDIUM (MOBILE)
+        &.page-dashboard-mobile {
+            .dashboard-con-col1 {
+                height: 20vh;
+            }
+
+            .dashboard-con-col2 {
+                height: 80vh;
+            }
+        }
     }
-
-    //   ONLY ON WIDTH > MEDIUM (DESKTOP)
-    &.page-dashboard-desktop {
-      .dashboard-con-col1 {
-        flex-direction: column;
-
-        .col1-user-con {
-          height: 30%;
-          flex-direction: column;
-          justify-content: space-between;
-        }
-
-        .col1-nav-con {
-          height: 70%;
-          padding-top: 3rem;
-          flex-direction: column;
-          gap: 2rem;
-        }
-      }
-
-      .dashboard-con-col2 {
-
-      }
-    }
-
-    //   ONLY ON WIDTH < MEDIUM (MOBILE)
-    &.page-dashboard-mobile {
-      .dashboard-con-col1 {
-        height: 20vh;
-      }
-
-      .dashboard-con-col2 {
-        height: 80vh;
-      }
-    }
-  }
 }

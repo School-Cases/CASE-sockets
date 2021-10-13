@@ -9,7 +9,7 @@ export const Nav = ({ setDashboardNavState }) => {
           setDashboardNavState("home");
         }}
       >
-        <span>icon</span> home
+        <span>icon</span> HOME
       </div>
       <div
         className="nav-con-li"
@@ -17,11 +17,12 @@ export const Nav = ({ setDashboardNavState }) => {
           setDashboardNavState("settings");
         }}
       >
-        <span>icon</span>settings
+        <span>icon</span>SETTINGS
       </div>
       <a href={api_address + "/user-logout"} className="nav-con-li">
-        <span>icon</span>log out
+        <span>icon</span>LOG OUT
       </a>
     </section>
   );
 };
+

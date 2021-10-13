@@ -9,6 +9,22 @@
     font-family: lato, sans-serif;
 }
 
+// olf white basic
+@mixin font-white-basic {
+    color: $white;
+    font-size: 20px;
+    font-family: lato, sans-serif;
+    letter-spacing: 1px;
+}
+
+// olf nav
+@mixin font-nav-basic {
+    color: $white;
+    font-size: 20px;
+    font-family: lato, sans-serif;
+    letter-spacing: 3px;
+}
+
 // olf red basic
 
 // olf header 1
@@ -17,6 +33,7 @@
     font-size: 30px;
     font-family: lato, sans-serif;
     font-weight: 900;
+    letter-spacing: 1px;
 }
    
 // grey text
