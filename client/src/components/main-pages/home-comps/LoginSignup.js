@@ -11,8 +11,8 @@ export const LoginSignup = ({
   console.log(passwordInput, usernameInput);
   let loginSingupTexts =
     loginSignup === "login"
-      ? ["Log in", "Dont have account?", "Sign up"]
-      : ["Sign up", "By singing up you agree osvosv", "terms and conditions"];
+      ? ["Log in", "Dont have account? ", "Sign up"]
+      : ["Sign up", "By singing up you agree osvosv ", "terms and conditions"];
 
   const signupOrTermsCond = () => {
     loginSignup === "login"

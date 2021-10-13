@@ -1,0 +1,27 @@
+@import "./colours.scss";
+@import url("https://use.typekit.net/rdr3hkg.css");
+@import url("https://use.typekit.net/rdr3hkg.css");
+
+@mixin button-large-red {
+    background-color: $olfred;
+    border-style: none;
+    padding: 10px 15px 10px 15px;
+    border-radius: 23px;
+    color: $white;
+    font-family: lato, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 22px;
+}
+
+@mixin button-large-white {
+    background-color: $white;
+    border-style: none;
+    padding: 10px 15px 10px 15px;
+    border-radius: 23px;
+    color: $olfred;
+    font-family: lato, sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 22px;
+}

@@ -1,0 +1,27 @@
+@import "./colours.scss";
+@import url("https://use.typekit.net/rdr3hkg.css");
+@import url("https://use.typekit.net/rdr3hkg.css");
+
+// olf yellow basic
+@mixin font-yellow-basic {
+    color: $olfYellowD;
+    font-size: 20px;
+    font-family: lato, sans-serif;
+}
+
+// olf red basic
+
+// olf header 1
+@mixin olf-header-1 {
+    color: $olfred;
+    font-size: 30px;
+    font-family: lato, sans-serif;
+    font-weight: 900;
+}
+   
+// grey text
+@mixin grey-text {
+    color: $greyM;
+    font-size: 17px;
+    font-family: lato, sans-serif;
+}
