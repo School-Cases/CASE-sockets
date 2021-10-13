@@ -43,6 +43,7 @@ export const get_all_users = async (req, res) => {
 };
 
 export const create_user = async (req, res) => {
+  console.log(req);
   try {
     if (
       await userModel.findOne({
@@ -155,6 +156,8 @@ export const user_login = async (req, res) => {
       console.log("no user");
       return res.redirect(clientAddress);
     }
+    console.log(user, "user");
+    console.log(user._id, "userid");
 
     // json web token
     // authzero PRIO
@@ -174,11 +177,12 @@ export const user_login = async (req, res) => {
             ? req.body.theme
             : user.theme,
       });
-      req.session.regenerate((error) => {
-        req.session.user = user;
-        return res.redirect(clientAddress + "/dashboard/" + user._id);
-      });
+      // req.session.regenerate((error) => {
+      //   req.session.user = user;
+      //   return res.redirect(clientAddress + "/dashboard/" + user._id);
+      // });
       console.log("correct password");
+      return res.redirect(clientAddress + "/dashboard/" + user._id);
     } else {
       req.session.message = {
         msg: true,

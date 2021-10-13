@@ -1,4 +1,4 @@
-import { address, post } from "../../../utils/http";
+import { address, post, get } from "../../../utils/http";
 
 export const LoginSignup = ({
   loginSignup,
@@ -11,8 +11,8 @@ export const LoginSignup = ({
   console.log(passwordInput, usernameInput);
   let loginSingupTexts =
     loginSignup === "login"
-      ? ["Log in", "Dont have account?", "Sign up"]
-      : ["Sign up", "By singing up you agree osvosv", "terms and conditions"];
+      ? ["Log in", "Dont have account? ", "Sign up"]
+      : ["Sign up", "By singing up you agree osvosv ", "terms and conditions"];
 
   const signupOrTermsCond = () => {
     loginSignup === "login"
@@ -22,18 +22,25 @@ export const LoginSignup = ({
 
   const submitFetch = async (btnState) => {
     // const abortController = new AbortController();
-    // btnState === "login"
-    //   ? await post(`/user-login`, {
-    //       name: "as",
-    //       password: "as",
-    //       avatar: avatar[0],
-    //       avatarChange: avatar[1],
-    //       theme: theme[0],
-    //       themeChange: theme[1],
-    //     })
-    //   : await post(`/create-user`);
+    btnState === "login"
+      ? await post(`/user-login`, {
+          name: usernameInput,
+          password: passwordInput,
+          avatar: avatar[0],
+          avatarChange: avatar[1],
+          theme: theme[0],
+          themeChange: theme[1],
+        })
+      : await post(`/create-user`, {
+          name: usernameInput,
+          password: passwordInput,
+          avatar: avatar[0],
+          // avatarChange: avatar[1],
+          theme: theme[0],
+          // themeChange: theme[1],
+        });
     // return () => abortController.abort();
-    document.querySelector(".login-con-form-userpass").submit();
+    // document.querySelector(".login-con-form-userpass").submit();
   };
 
   return (
@@ -41,8 +48,8 @@ export const LoginSignup = ({
       <button
         type="button"
         className="center login-btn"
-        // onClick={() => submitFetch(loginSignup)}
-        onClick={() => submitFetch()}
+        onClick={() => submitFetch(loginSignup)}
+        // onClick={() => submitFetch()}
       >
         {loginSingupTexts[0]}
       </button>

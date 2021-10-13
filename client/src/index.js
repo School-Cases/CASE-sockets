@@ -8,15 +8,15 @@ import reportWebVitals from "./reportWebVitals";
 import { client_address } from "../src/utils/http";
 
 ReactDOM.render(
-  <Auth0Provider
-    domain="dev-p2j2vhsk.eu.auth0.com"
-    clientId="2wJquhgDeDOaQKIPbnacTIYdsiJ54ncD"
-    redirectUri={window.location.origin}
-  >
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </Auth0Provider>,
+  // <Auth0Provider
+  //   domain="dev-p2j2vhsk.eu.auth0.com"
+  //   clientId="2wJquhgDeDOaQKIPbnacTIYdsiJ54ncD"
+  //   redirectUri={window.location.origin}
+  // >
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+  // </Auth0Provider>,
   document.getElementById("root")
 );
 

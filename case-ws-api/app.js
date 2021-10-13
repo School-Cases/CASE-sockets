@@ -55,6 +55,7 @@ app.use("/", index);
 
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
+// const wss = new WebSocketServer({ noServer: true });
 
 function emitMessage(data, isBinary) {
   wss.clients.forEach(function each(client) {
