@@ -47,13 +47,11 @@ export const PageDashboard = () => {
 
   const fetchUser = async (signal) => {
     let res = await get(`/get-user/${userId}`, signal);
-    console.log(res.data);
     setUser(res.data);
   };
 
   const fetchMessages = async (signal) => {
     let res = await get(`/get-chatroom-messages/` + activeChatroom._id, signal);
-    console.log(res.data);
     // setChatroomMessages(res.data);
     setMessages(res.data);
     // setLoading(false);
@@ -90,12 +88,14 @@ export const PageDashboard = () => {
 
     ws.onmessage = async (e) => {
       const message = JSON.parse(e.data);
+      console.log(message);
       if (user._id === message.sender) {
         await post(`/create-message`, message);
       }
 
-      // console.log(res);
-      setMessages([...messages, message]);
+      if (message.chatroom === activeChatroom._id) {
+        setMessages([...messages, message]);
+      }
     };
 
     return () => {

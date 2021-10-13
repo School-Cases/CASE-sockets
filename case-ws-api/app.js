@@ -65,6 +65,7 @@ function emitMessage(data, isBinary) {
 }
 
 wss.on("connection", (ws) => {
+  // console.log(ws);
   console.log("Client connected from IP: ", ws._socket.remoteAddress);
   console.log("Number of connected clients: ", wss.clients.size);
 
