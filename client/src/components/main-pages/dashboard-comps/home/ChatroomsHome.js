@@ -1,4 +1,5 @@
-import { api_address, post } from "../../../../utils/http";
+import { useEffect, useState } from "react";
+import { api_address, post, get } from "../../../../utils/http";
 
 export const ChatroomsHome = ({
   user,
@@ -45,6 +46,38 @@ export const ChatroomsHome = ({
 };
 
 const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
+  const [lastMessage, setLastMessage] = useState({});
+  const [lastMessageSender, setLastMessageSender] = useState({});
+
+  const [loading, setLoading] = useState(true);
+
+  const fetchLastMessage = async (signal) => {
+    let lastMessage = await get(`/get-message/${room.messages.at(-1)}`, signal);
+
+    setLastMessage(lastMessage.data);
+
+    if (lastMessage.data !== null) {
+      let lastMessageSenderFetch = await get(
+        `/get-user/${lastMessage.data.sender}`,
+        signal
+      );
+      setLastMessageSender(lastMessageSenderFetch.data);
+    }
+    setLoading(false);
+  };
+
+  useEffect(async () => {
+    const abortController = new AbortController();
+    await fetchLastMessage(abortController.signal);
+    return () => abortController.abort();
+  }, []);
+
+  if (loading) {
+    <h4>loading ...</h4>;
+  }
+
+  console.log(lastMessage);
+
   return (
     <section
       className="col2-chatroom-con"
@@ -56,7 +89,19 @@ const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
         <h5>{room.name}</h5>
         <div className="title-fav-con-fav">O</div>
       </div>
-      <div className="chatroom-con-mes">latest message</div>
+      {lastMessage !== null ? (
+        <div className="flex chatroom-con-mes">
+          <div>{lastMessageSender.avatar}</div>
+
+          <div>
+            <div>{lastMessage.text}</div>
+            <div>{lastMessage.time}</div>
+          </div>
+        </div>
+      ) : (
+        <div>no messages</div>
+      )}
+
       {joinable === "joinable" ? (
         <button
           onClick={async () => {
