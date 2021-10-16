@@ -46,7 +46,7 @@ export const PageHome = () => {
               className="col-nopad"
             >
               <section className="flex height100 login-con-form-btn">
-                {/* <form
+                <form
                   action={
                     loginSignup === "login"
                       ? api_address + "/user-login"
@@ -54,13 +54,13 @@ export const PageHome = () => {
                   }
                   method="post"
                   className="flex login-con-form-userpass"
-                > */}
-                <form className="flex login-con-form-userpass">
+                >
+                  {/* <form className="flex login-con-form-userpass"> */}
                   <label htmlFor="name">username:</label>
                   <input
                     type="text"
-                    // name="name"
-                    // id="name"
+                    name="name"
+                    id="name"
                     placeholder="haakon1337"
                     onChange={(e) => setUsernameInput(e.target.value)}
                     // onInput={(e) => console.log(e.target.value)}
@@ -68,8 +68,8 @@ export const PageHome = () => {
                   <label htmlFor="password">password:</label>
                   <input
                     type="password"
-                    // name="password"
-                    // id="password"
+                    name="password"
+                    id="password"
                     placeholder="pAssword123!"
                     onChange={(e) => setPasswordInput(e.target.value)}
                   />

@@ -15,6 +15,7 @@ import { ChatroomsSettings } from "./dashboard-comps/settings/ChatroomsSettings"
 import { UserSettings } from "./dashboard-comps/settings/UserSettings";
 import { Nav } from "./dashboard-comps/Nav";
 import { UserAvatar } from "./dashboard-comps/UserAvatar";
+import { SearchChatrooms } from "./dashboard-comps/SearchChatrooms";
 
 export const PageDashboard = () => {
   const [ws, setWs] = useState(
@@ -150,7 +151,7 @@ export const PageDashboard = () => {
         >
           <h4>Chatrooms</h4>
 
-          <input
+          {/* <input
             type="text"
             name=""
             id=""
@@ -158,6 +159,9 @@ export const PageDashboard = () => {
             onInput={(e) => setSearchChatrooms(e.target.value)}
           />
 
+          <label htmlFor="searchJoinableChatroomsCheckbox">
+            search joinable rooms:
+          </label>
           <input
             type="checkbox"
             name="searchJoinableChatroomsCheckbox"
@@ -165,6 +169,13 @@ export const PageDashboard = () => {
             onChange={(e) =>
               setSearchJoinableChatroomsCheckbox(e.target.checked)
             }
+          /> */}
+
+          <SearchChatrooms
+            setSearchChatrooms={setSearchChatrooms}
+            setCheckbox={setSearchJoinableChatroomsCheckbox}
+            checkbox={searchJoinableChatroomsCheckbox}
+            page={dashboardNavState}
           />
 
           {dashboardNavState === "home" ? (

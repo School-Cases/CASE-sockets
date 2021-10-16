@@ -18,7 +18,7 @@ export const get = async (endpoint, signal) => {
 export const post = async (endpoint, data) => {
   return await fetch(api_address + endpoint, {
     method: "POST",
-    mode: "no-cors",
+    // mode: "no-cors",
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",

@@ -22,25 +22,25 @@ export const LoginSignup = ({
 
   const submitFetch = async (btnState) => {
     // const abortController = new AbortController();
-    btnState === "login"
-      ? await post(`/user-login`, {
-          name: usernameInput,
-          password: passwordInput,
-          avatar: avatar[0],
-          avatarChange: avatar[1],
-          theme: theme[0],
-          themeChange: theme[1],
-        })
-      : await post(`/create-user`, {
-          name: usernameInput,
-          password: passwordInput,
-          avatar: avatar[0],
-          // avatarChange: avatar[1],
-          theme: theme[0],
-          // themeChange: theme[1],
-        });
+    // btnState === "login"
+    //   ? await post(`/user-login`, {
+    //       name: usernameInput,
+    //       password: passwordInput,
+    //       avatar: avatar[0],
+    //       avatarChange: avatar[1],
+    //       theme: theme[0],
+    //       themeChange: theme[1],
+    //     })
+    //   : await post(`/create-user`, {
+    //       name: usernameInput,
+    //       password: passwordInput,
+    //       avatar: avatar[0],
+    //       // avatarChange: avatar[1],
+    //       theme: theme[0],
+    //       // themeChange: theme[1],
+    //     });
     // return () => abortController.abort();
-    // document.querySelector(".login-con-form-userpass").submit();
+    document.querySelector(".login-con-form-userpass").submit();
   };
 
   return (

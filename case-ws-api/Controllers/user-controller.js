@@ -96,19 +96,47 @@ export const create_user = async (req, res) => {
 };
 
 export const update_user = async (req, res) => {
+  console.log(req.body);
   const id = req.params.id;
+  let user = await userModel.findById(id).exec();
+  console.log(user);
+
+  let changePassword = false;
+  let hashedPassword;
+  if (req.body.newPassword !== "") {
+    const correctPassword = await bcrypt.compare(
+      req.body.currentPassword,
+      user.password
+    );
+
+    if (correctPassword) {
+      console.log("currentPassword är korrekt");
+      changePassword = true;
+      const salt = await bcrypt.genSalt(10);
+      hashedPassword = await bcrypt.hash(req.body.newPassword, salt);
+    } else {
+      console.log("currentPassword är fel");
+      return res.json({
+        message: "wrong current password",
+        success: false,
+        data: null,
+      });
+    }
+  }
   try {
     await userModel.findByIdAndUpdate(id, {
       name: req.body.name,
-      password: req.body.password,
+      password: changePassword ? hashedPassword : user.password,
       avatar: req.body.avatar,
       theme: req.body.theme,
     });
-    return res.json({
-      message: "update user success",
-      success: true,
-      data: null,
-    });
+
+    return res.redirect("/dashboard/" + user._id);
+    // return res.json({
+    //   message: "update user success",
+    //   success: true,
+    //   data: null,
+    // });
   } catch (err) {
     return res.json({
       message: "update user failed",
