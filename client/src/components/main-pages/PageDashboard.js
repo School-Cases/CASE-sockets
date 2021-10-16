@@ -16,6 +16,7 @@ import { UserSettings } from "./dashboard-comps/settings/UserSettings";
 import { Nav } from "./dashboard-comps/Nav";
 import { UserAvatar } from "./dashboard-comps/UserAvatar";
 import { SearchChatrooms } from "./dashboard-comps/SearchChatrooms";
+import { PageSettings } from "./dashboard-comps/PageSettings";
 
 export const PageDashboard = () => {
   const [ws, setWs] = useState(
@@ -132,53 +133,45 @@ export const PageDashboard = () => {
           : "page-dashboard-desktop"
       }`}
     >
-      <Row className="dashboard-con">
-        <Col
-          lg={{ span: 2, order: 1 }}
-          md={{ span: 2, order: 1 }}
-          xs={{ span: 12, order: 1 }}
-          className="flex dashboard-con-col1"
-        >
-          <UserAvatar user={user} />
+      {dashboardNavState === "settings" ? (
+        <PageSettings
+          setSearchChatrooms={setSearchChatrooms}
+          setDashboardNavState={setDashboardNavState}
+          dashboardNavState={dashboardNavState}
+          userChatrooms={userChatrooms}
+          searchChatrooms={searchChatrooms}
+          user={user}
+        />
+      ) : (
+        <Row className="dashboard-con">
+          <Col
+            lg={{ span: 2, order: 1 }}
+            md={{ span: 2, order: 1 }}
+            xs={{ span: 12, order: 1 }}
+            className="flex dashboard-con-col1"
+          >
+            <UserAvatar user={user} />
+            <Nav
+              setDashboardNavState={setDashboardNavState}
+              dashboardNavState={dashboardNavState}
+            />
+          </Col>
 
-          <Nav setDashboardNavState={setDashboardNavState} />
-        </Col>
-        <Col
-          lg={{ span: 4, order: 2 }}
-          md={{ span: 4, order: 2 }}
-          xs={{ span: 12, order: 2 }}
-          className="dashboard-con-col2"
-        >
-          <h4>Chatrooms</h4>
+          <Col
+            lg={{ span: 4, order: 2 }}
+            md={{ span: 4, order: 2 }}
+            xs={{ span: 12, order: 2 }}
+            className="dashboard-con-col2"
+          >
+            <h4>Chatrooms</h4>
 
-          {/* <input
-            type="text"
-            name=""
-            id=""
-            placeholder="search chatrooms"
-            onInput={(e) => setSearchChatrooms(e.target.value)}
-          />
+            <SearchChatrooms
+              setSearchChatrooms={setSearchChatrooms}
+              setCheckbox={setSearchJoinableChatroomsCheckbox}
+              checkbox={searchJoinableChatroomsCheckbox}
+              page={dashboardNavState}
+            />
 
-          <label htmlFor="searchJoinableChatroomsCheckbox">
-            search joinable rooms:
-          </label>
-          <input
-            type="checkbox"
-            name="searchJoinableChatroomsCheckbox"
-            id=""
-            onChange={(e) =>
-              setSearchJoinableChatroomsCheckbox(e.target.checked)
-            }
-          /> */}
-
-          <SearchChatrooms
-            setSearchChatrooms={setSearchChatrooms}
-            setCheckbox={setSearchJoinableChatroomsCheckbox}
-            checkbox={searchJoinableChatroomsCheckbox}
-            page={dashboardNavState}
-          />
-
-          {dashboardNavState === "home" ? (
             <ChatroomsHome
               user={user}
               userChatrooms={userChatrooms}
@@ -186,23 +179,15 @@ export const PageDashboard = () => {
               searchChatrooms={searchChatrooms}
               setActiveChatroom={setActiveChatroom}
               searchJoinableChatroomsCheckbox={searchJoinableChatroomsCheckbox}
-              // fetchMessages={fetchMessages}
             />
-          ) : (
-            <ChatroomsSettings
-              userChatrooms={userChatrooms}
-              searchChatrooms={searchChatrooms}
-            />
-          )}
-        </Col>
-        {W > breakpoints.medium ? (
-          <Col
-            lg={{ span: 6, order: 3 }}
-            md={{ span: 6, order: 3 }}
-            xs={{ span: 12, order: 3 }}
-            className="dashboard-con-col3"
-          >
-            {dashboardNavState === "home" ? (
+          </Col>
+          {W > breakpoints.medium ? (
+            <Col
+              lg={{ span: 6, order: 3 }}
+              md={{ span: 6, order: 3 }}
+              xs={{ span: 12, order: 3 }}
+              className="dashboard-con-col3"
+            >
               <ChatHome
                 user={user}
                 activeChatroom={activeChatroom}
@@ -212,12 +197,10 @@ export const PageDashboard = () => {
                 messages={messages}
                 setMessages={setMessages}
               />
-            ) : (
-              <UserSettings user={user} />
-            )}
-          </Col>
-        ) : null}
-      </Row>
+            </Col>
+          ) : null}
+        </Row>
+      )}
     </Container>
   );
 };
