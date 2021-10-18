@@ -58,7 +58,7 @@ const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
 
     if (lastMessage.data !== null) {
       let lastMessageSenderFetch = await get(
-        `/get-user/${lastMessage.data.sender}`,
+        `/protected/get-user/${lastMessage.data.sender}`,
         signal
       );
       setLastMessageSender(lastMessageSenderFetch.data);
@@ -66,51 +66,59 @@ const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
     setLoading(false);
   };
 
-  useEffect(async () => {
-    const abortController = new AbortController();
-    await fetchLastMessage(abortController.signal);
-    return () => abortController.abort();
-  }, []);
-
   if (loading) {
     <h4>loading ...</h4>;
   }
 
   console.log(lastMessage);
 
+  useEffect(async () => {
+    if (joinable === "notJoinable") {
+      const abortController = new AbortController();
+      await fetchLastMessage(abortController.signal);
+      return () => abortController.abort();
+    }
+  }, []);
   return (
-    <section
-      className="col2-chatroom-con"
-      onClick={() => {
-        setActiveChatroom(room);
-      }}
-    >
-      <div className="flex chatroom-con-title-fav-con">
-        <h5>{room.name}</h5>
-        <div className="title-fav-con-fav">O</div>
-      </div>
-      {lastMessage !== null ? (
-        <div className="flex chatroom-con-mes">
-          <div>{lastMessageSender.avatar}</div>
-
-          <div>
-            <div>{lastMessage.text}</div>
-            <div>{lastMessage.time}</div>
-          </div>
-        </div>
-      ) : (
-        <div>no messages</div>
-      )}
-
-      {joinable === "joinable" ? (
-        <button
-          onClick={async () => {
-            await post(`/join-chatroom/${room._id}/${user._id}`);
+    <section>
+      {joinable === "notJoinable" ? (
+        <section
+          className="col2-chatroom-con"
+          onClick={() => {
+            setActiveChatroom(room);
           }}
         >
-          join
-        </button>
-      ) : null}
+          <div className="flex chatroom-con-title-fav-con">
+            <h5>{room.name}</h5>
+            <div className="title-fav-con-fav">O</div>
+          </div>
+          {lastMessage !== null ? (
+            <div className="flex chatroom-con-mes">
+              <div>{lastMessageSender.avatar}</div>
+
+              <div>
+                <div>{lastMessage.text}</div>
+                <div>{lastMessage.time}</div>
+              </div>
+            </div>
+          ) : (
+            <div>no messages</div>
+          )}
+        </section>
+      ) : (
+        <section className="col2-chatroom-con">
+          <div className="flex chatroom-con-title-fav-con">
+            <h5>{room.name}</h5>
+          </div>
+          <button
+            onClick={async () => {
+              await post(`/join-chatroom/${room._id}/${user._id}`);
+            }}
+          >
+            join
+          </button>
+        </section>
+      )}
     </section>
   );
 };

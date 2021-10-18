@@ -29,7 +29,7 @@ export const PageDashboard = () => {
   const [messages, setMessages] = useState([]);
 
   const [W, setW] = useState(window.innerWidth);
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState({});
 
   const [loading, setLoading] = useState(true);
 
@@ -45,11 +45,15 @@ export const PageDashboard = () => {
   const [searchJoinableChatroomsCheckbox, setSearchJoinableChatroomsCheckbox] =
     useState(false);
 
-  let userId = useParams().id;
+  // let userId = useParams().id;
 
   const fetchUser = async (signal) => {
-    let res = await get(`/get-user/${userId}`, signal);
+    let res = await get(`/protected/get-user`, signal);
     setUser(res.data);
+    console.log(res.data, "user");
+
+    await fetchChatrooms(signal);
+    setLoading(false);
   };
 
   const fetchMessages = async (signal) => {
@@ -62,19 +66,26 @@ export const PageDashboard = () => {
   const fetchChatrooms = async (signal) => {
     let res = await get(`/get-all-chatrooms`, signal);
     console.log(res.data);
+    console.log(user);
+
+    console.log(
+      res.data.filter((chat) => chat.members.includes(user._id)),
+      "hehe"
+    );
 
     setAllChatrooms(res.data);
-    setUserChatrooms(res.data.filter((chat) => chat.members.includes(userId)));
+    setUserChatrooms(
+      res.data.filter((chat) => chat.members.includes(user._id))
+    );
 
     setJoinableChatrooms(
-      res.data.filter((chat) => !chat.members.includes(userId))
+      res.data.filter((chat) => !chat.members.includes(user._id))
     );
     // setActiveChatroom(
     //   res.data.filter((chat) => chat.members.includes(userId))[0]
     // );
 
-    fetchUser();
-    setLoading(false);
+    // fetchUser();
   };
 
   // useEffect(async () => {
@@ -117,7 +128,7 @@ export const PageDashboard = () => {
 
   useEffect(async () => {
     const abortController = new AbortController();
-    await fetchChatrooms(abortController.signal);
+    await fetchUser(abortController.signal);
     return () => abortController.abort();
   }, []);
 

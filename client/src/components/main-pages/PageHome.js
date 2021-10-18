@@ -46,15 +46,7 @@ export const PageHome = () => {
               className="col-nopad"
             >
               <section className="flex height100 login-con-form-btn">
-                <form
-                  action={
-                    loginSignup === "login"
-                      ? api_address + "/user-login"
-                      : api_address + "/create-user"
-                  }
-                  method="post"
-                  className="flex login-con-form-userpass"
-                >
+                <div className="flex login-con-form-userpass">
                   {/* <form className="flex login-con-form-userpass"> */}
                   <label htmlFor="name">username:</label>
                   <input
@@ -88,7 +80,7 @@ export const PageHome = () => {
                     hidden
                   />
                   {/* </form> */}
-                </form>
+                </div>
 
                 {W > breakpoints.medium ? (
                   <LoginSignup
@@ -161,6 +153,10 @@ export const PageHome = () => {
         <LoginSignup
           loginSignup={loginSignup}
           setLoginSignup={setLoginSignup}
+          usernameInput={usernameInput}
+          passwordInput={passwordInput}
+          theme={theme}
+          avatar={avatar}
         />
       ) : null}
     </Container>

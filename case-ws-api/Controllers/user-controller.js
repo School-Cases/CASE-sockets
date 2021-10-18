@@ -2,12 +2,30 @@
 
 import bcrypt from "bcrypt";
 import session from "express-session";
-
+import jwt from "jsonwebtoken";
 import { userModel } from "../Models/user-model";
 
 import { clientAddress } from "../utils/address";
 
 export const get_user = async (req, res) => {
+  try {
+    const id = req.headers["userId"];
+    let user = await userModel.findById(id).exec();
+    return res.json({
+      message: "find user success",
+      success: true,
+      data: user,
+    });
+  } catch (err) {
+    return res.json({
+      message: "find user fail" + err,
+      success: false,
+      data: null,
+    });
+  }
+};
+
+export const get_user_byId = async (req, res) => {
   try {
     const id = req.params.id;
     let user = await userModel.findById(id).exec();
@@ -131,12 +149,12 @@ export const update_user = async (req, res) => {
       theme: req.body.theme,
     });
 
-    return res.redirect("/dashboard/" + user._id);
-    // return res.json({
-    //   message: "update user success",
-    //   success: true,
-    //   data: null,
-    // });
+    // return res.redirect("/dashboard/" + user._id);
+    return res.json({
+      message: "update user success",
+      success: true,
+      data: null,
+    });
   } catch (err) {
     return res.json({
       message: "update user failed",
@@ -170,30 +188,27 @@ export const delete_all_users = async (req, res) => {
 };
 
 export const user_login = async (req, res) => {
-  console.log(req.body, "changeAva");
+  console.log(req.body);
+
   try {
     const user = await userModel.findOne({
       name: req.body.name,
     });
-    if (!user) {
-      req.session.message = {
-        msg: true,
-        type: "Fail",
-        message: "Cant find user: " + req.body.name,
-      };
-      console.log("no user");
-      return res.redirect(clientAddress);
-    }
+    if (!user)
+      return res.json({
+        message: "no user found",
+        success: false,
+        data: null,
+      });
+
     console.log(user, "user");
     console.log(user._id, "userid");
-
-    // json web token
-    // authzero PRIO
 
     const correctPassword = await bcrypt.compare(
       req.body.password,
       user.password
     );
+
     if (correctPassword) {
       await userModel.findByIdAndUpdate(user._id, {
         avatar:
@@ -205,20 +220,20 @@ export const user_login = async (req, res) => {
             ? req.body.theme
             : user.theme,
       });
-      // req.session.regenerate((error) => {
-      //   req.session.user = user;
-      //   return res.redirect(clientAddress + "/dashboard/" + user._id);
-      // });
-      console.log("correct password");
-      return res.redirect(clientAddress + "/dashboard/" + user._id);
+
+      const token = jwt.sign({ _id: user._id }, "hemlighet");
+
+      return res.json({
+        message: "login success",
+        success: true,
+        data: token,
+      });
     } else {
-      req.session.message = {
-        msg: true,
-        type: "Fail",
-        message: "Wrong password",
-      };
-      console.log("wrong password");
-      res.redirect(clientAddress);
+      return res.json({
+        message: "user failed",
+        success: false,
+        data: null,
+      });
     }
 
     // return res.json({

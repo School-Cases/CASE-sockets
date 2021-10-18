@@ -11,16 +11,17 @@ export const UserSettings = ({ user }) => {
   const [currentPassword, setCurrentPassword] = useState("");
 
   const fetchUpdateUser = async () => {
-    await post(`/update-user/${user._id}`, {
+    let res = await post(`/update-user/${user._id}`, {
       name: name,
       newPassword: newPassword,
       currentPassword: currentPassword,
       avatar: avatar,
       theme: theme,
     });
+    console.log(res);
   };
   return (
-    <form>
+    <div>
       <div className="user-settings-input-con">
         <label htmlFor="name">Name:</label>
         <input
@@ -61,9 +62,7 @@ export const UserSettings = ({ user }) => {
         <div onClick={() => setTheme(0)}>theme img1</div>
         <div onClick={() => setTheme(1)}>theme img2</div>
       </div>
-      <button type="submit" onClick={() => fetchUpdateUser()}>
-        save
-      </button>
-    </form>
+      <button onClick={() => fetchUpdateUser()}>save</button>
+    </div>
   );
 };

@@ -62,6 +62,7 @@ export const PageSettings = ({
           page={dashboardNavState}
         />
         <ChatroomsSettings
+          user={user}
           userChatrooms={userChatrooms}
           searchChatrooms={searchChatrooms}
         />

@@ -1,26 +1,62 @@
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { GuardProvider, GuardedRoute } from "react-router-guards";
 
 import { PageHome } from "./components/main-pages/PageHome";
 import { PageDashboard } from "./components/main-pages/PageDashboard";
 
 import { parse } from "./utils/parse";
 
+import { get } from "./utils/http";
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style/temp.scss";
+
+const requireLogin = async (to, from, next) => {
+  const res = await get("/logged-in");
+
+  console.log(res);
+
+  if (to.meta.auth === undefined) return next();
+  if (to.meta.auth && !res.data) return next.redirect("/");
+  if (!to.meta.auth && res.data) return next.redirect("/dashboard");
+
+  return next();
+};
+
+const Loading = () => {
+  return <p>Loading...</p>;
+};
+
+const NotFound = () => {
+  return <p>Not Found</p>;
+};
 
 function App() {
   return (
     <div className="App">
-      <Router>
-        <div>
+      <BrowserRouter>
+        <GuardProvider
+          guards={[requireLogin]}
+          loading={Loading}
+          error={NotFound}
+        >
           <Switch>
-            <Route path="/" component={PageHome} exact />
-            {/* <Route path="/login" component={Login} exact />
-            <Route path="/signup" component={Signup} exact /> */}
-            <Route path="/dashboard/:id" component={PageDashboard} exact />
+            <GuardedRoute
+              path="/"
+              exact
+              component={PageHome}
+              meta={{ auth: false }}
+            />
+            <GuardedRoute
+              path="/dashboard"
+              exact
+              component={PageDashboard}
+              meta={{ auth: true }}
+            />
+            <GuardedRoute path="*" component={NotFound} />
           </Switch>
-        </div>
-      </Router>
+        </GuardProvider>
+      </BrowserRouter>
     </div>
   );
 }
