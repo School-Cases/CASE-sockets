@@ -85,14 +85,46 @@
                 .col3-chat-con {
                     flex-direction: column;
                     justify-content: space-between;
+                    background-color: white;
+                    border-radius: 23px;
+                    margin: 3rem 0 0 0;
+                    height: 85%;
+                    padding: 1.5rem;
 
                     .chat-con-top {
                         justify-content: space-between;
                     }
 
-                    .chat-con-mid {}
+                    .chat-con-mid {
+                    }
 
                     .chat-con-bot {}
+                }
+                .send-message-con {
+                    width: 100%;
+                    justify-content: space-between;
+
+                    input {
+                        background-color: $greyL;
+                        border-radius: 23px;
+                        border: none;
+                        padding: 0.5rem 0 0.5rem 1rem;
+                        width: 90%;
+                        color: $greyD;
+                    }
+
+                    input:focus {
+                        outline: none;
+                        color: $greyD;
+                    }
+
+                    button {
+                        border-radius: 23px;
+                        border: none;
+                        background-color: $olfred;
+                        padding: 0.5rem;
+                    }
+
                 }
             }
         }

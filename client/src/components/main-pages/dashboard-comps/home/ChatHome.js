@@ -103,7 +103,7 @@ export const ChatHome = ({
           : null} */}
       </section>
       <section className="chat-con-bot">
-        <div>
+        <div className="flex send-message-con">
           <input
             placeholder="write message"
             value={message}
