@@ -41,6 +41,7 @@
                     width: 50%;
                     border-style: none;
                     border-radius: 23px;
+                    box-shadow: 0px 3px 6px #00000029;
                     padding: 0.3rem 0 0.3rem 0.8rem;
                 }
 
@@ -55,7 +56,7 @@
                     .col2-chatroom-con {
                         cursor: pointer;
                         background: linear-gradient(235deg,
-                                rgba(7, 109, 255, 1) 25%,
+                                $blueC 25%,
                                 rgba(255, 255, 255, 1) 25%);
                     }
                 }
@@ -70,12 +71,17 @@
                         border-radius: 23px;
                         margin-bottom: 1rem;
                         padding: 1rem 1rem 1rem 1rem;
+                        box-shadow: 0px 3px 6px #00000029;
                         background: linear-gradient(235deg,
-                                rgba(7, 109, 255, 1) 25%,
+                                $blueC 25%,
                                 rgba(255, 255, 255, 1) 25%);
 
                         .chatroom-con-title-fav-con {
                             justify-content: space-between;
+
+                            h5 {
+                                @include olf-header-2
+                            }
                         }
                     }
                 }
@@ -86,6 +92,7 @@
                     flex-direction: column;
                     justify-content: space-between;
                     background-color: white;
+                    box-shadow: 0px 3px 6px #00000029;
                     border-radius: 23px;
                     margin: 3rem 0 0 0;
                     height: 85%;
@@ -100,6 +107,7 @@
 
                     .chat-con-bot {}
                 }
+
                 .send-message-con {
                     width: 100%;
                     justify-content: space-between;

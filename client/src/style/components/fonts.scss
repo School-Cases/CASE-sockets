@@ -27,13 +27,23 @@
 
 // olf red basic
 
-// olf header 1
+// olf header red
 @mixin olf-header-1 {
     color: $olfred;
     font-size: 30px;
     font-family: lato, sans-serif;
     font-weight: 900;
     letter-spacing: 1px;
+}
+
+// olf header yellow
+@mixin olf-header-2 {
+    color: $olfYellowD;
+    font-size: 17px;
+    font-family: lato, sans-serif;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
    
 // grey text
