@@ -251,18 +251,19 @@ export const user_login = async (req, res) => {
 };
 
 export const user_logout = async (req, res) => {
-  // try {
-  req.session.destroy((error) => {
-    res.redirect(clientAddress);
-    console.log("destroyed");
-  });
-  // } catch (err) {
-  //   return res.json({
-  //     message: "login user fail" + err,
-  //     success: false,
-  //     data: null,
-  //   });
-  // }
+  try {
+    return res.json({
+      message: "login user success",
+      success: true,
+      data: null,
+    });
+  } catch (err) {
+    return res.json({
+      message: "login user fail" + err,
+      success: false,
+      data: null,
+    });
+  }
 };
 
 export const user_join_chatroom = async (req, res) => {

@@ -35,12 +35,6 @@ export const ChatroomsHome = ({
               ) : null;
             })}
       </div>
-      <form action={api_address + "/create-chatroom"} method="post">
-        <input type="text" name="name" id="" placeholder="chatroom name" />
-        <input type="text" name="creater" id="" value={user._id} hidden />
-
-        <button type="submit">create</button>
-      </form>
     </section>
   );
 };
@@ -52,7 +46,10 @@ const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchLastMessage = async (signal) => {
-    let lastMessage = await get(`/get-message/${room.messages.at(-1)}`, signal);
+    let lastMessage = await get(
+      `/protected/get-message/${room.messages.at(-1)}`,
+      signal
+    );
 
     setLastMessage(lastMessage.data);
 
@@ -69,8 +66,6 @@ const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
   if (loading) {
     <h4>loading ...</h4>;
   }
-
-  console.log(lastMessage);
 
   useEffect(async () => {
     if (joinable === "notJoinable") {
@@ -112,7 +107,7 @@ const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
           </div>
           <button
             onClick={async () => {
-              await post(`/join-chatroom/${room._id}/${user._id}`);
+              await post(`/protected/join-chatroom/${room._id}/${user._id}`);
             }}
           >
             join
