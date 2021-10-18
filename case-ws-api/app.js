@@ -6,10 +6,12 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import session from "express-session";
 import bcrypt from "bcrypt";
-
 import http from "http";
 import { parse } from "./utils/parse";
 import WebSocket, { WebSocketServer } from "ws";
+import { protectedMw } from "./middlewares/protected";
+import protectedRouter from "./routers/protected";
+import index from "./routers/index";
 
 dotenv.config();
 const app = express();
@@ -28,10 +30,6 @@ app.use(express.urlencoded({ extended: false }));
   }
 })();
 
-import index from "./routers/index";
-
-app.use(cors());
-
 const corsOptions = {
   origin: "*",
   credentials: true, //access-control-allow-credentials:true
@@ -39,7 +37,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions)); // Use this after the variable declaration
-
 app.use(express.json());
 app.use("/", express.static("./public"));
 app.use("/static", express.static("./public/static"));
@@ -51,10 +48,13 @@ app.use(
     cookie: { secure: false },
   })
 );
+
 app.use("/", index);
+app.use("/protected", protectedMw, protectedRouter);
 
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
+// const wss = new WebSocketServer({ noServer: true });
 
 function emitMessage(data, isBinary) {
   wss.clients.forEach(function each(client) {
@@ -65,6 +65,7 @@ function emitMessage(data, isBinary) {
 }
 
 wss.on("connection", (ws) => {
+  // console.log(ws);
   console.log("Client connected from IP: ", ws._socket.remoteAddress);
   console.log("Number of connected clients: ", wss.clients.size);
 

@@ -21,15 +21,54 @@ export const get_chatroom = async (req, res) => {
   }
 };
 
+export const leave_chatroom = async (req, res) => {
+  const chatroomId = req.params.chatroomId;
+  const userId = req.params.userId;
+
+  try {
+    await chatroomModel
+      .findByIdAndUpdate(chatroomId, {
+        $pull: {
+          members: userId,
+        },
+      })
+      .exec();
+
+    await userModel
+      .findByIdAndUpdate(userId, {
+        $pull: {
+          chatrooms: chatroomId,
+        },
+      })
+      .exec();
+
+    return res.json({
+      message: "find chatroom success",
+      success: true,
+      data: null,
+    });
+  } catch (err) {
+    console.log(err, "error");
+    return res.json({
+      message: "find chatroom fail",
+      success: false,
+      data: null,
+    });
+  }
+};
+
 export const join_chatroom = async (req, res) => {
   const chatroomId = req.params.chatroomId;
   const userId = req.params.userId;
   try {
-    let chatroom = await chatroomModel.findByIdAndUpdate(req.params.chatroomId, {
-      $push: {
-        members: await userModel.findById(req.params.userId),
-      },
-    });
+    let chatroom = await chatroomModel.findByIdAndUpdate(
+      req.params.chatroomId,
+      {
+        $push: {
+          members: await userModel.findById(req.params.userId),
+        },
+      }
+    );
     let user = await userModel.findByIdAndUpdate(req.params.userId, {
       $push: {
         chatrooms: await chatroomModel.findById(req.params.chatroomId),

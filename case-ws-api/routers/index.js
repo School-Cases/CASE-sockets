@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 
+import { loggedIn } from "../Controllers/logged-in";
 import {
   get_user,
   get_all_users,
@@ -21,6 +22,7 @@ import {
   update_chatroom,
   delete_chatroom,
   join_chatroom,
+  leave_chatroom,
 } from "../Controllers/chatroom-controller";
 import {
   get_message,
@@ -33,6 +35,8 @@ import {
   delete_message,
   delete_all_messages,
 } from "../Controllers/message-controller";
+
+router.get("/logged-in", loggedIn);
 
 router.get("/get-user/:id", get_user);
 router.get("/get-all-users", get_all_users);
@@ -55,6 +59,7 @@ router.post("/create-chatroom", create_chatroom);
 router.post("/update-chatroom/:id", update_chatroom);
 router.get("/delete-chatroom/:id", delete_chatroom);
 router.post("/join-chatroom/:chatroomId/:userId", join_chatroom);
+router.post("/leave-chatroom/:chatroomId/:userId", leave_chatroom);
 
 router.get("/get-message/:id", get_message);
 router.get("/get-chatroom-messages/:id", get_chatroom_messages);

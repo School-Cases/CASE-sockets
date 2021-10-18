@@ -1,33 +1,68 @@
-import { api_address } from "../../../../utils/http";
+import { useState, useEffect } from "react";
+import { api_address, post } from "../../../../utils/http";
 
 export const UserSettings = ({ user }) => {
   console.log(user);
+
+  const [avatar, setAvatar] = useState(user.avatar);
+  const [theme, setTheme] = useState(user.theme);
+  const [name, setName] = useState(user.name);
+  const [newPassword, setNewPassword] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+
+  const fetchUpdateUser = async () => {
+    let res = await post(`/update-user/${user._id}`, {
+      name: name,
+      newPassword: newPassword,
+      currentPassword: currentPassword,
+      avatar: avatar,
+      theme: theme,
+    });
+    console.log(res);
+  };
   return (
-    <section>
+    <div>
       <div className="user-settings-input-con">
         <label htmlFor="name">Name:</label>
-        <input type="text" name="name" id="" placeholder={user.name} />
+        <input
+          type="text"
+          name="name"
+          id=""
+          placeholder={user.name}
+          onChange={(e) => setName(e.target.value)}
+        />
       </div>
       <div className="user-settings-input-con">
         <label htmlFor="newPassword">New password:</label>
-        <input type="password" name="newPassword" id="" />
+        <input
+          type="password"
+          name="newPassword"
+          id=""
+          onChange={(e) => setNewPassword(e.target.value)}
+        />
       </div>
       <div className="user-settings-input-con">
         <label htmlFor="password">Current password:</label>
-        <input type="password" name="password" id="" />
+        <input
+          type="password"
+          name="password"
+          id=""
+          onChange={(e) => setCurrentPassword(e.target.value)}
+        />
       </div>
 
-      <div className="user-settings-input-con">
+      <div className="flex user-settings-input-con">
         <label htmlFor="avatar">Avatar:</label>
         <div>avatarImg</div>
-        <input type="number" name="avatar" id="" />
+        <div>avatarImg2</div>
+        <div>avatarImg3</div>
       </div>
-      <div className="user-settings-input-con">
+      <div className="flex user-settings-input-con">
         <label htmlFor="theme">Theme:</label>
-        <div>theme img1</div>
-        <div>theme img2</div>
-        <input type="number" name="theme" id="" />
+        <div onClick={() => setTheme(0)}>theme img1</div>
+        <div onClick={() => setTheme(1)}>theme img2</div>
       </div>
-    </section>
+      <button onClick={() => fetchUpdateUser()}>save</button>
+    </div>
   );
 };

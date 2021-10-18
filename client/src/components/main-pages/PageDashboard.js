@@ -15,6 +15,8 @@ import { ChatroomsSettings } from "./dashboard-comps/settings/ChatroomsSettings"
 import { UserSettings } from "./dashboard-comps/settings/UserSettings";
 import { Nav } from "./dashboard-comps/Nav";
 import { UserAvatar } from "./dashboard-comps/UserAvatar";
+import { SearchChatrooms } from "./dashboard-comps/SearchChatrooms";
+import { PageSettings } from "./dashboard-comps/PageSettings";
 
 export const PageDashboard = () => {
   const [ws, setWs] = useState(
@@ -27,7 +29,7 @@ export const PageDashboard = () => {
   const [messages, setMessages] = useState([]);
 
   const [W, setW] = useState(window.innerWidth);
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState({});
 
   const [loading, setLoading] = useState(true);
 
@@ -43,17 +45,19 @@ export const PageDashboard = () => {
   const [searchJoinableChatroomsCheckbox, setSearchJoinableChatroomsCheckbox] =
     useState(false);
 
-  let userId = useParams().id;
+  // let userId = useParams().id;
 
   const fetchUser = async (signal) => {
-    let res = await get(`/get-user/${userId}`, signal);
-    console.log(res.data);
+    let res = await get(`/protected/get-user`, signal);
     setUser(res.data);
+    console.log(res.data, "user");
+
+    await fetchChatrooms(signal);
+    setLoading(false);
   };
 
   const fetchMessages = async (signal) => {
     let res = await get(`/get-chatroom-messages/` + activeChatroom._id, signal);
-    console.log(res.data);
     // setChatroomMessages(res.data);
     setMessages(res.data);
     // setLoading(false);
@@ -62,19 +66,26 @@ export const PageDashboard = () => {
   const fetchChatrooms = async (signal) => {
     let res = await get(`/get-all-chatrooms`, signal);
     console.log(res.data);
+    console.log(user);
+
+    console.log(
+      res.data.filter((chat) => chat.members.includes(user._id)),
+      "hehe"
+    );
 
     setAllChatrooms(res.data);
-    setUserChatrooms(res.data.filter((chat) => chat.members.includes(userId)));
+    setUserChatrooms(
+      res.data.filter((chat) => chat.members.includes(user._id))
+    );
 
     setJoinableChatrooms(
-      res.data.filter((chat) => !chat.members.includes(userId))
+      res.data.filter((chat) => !chat.members.includes(user._id))
     );
     // setActiveChatroom(
     //   res.data.filter((chat) => chat.members.includes(userId))[0]
     // );
 
-    fetchUser();
-    setLoading(false);
+    // fetchUser();
   };
 
   // useEffect(async () => {
@@ -90,12 +101,14 @@ export const PageDashboard = () => {
 
     ws.onmessage = async (e) => {
       const message = JSON.parse(e.data);
+      console.log(message);
       if (user._id === message.sender) {
         await post(`/create-message`, message);
       }
 
-      // console.log(res);
-      setMessages([...messages, message]);
+      if (message.chatroom === activeChatroom._id) {
+        setMessages([...messages, message]);
+      }
     };
 
     return () => {
@@ -115,7 +128,7 @@ export const PageDashboard = () => {
 
   useEffect(async () => {
     const abortController = new AbortController();
-    await fetchChatrooms(abortController.signal);
+    await fetchUser(abortController.signal);
     return () => abortController.abort();
   }, []);
 
@@ -131,43 +144,45 @@ export const PageDashboard = () => {
           : "page-dashboard-desktop"
       }`}
     >
-      <Row className="dashboard-con">
-        <Col
-          lg={{ span: 2, order: 1 }}
-          md={{ span: 2, order: 1 }}
-          xs={{ span: 12, order: 1 }}
-          className="flex dashboard-con-col1"
-        >
-          <UserAvatar user={user} />
+      {dashboardNavState === "settings" ? (
+        <PageSettings
+          setSearchChatrooms={setSearchChatrooms}
+          setDashboardNavState={setDashboardNavState}
+          dashboardNavState={dashboardNavState}
+          userChatrooms={userChatrooms}
+          searchChatrooms={searchChatrooms}
+          user={user}
+        />
+      ) : (
+        <Row className="dashboard-con">
+          <Col
+            lg={{ span: 2, order: 1 }}
+            md={{ span: 2, order: 1 }}
+            xs={{ span: 12, order: 1 }}
+            className="flex dashboard-con-col1"
+          >
+            <UserAvatar user={user} />
+            <Nav
+              setDashboardNavState={setDashboardNavState}
+              dashboardNavState={dashboardNavState}
+            />
+          </Col>
 
-          <Nav setDashboardNavState={setDashboardNavState} />
-        </Col>
-        <Col
-          lg={{ span: 4, order: 2 }}
-          md={{ span: 4, order: 2 }}
-          xs={{ span: 12, order: 2 }}
-          className="dashboard-con-col2"
-        >
-          <h4>Chatrooms</h4>
+          <Col
+            lg={{ span: 4, order: 2 }}
+            md={{ span: 4, order: 2 }}
+            xs={{ span: 12, order: 2 }}
+            className="dashboard-con-col2"
+          >
+            <h4>Chatrooms</h4>
 
-          <input
-            type="text"
-            name=""
-            id=""
-            placeholder="search chatrooms"
-            onInput={(e) => setSearchChatrooms(e.target.value)}
-          />
+            <SearchChatrooms
+              setSearchChatrooms={setSearchChatrooms}
+              setCheckbox={setSearchJoinableChatroomsCheckbox}
+              checkbox={searchJoinableChatroomsCheckbox}
+              page={dashboardNavState}
+            />
 
-          <input
-            type="checkbox"
-            name="searchJoinableChatroomsCheckbox"
-            id=""
-            onChange={(e) =>
-              setSearchJoinableChatroomsCheckbox(e.target.checked)
-            }
-          />
-
-          {dashboardNavState === "home" ? (
             <ChatroomsHome
               user={user}
               userChatrooms={userChatrooms}
@@ -175,23 +190,15 @@ export const PageDashboard = () => {
               searchChatrooms={searchChatrooms}
               setActiveChatroom={setActiveChatroom}
               searchJoinableChatroomsCheckbox={searchJoinableChatroomsCheckbox}
-              // fetchMessages={fetchMessages}
             />
-          ) : (
-            <ChatroomsSettings
-              userChatrooms={userChatrooms}
-              searchChatrooms={searchChatrooms}
-            />
-          )}
-        </Col>
-        {W > breakpoints.medium ? (
-          <Col
-            lg={{ span: 6, order: 3 }}
-            md={{ span: 6, order: 3 }}
-            xs={{ span: 12, order: 3 }}
-            className="dashboard-con-col3"
-          >
-            {dashboardNavState === "home" ? (
+          </Col>
+          {W > breakpoints.medium ? (
+            <Col
+              lg={{ span: 6, order: 3 }}
+              md={{ span: 6, order: 3 }}
+              xs={{ span: 12, order: 3 }}
+              className="dashboard-con-col3"
+            >
               <ChatHome
                 user={user}
                 activeChatroom={activeChatroom}
@@ -201,12 +208,10 @@ export const PageDashboard = () => {
                 messages={messages}
                 setMessages={setMessages}
               />
-            ) : (
-              <UserSettings user={user} />
-            )}
-          </Col>
-        ) : null}
-      </Row>
+            </Col>
+          ) : null}
+        </Row>
+      )}
     </Container>
   );
 };

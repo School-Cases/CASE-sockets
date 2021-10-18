@@ -1,4 +1,5 @@
-import { address, post } from "../../../utils/http";
+import { post } from "../../../utils/http";
+import { useHistory } from "react-router";
 
 export const LoginSignup = ({
   loginSignup,
@@ -8,7 +9,8 @@ export const LoginSignup = ({
   theme,
   avatar,
 }) => {
-  console.log(passwordInput, usernameInput);
+  const history = useHistory();
+
   let loginSingupTexts =
     loginSignup === "login"
       ? ["Log in", "Dont have account? ", "Sign up"]
@@ -21,19 +23,27 @@ export const LoginSignup = ({
   };
 
   const submitFetch = async (btnState) => {
-    // const abortController = new AbortController();
-    // btnState === "login"
-    //   ? await post(`/user-login`, {
-    //       name: "as",
-    //       password: "as",
-    //       avatar: avatar[0],
-    //       avatarChange: avatar[1],
-    //       theme: theme[0],
-    //       themeChange: theme[1],
-    //     })
-    //   : await post(`/create-user`);
-    // return () => abortController.abort();
-    document.querySelector(".login-con-form-userpass").submit();
+    let endPoint = "/user-login";
+
+    if (btnState !== "login") {
+      endPoint = "/create-user";
+    }
+
+    let payload = {
+      name: usernameInput,
+      password: passwordInput,
+      avatar: avatar[0],
+      avatarChange: avatar[1],
+      theme: theme[0],
+      themeChange: theme[1],
+    };
+
+    const response = await post(endPoint, payload);
+
+    if (response.success) {
+      localStorage.setItem("token", response.data);
+      return history.push("/dashboard");
+    }
   };
 
   return (
@@ -41,8 +51,8 @@ export const LoginSignup = ({
       <button
         type="button"
         className="center login-btn"
-        // onClick={() => submitFetch(loginSignup)}
-        onClick={() => submitFetch()}
+        onClick={() => submitFetch(loginSignup)}
+        // onClick={() => submitFetch()}
       >
         {loginSingupTexts[0]}
       </button>

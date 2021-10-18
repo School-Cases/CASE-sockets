@@ -24,6 +24,10 @@ export const PageHome = () => {
     return window.removeEventListener("resize", changeW);
   }, [W]);
 
+  // useEffect(() => {
+
+  // }, []);
+
   return (
     <Container
       className={`page page-home ${
@@ -42,23 +46,16 @@ export const PageHome = () => {
               className="col-nopad home-con-col1"
             >
               <section className="flex height100 login-con-form-btn">
-                <form
-                  action={
-                    loginSignup === "login"
-                      ? api_address + "/user-login"
-                      : api_address + "/create-user"
-                  }
-                  method="post"
-                  className="flex login-con-form-userpass"
-                >
+                <div className="flex login-con-form-userpass">
+                  {/* <form className="flex login-con-form-userpass"> */}
                   <label htmlFor="name">username:</label>
                   <input
                     type="text"
                     name="name"
                     id="name"
                     placeholder="haakon1337"
-                    // onChange={(e) => setUsernameInput(e.target.value)}
-                    // onChange={(e) => console.log(e.target.value)}
+                    onChange={(e) => setUsernameInput(e.target.value)}
+                    // onInput={(e) => console.log(e.target.value)}
                   />
                   <label htmlFor="password">password:</label>
                   <input
@@ -66,30 +63,31 @@ export const PageHome = () => {
                     name="password"
                     id="password"
                     placeholder="pAssword123!"
-                    // onChange={(e) => setPasswordInput(e.target.value)}
+                    onChange={(e) => setPasswordInput(e.target.value)}
                   />
                   <input type="number" name="theme" value={theme[0]} hidden />
                   <input type="number" name="avatar" value={avatar[0]} hidden />
                   <input
                     type="number"
                     name="avatarChange"
-                    value={avatar[1]}
+                    defaultValue={avatar[1]}
                     hidden
                   />
                   <input
                     type="number"
                     name="themeChange"
-                    value={theme[1]}
+                    defaultValue={theme[1]}
                     hidden
                   />
-                </form>
+                  {/* </form> */}
+                </div>
 
                 {W > breakpoints.medium ? (
                   <LoginSignup
                     loginSignup={loginSignup}
                     setLoginSignup={setLoginSignup}
-                    username={usernameInput}
-                    password={passwordInput}
+                    usernameInput={usernameInput}
+                    passwordInput={passwordInput}
                     theme={theme}
                     avatar={avatar}
                   />
@@ -155,6 +153,10 @@ export const PageHome = () => {
         <LoginSignup
           loginSignup={loginSignup}
           setLoginSignup={setLoginSignup}
+          usernameInput={usernameInput}
+          passwordInput={passwordInput}
+          theme={theme}
+          avatar={avatar}
         />
       ) : null}
     </Container>
