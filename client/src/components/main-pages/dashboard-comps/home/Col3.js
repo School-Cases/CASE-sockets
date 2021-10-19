@@ -3,7 +3,7 @@ import { api_address, post, get } from "../../../../utils/http";
 import { Chat } from "./Chat";
 import { CreateChatroom } from "./CreateChatroom";
 
-export const ChatHome = ({
+export const Col3 = ({
   user,
   activeChatroom,
   ws,

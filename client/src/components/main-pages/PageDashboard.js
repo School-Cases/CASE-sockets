@@ -10,7 +10,7 @@ import { useState } from "react";
 
 import { WS } from "../../js/ws";
 import { ChatroomsHome } from "./dashboard-comps/home/ChatroomsHome";
-import { ChatHome } from "./dashboard-comps/home/ChatHome";
+import { Col3 } from "./dashboard-comps/home/Col3";
 import { ChatroomsSettings } from "./dashboard-comps/settings/ChatroomsSettings";
 import { UserSettings } from "./dashboard-comps/settings/UserSettings";
 import { Nav } from "./dashboard-comps/Nav";
@@ -176,6 +176,7 @@ export const PageDashboard = () => {
               searchChatrooms={searchChatrooms}
               setActiveChatroom={setActiveChatroom}
               searchJoinableChatroomsCheckbox={searchJoinableChatroomsCheckbox}
+              setCreateChatroom={setCreateChatroom}
             />
             {/* <div>
               <input
@@ -206,7 +207,7 @@ export const PageDashboard = () => {
               xs={{ span: 12, order: 3 }}
               className="dashboard-con-col3"
             >
-              <ChatHome
+              <Col3
                 user={user}
                 activeChatroom={activeChatroom}
                 ws={ws}
