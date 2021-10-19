@@ -1,32 +1,40 @@
 import { api_address, get } from "../../../utils/http";
+import { useHistory } from "react-router";
 
-export const Nav = ({ setDashboardNavState, dashboardNavState }) => {
-  const fetchUserLogout = async () => {
-    const abortController = new AbortController();
-    let res = await get(`/protected/user-logout`, abortController.signal);
-    if (res.success) {
-      console.log("yay");
-    }
+export const Nav = ({
+  setDashboardNavState,
+  dashboardNavState,
+  createChatroom,
+  setCreateChatroom,
+}) => {
+  const history = useHistory();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    history.push("/", null);
   };
+
   return (
     <section className="flex col1-nav-con">
       <div
         className="nav-con-li"
         onClick={() => {
           setDashboardNavState("home");
+          if (createChatroom) setCreateChatroom(false);
         }}
       >
-        <span>icon</span> home
+        <span>icon</span> HOME
       </div>
       <div
         className="nav-con-li"
         onClick={() => {
           setDashboardNavState("settings");
+          if (createChatroom) setCreateChatroom(false);
         }}
       >
-        <span>icon</span>settings
+        <span>icon</span>SETTINGS
       </div>
-      <div onClick={() => fetchUserLogout()} className="nav-con-li">
+      <div onClick={logout} className="nav-con-li">
         <span>icon</span>log out
       </div>
     </section>

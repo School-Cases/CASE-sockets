@@ -1,0 +1,204 @@
+@import "/src/style/login.scss";
+
+@import "/src/style/components/colours.scss";
+@import "/src/style/components/fonts.scss";
+@import "/src/style/components/buttons.scss";
+@import url("https://use.typekit.net/rdr3hkg.css");
+
+.page {
+    margin: 0;
+    min-width: 100%;
+    min-height: 100vh;
+    background-image: url(../images/Olf-pattern.png), linear-gradient(#F6C658, #FF997D);
+
+    &.page-dashboard {
+
+        //   BOTH MOBILE AND DESKTOP
+        .dashboard-con {
+            min-height: 100vh;
+
+            .user-con-avatar {
+                &:after {
+                    content: "";
+                    background-color: hotpink;
+                    width: 1rem;
+                    height: 1rem;
+                    position: absolute;
+                }
+            }
+
+            .dashboard-con-col2 {
+
+                h4 {
+                    display: none;
+                }
+
+                input {
+                    margin-bottom: 1rem;
+                }
+
+                input[type="text"i] {
+                    width: 50%;
+                    border-style: none;
+                    border-radius: 23px;
+                    box-shadow: 0px 3px 6px #00000029;
+                    padding: 0.3rem 0 0.3rem 0.8rem;
+                }
+
+                input[type="text"i]:focus {
+                    outline: none;
+                    color: $greyD;
+                }
+
+                .dash-settings-chatrooms {
+                    flex-direction: column;
+
+                    .col2-chatroom-con {
+                        cursor: pointer;
+                        background: linear-gradient(235deg,
+                                $blueC 25%,
+                                rgba(255, 255, 255, 1) 25%);
+                    }
+                }
+
+                .dash-home-chatrooms {
+                    flex-direction: column;
+                    width: 100%;
+
+
+                    .col2-chatroom-con {
+                        cursor: pointer;
+                        border-radius: 23px;
+                        margin-bottom: 1rem;
+                        padding: 1rem 1rem 1rem 1rem;
+                        box-shadow: 0px 3px 6px #00000029;
+                        background: linear-gradient(235deg,
+                                $blueC 25%,
+                                rgba(255, 255, 255, 1) 25%);
+
+                        .chatroom-con-title-fav-con {
+                            justify-content: space-between;
+
+                            h5 {
+                                @include olf-header-2
+                            }
+                        }
+                    }
+                }
+            }
+
+            .dashboard-con-col3 {
+                .col3-chat-con {
+                    flex-direction: column;
+                    justify-content: space-between;
+                    background-color: white;
+                    box-shadow: 0px 3px 6px #00000029;
+                    border-radius: 23px;
+                    margin: 3rem 0 0 0;
+                    height: 85%;
+                    padding: 1.5rem;
+
+                    .chat-con-top {
+                        justify-content: space-between;
+                    }
+
+                    .chat-con-mid {
+                    }
+
+                    .chat-con-bot {}
+                }
+
+                .send-message-con {
+                    width: 100%;
+                    justify-content: space-between;
+
+                    input {
+                        background-color: $greyL;
+                        border-radius: 23px;
+                        border: none;
+                        padding: 0.5rem 0 0.5rem 1rem;
+                        width: 90%;
+                        color: $greyD;
+                    }
+
+                    input:focus {
+                        outline: none;
+                        color: $greyD;
+                    }
+
+                    button {
+                        border-radius: 23px;
+                        border: none;
+                        background-color: $olfred;
+                        padding: 0.5rem;
+                    }
+
+                }
+            }
+        }
+
+        //   ONLY ON WIDTH > MEDIUM (DESKTOP)
+        &.page-dashboard-desktop {
+            .dashboard-con-col1 {
+                flex-direction: column;
+                margin: 3rem 0 0 3rem;
+                border-right: 3px solid white;
+
+                .col1-user-con {
+                    @include font-white-basic;
+                    height: 30%;
+                    flex-direction: column;
+                    justify-content: space-between;
+                }
+
+                .col1-nav-con {
+                    @include font-nav-basic;
+                    cursor: pointer;
+
+                    height: 70%;
+                    padding-top: 3rem;
+                    flex-direction: column;
+                    gap: 2rem;
+
+                    a {
+                        @include font-nav-basic;
+                        text-decoration: none;
+                        cursor: pointer;
+
+                    }
+                }
+
+            }
+
+            .dashboard-con-col2 {
+                margin-top: 3rem;
+                margin-left: 2rem;
+                width: 25%;
+                
+                .dash-home-chatrooms {
+                    height: 30rem;
+                    overflow: scroll;
+                    -ms-overflow-style: none;  /* IE and Edge */
+                    scrollbar-width: none;  /* Firefox */
+                }
+
+                .dash-home-chatrooms::-webkit-scrollbar {
+                    display: none;
+                  }
+                
+
+            }
+        }
+
+        //   ONLY ON WIDTH < MEDIUM (MOBILE)
+        &.page-dashboard-mobile {
+            .dashboard-con-col1 {
+                height: 20vh;
+            }
+
+            .dashboard-con-col2 {
+                height: 80vh;
+            }
+        }
+    }
+}

@@ -45,37 +45,22 @@ export const PageDashboard = () => {
     useState(false);
   const [createChatroom, setCreateChatroom] = useState(false);
 
-  const fetchUserAndChatrooms = async (signal) => {
+  const fetchUser = async (signal) => {
     let res = await get(`/protected/get-user`, signal);
     setUser(res.data);
-
-    if (res.data !== null) {
-      let res2 = await get(`/protected/get-all-chatrooms`, signal);
-
-      setAllChatrooms(res2.data);
-      setUserChatrooms(
-        res2.data.filter((chat) => chat.members.includes(res.data._id))
-      );
-      setJoinableChatrooms(
-        res2.data.filter((chat) => !chat.members.includes(res.data._id))
-      );
-    }
-
-    setLoading(false);
+    return fetchChatrooms(signal, res.data._id);
   };
 
-  // const fetchChatrooms = async (signal) => {
-  //   let res = await get(`/protected/get-all-chatrooms`, signal);
-  //   console.log(user);
+  const fetchChatrooms = async (signal, userID) => {
+    let res = await get(`/protected/get-all-chatrooms`, signal);
 
-  //   setAllChatrooms(res.data);
-  //   setUserChatrooms(
-  //     res.data.filter((chat) => chat.members.includes(user._id))
-  //   );
-  //   setJoinableChatrooms(
-  //     res.data.filter((chat) => !chat.members.includes(user._id))
-  //   );
-  // };
+    setAllChatrooms(res.data);
+    setUserChatrooms(res.data.filter((chat) => chat.members.includes(userID)));
+    setJoinableChatrooms(
+      res.data.filter((chat) => !chat.members.includes(userID))
+    );
+    setLoading(false);
+  };
 
   const fetchMessages = async (signal) => {
     let res = await get(
@@ -111,13 +96,11 @@ export const PageDashboard = () => {
       }
     };
 
-    return () => {
-      ws.onclose = () => {
-        console.log("WebSocket Disconnected");
-        setWs(new WebSocket("ws://localhost:5002"));
-      };
+    ws.onclose = () => {
+      console.log("WebSocket Disconnected");
+      setWs(new WebSocket("ws://localhost:5002"));
     };
-  }, [ws.onmessage, ws.onopen, ws.onclose, messages]);
+  }, [ws.onmessage, ws.onopen, messages, ws.onclose]);
 
   useEffect(() => {
     let changeW = window.addEventListener("resize", () =>
@@ -128,7 +111,7 @@ export const PageDashboard = () => {
 
   useEffect(async () => {
     const abortController = new AbortController();
-    await fetchUserAndChatrooms(abortController.signal);
+    await fetchUser(abortController.signal);
     return () => abortController.abort();
   }, []);
 
@@ -165,6 +148,8 @@ export const PageDashboard = () => {
             <Nav
               setDashboardNavState={setDashboardNavState}
               dashboardNavState={dashboardNavState}
+              createChatroom={createChatroom}
+              setCreateChatroom={setCreateChatroom}
             />
           </Col>
 
@@ -229,6 +214,8 @@ export const PageDashboard = () => {
                 messages={messages}
                 setMessages={setMessages}
                 createChatroom={createChatroom}
+                setCreateChatroom={setCreateChatroom}
+                fetchChatrooms={fetchChatrooms}
               />
             </Col>
           ) : null}

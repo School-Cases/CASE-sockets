@@ -45,7 +45,6 @@ import {
   delete_all_users,
   user_join_chatroom,
   user_login,
-  user_logout,
   // not used
   user_dashboard,
 } from "../Controllers/user-controller";
@@ -67,7 +66,6 @@ router.get("/delete-all-users", delete_all_users);
 router.post("/user-join-chatroom", user_join_chatroom);
 
 router.post("/user-login", user_login);
-router.get("/user-logout", user_logout);
 
 // not used
 router.get("/user-dashboard/:id", user_dashboard);

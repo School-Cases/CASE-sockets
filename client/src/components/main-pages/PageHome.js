@@ -43,7 +43,7 @@ export const PageHome = () => {
               lg={{ span: 8, order: 1 }}
               md={{ span: 8, order: 1 }}
               xs={{ span: 12, order: 1 }}
-              className="col-nopad"
+              className="col-nopad home-con-col1"
             >
               <section className="flex height100 login-con-form-btn">
                 <div className="flex login-con-form-userpass">
@@ -98,7 +98,7 @@ export const PageHome = () => {
               lg={{ span: 4, order: 2 }}
               md={{ span: 4, order: 2 }}
               xs={{ span: 12, order: 2 }}
-              className={`${W < breakpoints.medium ? "flex" : ""} col-nopad`}
+              className={`home-con-col2 ${W < breakpoints.medium ? "flex" : ""} col-nopad`}
             >
               <Col
                 lg={{ span: 12, order: 1 }}

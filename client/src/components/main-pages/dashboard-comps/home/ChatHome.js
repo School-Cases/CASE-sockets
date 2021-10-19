@@ -10,6 +10,8 @@ export const ChatHome = ({
   messages,
   setMessages,
   createChatroom,
+  setCreateChatroom,
+  fetchChatrooms,
 }) => {
   const [loading, setLoading] = useState(true);
   const [newRoomName, setNewRoomName] = useState("");
@@ -37,7 +39,6 @@ export const ChatHome = ({
   };
 
   const fetchMessages = async (signal) => {
-    console.log("fetching messages");
     let res = await get(
       `/protected/get-chatroom-messages/` + activeChatroom._id,
       signal
@@ -48,38 +49,32 @@ export const ChatHome = ({
 
   const fetchAllUsers = async (signal) => {
     let res = await get(`/protected/get-all-users`, signal);
-    console.log(res, "re");
 
-    // setAddableUsers(res.data.filter((u) => u._id !== user._id));
     setAddableUsers(res.data);
     setLoading(false);
   };
 
   const fetchCreateChatroom = async () => {
-    // let res =
     await post(`/protected/create-chatroom`, {
       name: newRoomName,
-      admins: user._id,
+      admins: [user._id],
       members: newRoomMembers,
       theme: newRoomTheme,
     });
-    // console.log(res, "ress");
-
-    // setAddableUsers(res.data.filter((u) => u._id !== user._id));
-    // setAddableUsers(res.data);
-    // setLoading(false);
+    setCreateChatroom(false);
+    const abortController = new AbortController();
+    fetchChatrooms(abortController.signal, user._id);
+    return () => abortController.abort();
   };
 
   useEffect(async () => {
     const abortController = new AbortController();
-    // if (activeChatroom)
     if (activeChatroom !== null) await fetchMessages(abortController.signal);
     return () => abortController.abort();
   }, [activeChatroom]);
 
   useEffect(async () => {
     const abortController = new AbortController();
-    // if (activeChatroom)
     if (createChatroom) await fetchAllUsers(abortController.signal);
     return () => abortController.abort();
   }, [createChatroom]);
@@ -92,6 +87,7 @@ export const ChatHome = ({
     <section className="flex height100 col3-chat-con">
       {createChatroom ? (
         <section>
+          <button onClick={() => setCreateChatroom(false)}>back</button>
           <h3>create a chatrum</h3>
           <input
             type="text"
@@ -169,8 +165,7 @@ export const ChatHome = ({
             </section>
           ) : (
             <section>
-              <h3>create chatroom</h3>
-              <h3>join chatroom</h3>
+              <h3 onClick={() => setCreateChatroom(true)}>create chatroom</h3>
             </section>
           )}
         </section>
