@@ -37,15 +37,6 @@ export const ChatroomsHome = ({
               ) : null;
             })}
       </div>
-<<<<<<< HEAD
-      {/* <form action={api_address + "/create-chatroom"} method="post">
-        <input type="text" name="name" id="" placeholder="chatroom name" />
-        <input type="text" name="creater" id="" value={user._id} hidden />
-
-        <button type="submit">create</button>
-      </form> */}
-=======
->>>>>>> b2de89e4bef37e0e8251060c018980af3584b308
     </section>
   );
 };
