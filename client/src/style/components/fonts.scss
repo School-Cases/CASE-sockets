@@ -17,6 +17,14 @@
     letter-spacing: 1px;
 }
 
+// olf white basic small
+@mixin font-white-basic-small {
+    color: $white;
+    font-size: 15px;
+    font-family: lato, sans-serif;
+    letter-spacing: 1px;
+}
+
 // olf nav
 @mixin font-nav-basic {
     color: $white;

@@ -5,7 +5,7 @@ export const SearchChatrooms = ({
   setSearchChatrooms,
 }) => {
   return (
-    <section>
+    <section className= "flex search-chatroom-con">
       <input
         type="text"
         name=""
@@ -15,9 +15,9 @@ export const SearchChatrooms = ({
       />
 
       {page === "home" ? (
-        <div>
+        <div className="flex">
           <label htmlFor="searchJoinableChatroomsCheckbox">
-            search joinable rooms:
+            all:
           </label>
           <input
             type="checkbox"

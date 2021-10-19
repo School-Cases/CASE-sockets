@@ -11,7 +11,7 @@ export const ChatroomsHome = ({
 }) => {
   return (
     <section className="flex dash-home-chatrooms">
-      <div>
+      <div className="flex home-chatrooms-con">
         {/* korta ner detta */}
         {searchJoinableChatroomsCheckbox === false
           ? userChatrooms.map((room) => {
@@ -35,12 +35,12 @@ export const ChatroomsHome = ({
               ) : null;
             })}
       </div>
-      <form action={api_address + "/create-chatroom"} method="post">
+      {/* <form action={api_address + "/create-chatroom"} method="post">
         <input type="text" name="name" id="" placeholder="chatroom name" />
         <input type="text" name="creater" id="" value={user._id} hidden />
 
         <button type="submit">create</button>
-      </form>
+      </form> */}
     </section>
   );
 };
