@@ -16,11 +16,9 @@ export const Col3 = ({
   fetchChatrooms,
 }) => {
   const [loading, setLoading] = useState(true);
-  const [newRoomName, setNewRoomName] = useState("");
-  const [newRoomTheme, setNewRoomTheme] = useState(0);
-  const [newRoomMembers, setNewRoomMembers] = useState([user._id]);
-  const [searchUsersInput, setSearchUsersInput] = useState("");
-  const [addableUsers, setAddableUsers] = useState([]);
+  // const [newRoomName, setNewRoomName] = useState("");
+  // const [newRoomTheme, setNewRoomTheme] = useState(0);
+  // const [newRoomMembers, setNewRoomMembers] = useState([user._id]);
 
   const send = () => {
     if (!message) return;
@@ -49,25 +47,25 @@ export const Col3 = ({
     setLoading(false);
   };
 
-  const fetchAllUsers = async (signal) => {
-    let res = await get(`/protected/get-all-users`, signal);
+  // const fetchAllUsers = async (signal) => {
+  //   let res = await get(`/protected/get-all-users`, signal);
 
-    setAddableUsers(res.data);
-    setLoading(false);
-  };
+  //   setAddableUsers(res.data);
+  //   setLoading(false);
+  // };
 
-  const fetchCreateChatroom = async () => {
-    await post(`/protected/create-chatroom`, {
-      name: newRoomName,
-      admins: [user._id],
-      members: newRoomMembers,
-      theme: newRoomTheme,
-    });
-    setCreateChatroom(false);
-    const abortController = new AbortController();
-    fetchChatrooms(abortController.signal, user._id);
-    return () => abortController.abort();
-  };
+  // const fetchCreateChatroom = async () => {
+  //   await post(`/protected/create-chatroom`, {
+  //     name: newRoomName,
+  //     admins: [user._id],
+  //     members: newRoomMembers,
+  //     theme: newRoomTheme,
+  //   });
+  //   setCreateChatroom(false);
+  //   const abortController = new AbortController();
+  //   fetchChatrooms(abortController.signal, user._id);
+  //   return () => abortController.abort();
+  // };
 
   useEffect(async () => {
     const abortController = new AbortController();
@@ -75,11 +73,11 @@ export const Col3 = ({
     return () => abortController.abort();
   }, [activeChatroom]);
 
-  useEffect(async () => {
-    const abortController = new AbortController();
-    if (createChatroom) await fetchAllUsers(abortController.signal);
-    return () => abortController.abort();
-  }, [createChatroom]);
+  // useEffect(async () => {
+  //   const abortController = new AbortController();
+  //   if (createChatroom) await fetchAllUsers(abortController.signal);
+  //   return () => abortController.abort();
+  // }, [createChatroom]);
 
   if (loading) {
     <h4>loading ...</h4>;
@@ -89,18 +87,19 @@ export const Col3 = ({
     <section className="flex height100 col3-chat-con">
       {createChatroom ? (
         <CreateChatroom
+          fetchChatrooms={fetchChatrooms}
           setCreateChatroom={setCreateChatroom}
-          setNewRoomName={setNewRoomName}
-          setNewRoomTheme={setNewRoomTheme}
-          newRoomTheme={newRoomTheme}
-          searchUsersInput={searchUsersInput}
-          setSearchUsersInput={setSearchUsersInput}
-          setNewRoomMembers={setNewRoomMembers}
-          addableUsers={addableUsers}
-          fetchCreateChatroom={fetchCreateChatroom}
+          createChatroom={createChatroom}
+          user={user}
+          // setNewRoomName={setNewRoomName}
+          // setNewRoomTheme={setNewRoomTheme}
+          // newRoomTheme={newRoomTheme}
+          // setNewRoomMembers={setNewRoomMembers}
+          // addableUsers={addableUsers}
+          // fetchCreateChatroom={fetchCreateChatroom}
         />
       ) : (
-        <section>
+        <>
           {activeChatroom !== null ? (
             <Chat
               activeChatroom={activeChatroom}
@@ -111,13 +110,13 @@ export const Col3 = ({
               send={send}
             />
           ) : (
-            <section>
+            <>
               <button onClick={() => setCreateChatroom(true)}>
                 create chatroom
               </button>
-            </section>
+            </>
           )}
-        </section>
+        </>
       )}
     </section>
   );

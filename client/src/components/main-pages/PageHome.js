@@ -6,6 +6,7 @@ import { LoginSignup } from "./home-comps/LoginSignup";
 
 import { breakpoints } from "../../utils/breakpoints";
 import { api_address, post } from "../../utils/http";
+import { If } from "../../utils/If";
 
 export const PageHome = () => {
   const [W, setW] = useState(window.innerWidth);
@@ -23,10 +24,6 @@ export const PageHome = () => {
     );
     return window.removeEventListener("resize", changeW);
   }, [W]);
-
-  // useEffect(() => {
-
-  // }, []);
 
   return (
     <Container
@@ -47,7 +44,6 @@ export const PageHome = () => {
             >
               <section className="flex height100 login-con-form-btn">
                 <div className="flex login-con-form-userpass">
-                  {/* <form className="flex login-con-form-userpass"> */}
                   <label htmlFor="name">username:</label>
                   <input
                     type="text"
@@ -55,7 +51,6 @@ export const PageHome = () => {
                     id="name"
                     placeholder="haakon1337"
                     onChange={(e) => setUsernameInput(e.target.value)}
-                    // onInput={(e) => console.log(e.target.value)}
                   />
                   <label htmlFor="password">password:</label>
                   <input
@@ -79,10 +74,9 @@ export const PageHome = () => {
                     defaultValue={theme[1]}
                     hidden
                   />
-                  {/* </form> */}
                 </div>
 
-                {W > breakpoints.medium ? (
+                <If condition={W > breakpoints.medium}>
                   <LoginSignup
                     loginSignup={loginSignup}
                     setLoginSignup={setLoginSignup}
@@ -91,14 +85,16 @@ export const PageHome = () => {
                     theme={theme}
                     avatar={avatar}
                   />
-                ) : null}
+                </If>
               </section>
             </Col>
             <Col
               lg={{ span: 4, order: 2 }}
               md={{ span: 4, order: 2 }}
               xs={{ span: 12, order: 2 }}
-              className={`home-con-col2 ${W < breakpoints.medium ? "flex" : ""} col-nopad`}
+              className={`home-con-col2 ${
+                W < breakpoints.medium ? "flex" : ""
+              } col-nopad`}
             >
               <Col
                 lg={{ span: 12, order: 1 }}
@@ -149,7 +145,7 @@ export const PageHome = () => {
         </Container>
       </Container>
 
-      {W < breakpoints.medium ? (
+      <If condition={W < breakpoints.medium}>
         <LoginSignup
           loginSignup={loginSignup}
           setLoginSignup={setLoginSignup}
@@ -158,7 +154,7 @@ export const PageHome = () => {
           theme={theme}
           avatar={avatar}
         />
-      ) : null}
+      </If>
     </Container>
   );
 };

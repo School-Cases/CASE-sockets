@@ -8,6 +8,8 @@ import { parse } from "../../utils/parse";
 import { useEffect } from "react";
 import { useState } from "react";
 
+import { If } from "../../utils/If";
+
 import { WS } from "../../js/ws";
 import { ChatroomsHome } from "./dashboard-comps/home/ChatroomsHome";
 import { Col3 } from "./dashboard-comps/home/Col3";
@@ -178,19 +180,6 @@ export const PageDashboard = () => {
               searchJoinableChatroomsCheckbox={searchJoinableChatroomsCheckbox}
               setCreateChatroom={setCreateChatroom}
             />
-            {/* <div>
-              <input
-                type="text"
-                name="name"
-                id=""
-                placeholder="chatroom name"
-              />
-              <input type="text" name="creater" id="" value={user._id} hidden />
-              
-              <button type="submit" onClick={() => fetchCreateChatroom}>
-                create
-              </button>
-            </div> */}
 
             <button
               onClick={() => {
@@ -200,7 +189,7 @@ export const PageDashboard = () => {
               create
             </button>
           </Col>
-          {W > breakpoints.medium ? (
+          <If condition={W > breakpoints.medium}>
             <Col
               lg={{ span: 6, order: 3 }}
               md={{ span: 6, order: 3 }}
@@ -220,7 +209,7 @@ export const PageDashboard = () => {
                 fetchChatrooms={fetchChatrooms}
               />
             </Col>
-          ) : null}
+          </If>
         </Row>
       )}
     </Container>
