@@ -95,15 +95,3 @@ export const CreateChatroom = ({
     </section>
   );
 };
-
-//   m.name.includes(searchUsersInput) ? (
-//     <div
-//       onClick={() =>
-//         setNewRoomMembers((prev) => {
-//           return [...prev, m._id];
-//         })
-//       }
-//     >
-//       {m.name} <span>+</span>
-//     </div>
-//   ) : null;

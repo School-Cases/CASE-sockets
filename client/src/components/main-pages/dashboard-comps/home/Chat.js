@@ -1,3 +1,5 @@
+import { If } from "../../../../utils/If";
+
 export const Chat = ({
   activeChatroom,
   user,
@@ -20,20 +22,19 @@ export const Chat = ({
       </section>
 
       <section className="height100 chat-con-mid">
-        {messages && messages.length !== 0
-          ? messages.reverse().map((m) => {
-              console.log(m);
-              return (
-                <div
-                  className={
-                    m.sender === user._id ? "message-right" : "message-left"
-                  }
-                >
-                  {m.text}
-                </div>
-              );
-            })
-          : null}
+        <If condition={messages && messages.length !== 0}>
+          {messages.reverse().map((m) => {
+            return (
+              <div
+                className={
+                  m.sender === user._id ? "message-right" : "message-left"
+                }
+              >
+                {m.text}
+              </div>
+            );
+          })}
+        </If>
       </section>
       <section className="chat-con-bot">
         <div>

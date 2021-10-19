@@ -77,6 +77,8 @@ const Chatroom = ({
       </h5>
       <If condition={chatSettingsToggle === room._id}>
         <p>{room.members.length} members</p>
+        <label>name:</label>
+        <input type="text" placeholder={room.name} />
         <div>Members:</div>
         <div className="flex">
           {roomMembers.map((m, i) => {
