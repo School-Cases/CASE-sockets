@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { api_address, post, get } from "../../../../utils/http";
 
+import { If } from "../../../../utils/If";
+
 export const ChatroomsHome = ({
   user,
   userChatrooms,
@@ -14,27 +16,32 @@ export const ChatroomsHome = ({
     <section className="flex dash-home-chatrooms">
       <div className="flex home-chatrooms-con">
         {/* korta ner detta */}
+
         {searchJoinableChatroomsCheckbox === false
           ? userChatrooms.map((room) => {
-              return room.name.includes(searchChatrooms) ? (
-                <Chatroom
-                  joinable={"notJoinable"}
-                  setActiveChatroom={setActiveChatroom}
-                  room={room}
-                  user={user}
-                  setCreateChatroom={setCreateChatroom}
-                />
-              ) : null;
+              return (
+                <If condition={room.name.includes(searchChatrooms)}>
+                  <Chatroom
+                    joinable={"notJoinable"}
+                    setActiveChatroom={setActiveChatroom}
+                    room={room}
+                    user={user}
+                    setCreateChatroom={setCreateChatroom}
+                  />
+                </If>
+              );
             })
           : joinableChatrooms.map((room) => {
-              return room.name.includes(searchChatrooms) ? (
-                <Chatroom
-                  joinable={"joinable"}
-                  setActiveChatroom={setActiveChatroom}
-                  room={room}
-                  user={user}
-                />
-              ) : null;
+              return (
+                <If condition={room.name.includes(searchChatrooms)}>
+                  <Chatroom
+                    joinable={"joinable"}
+                    setActiveChatroom={setActiveChatroom}
+                    room={room}
+                    user={user}
+                  />
+                </If>
+              );
             })}
       </div>
     </section>
@@ -71,10 +78,6 @@ const Chatroom = ({
     setLoading(false);
   };
 
-  if (loading) {
-    <h4>loading ...</h4>;
-  }
-
   useEffect(async () => {
     if (joinable === "notJoinable") {
       const abortController = new AbortController();
@@ -82,6 +85,11 @@ const Chatroom = ({
       return () => abortController.abort();
     }
   }, []);
+
+  if (loading) {
+    <h4>loading ...</h4>;
+  }
+
   return (
     <section>
       {joinable === "notJoinable" ? (

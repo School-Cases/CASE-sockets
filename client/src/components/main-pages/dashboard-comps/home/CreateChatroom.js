@@ -8,12 +8,6 @@ export const CreateChatroom = ({
   setCreateChatroom,
   createChatroom,
   user,
-  //   setNewRoomName,
-  //   setNewRoomTheme,
-  //   newRoomTheme,
-  //   setNewRoomMembers,
-  //   addableUsers,
-  //   fetchCreateChatroom,
 }) => {
   const [loading, setLoading] = useState(true);
   const [newRoomName, setNewRoomName] = useState("");
