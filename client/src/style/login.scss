@@ -182,6 +182,25 @@
         }
   
       }
+
+      .login-con-noaccount {
+        color: white;
+        span {
+          color: $greyD;
+          cursor: pointer;
+        }
+      }
+
+      .login-con-theme-con {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        button {
+        }
+      }
+
+      .login-con-avatar-con {
+        padding-top: 1rem;
+      }
   
     }
   
