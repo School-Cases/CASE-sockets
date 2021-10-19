@@ -13,7 +13,6 @@
 @mixin font-white-basic {
     color: $white;
     font-size: 20px;
-    font-family: lato, sans-serif;
     letter-spacing: 1px;
 }
 
@@ -21,7 +20,6 @@
 @mixin font-white-basic-small {
     color: $white;
     font-size: 15px;
-    font-family: lato, sans-serif;
     letter-spacing: 1px;
 }
 
@@ -29,7 +27,6 @@
 @mixin font-nav-basic {
     color: $white;
     font-size: 20px;
-    font-family: lato, sans-serif;
     letter-spacing: 3px;
 }
 
@@ -39,7 +36,6 @@
 @mixin olf-header-1 {
     color: $olfred;
     font-size: 30px;
-    font-family: lato, sans-serif;
     font-weight: 900;
     letter-spacing: 1px;
 }
@@ -48,7 +44,6 @@
 @mixin olf-header-2 {
     color: $olfYellowD;
     font-size: 17px;
-    font-family: lato, sans-serif;
     font-weight: 900;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -58,5 +53,4 @@
 @mixin grey-text {
     color: $greyM;
     font-size: 17px;
-    font-family: lato, sans-serif;
 }
