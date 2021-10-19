@@ -177,16 +177,6 @@ export const PageDashboard = () => {
               setActiveChatroom={setActiveChatroom}
               searchJoinableChatroomsCheckbox={searchJoinableChatroomsCheckbox}
             />
-<<<<<<< HEAD
-
-        <div className= "flex create-chatroom-con">
-        <input type="text" name="name" id="" placeholder="chatroom name" />
-        <input type="text" name="creater" id="" value={user._id} hidden />
-
-        <button type="button">create</button>
-        </div>
-
-=======
             {/* <div>
               <input
                 type="text"
@@ -195,7 +185,7 @@ export const PageDashboard = () => {
                 placeholder="chatroom name"
               />
               <input type="text" name="creater" id="" value={user._id} hidden />
-
+              
               <button type="submit" onClick={() => fetchCreateChatroom}>
                 create
               </button>
@@ -208,7 +198,6 @@ export const PageDashboard = () => {
             >
               create
             </button>
->>>>>>> b2de89e4bef37e0e8251060c018980af3584b308
           </Col>
           {W > breakpoints.medium ? (
             <Col
