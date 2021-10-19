@@ -103,6 +103,7 @@ export const PageDashboard = () => {
   }, [ws.onmessage, ws.onopen, messages, ws.onclose]);
 
   useEffect(() => {
+    // ****
     let changeW = window.addEventListener("resize", () =>
       setW(window.innerWidth)
     );

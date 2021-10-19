@@ -85,7 +85,14 @@ const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
         >
           <div className="flex chatroom-con-title-fav-con">
             <h5>{room.name}</h5>
-            <div className="title-fav-con-fav">O</div>
+            <div
+              className="title-fav-con-fav"
+              onClick={() => {
+                console.log("sho");
+              }}
+            >
+              O
+            </div>
           </div>
           {lastMessage !== null ? (
             <div className="flex chatroom-con-mes">
