@@ -1,9 +1,10 @@
-import jwt from "jsonwebtoken";
+import { decode } from "../utils/jwt";
 
 export const protectedMw = (req, res, next) => {
   const token = req.headers["authorization"];
+  const decoded = decode(token);
 
-  if (!token || token.length <= 0) {
+  if (!decoded) {
     return res.json({
       message: "logged out",
       success: false,
@@ -11,17 +12,6 @@ export const protectedMw = (req, res, next) => {
     });
   }
 
-  const OK = jwt.verify(token, "hemlighet");
-
-  if (OK !== null && OK !== undefined) {
-    console.log(OK);
-    req.headers["userId"] = OK._id;
-    return next();
-  }
-
-  return res.json({
-    message: "logged out",
-    success: false,
-    data: false,
-  });
+  req.userId = decoded._id;
+  return next();
 };

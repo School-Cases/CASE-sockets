@@ -29,70 +29,55 @@ export const PageDashboard = () => {
   const [messages, setMessages] = useState([]);
 
   const [W, setW] = useState(window.innerWidth);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
   const [loading, setLoading] = useState(true);
 
   const [dashboardNavState, setDashboardNavState] = useState("home");
 
   // chatrooms states
-  const [activeChatroom, setActiveChatroom] = useState({});
+  const [activeChatroom, setActiveChatroom] = useState(null);
   const [allChatrooms, setAllChatrooms] = useState([]);
   const [userChatrooms, setUserChatrooms] = useState([]);
   const [joinableChatrooms, setJoinableChatrooms] = useState([]);
   const [searchChatrooms, setSearchChatrooms] = useState("");
-  // const [searchJoinableChatrooms, setSearchJoinableChatrooms] = useState("");
   const [searchJoinableChatroomsCheckbox, setSearchJoinableChatroomsCheckbox] =
     useState(false);
-
-  // let userId = useParams().id;
+  const [createChatroom, setCreateChatroom] = useState(false);
 
   const fetchUser = async (signal) => {
     let res = await get(`/protected/get-user`, signal);
     setUser(res.data);
-    console.log(res.data, "user");
+    return fetchChatrooms(signal, res.data._id);
+  };
 
-    await fetchChatrooms(signal);
+  const fetchChatrooms = async (signal, userID) => {
+    let res = await get(`/protected/get-all-chatrooms`, signal);
+
+    setAllChatrooms(res.data);
+    setUserChatrooms(res.data.filter((chat) => chat.members.includes(userID)));
+    setJoinableChatrooms(
+      res.data.filter((chat) => !chat.members.includes(userID))
+    );
     setLoading(false);
   };
 
   const fetchMessages = async (signal) => {
-    let res = await get(`/get-chatroom-messages/` + activeChatroom._id, signal);
+    let res = await get(
+      `/protected/get-chatroom-messages/` + activeChatroom._id,
+      signal
+    );
     // setChatroomMessages(res.data);
     setMessages(res.data);
     // setLoading(false);
   };
 
-  const fetchChatrooms = async (signal) => {
-    let res = await get(`/get-all-chatrooms`, signal);
-    console.log(res.data);
-    console.log(user);
-
-    console.log(
-      res.data.filter((chat) => chat.members.includes(user._id)),
-      "hehe"
-    );
-
-    setAllChatrooms(res.data);
-    setUserChatrooms(
-      res.data.filter((chat) => chat.members.includes(user._id))
-    );
-
-    setJoinableChatrooms(
-      res.data.filter((chat) => !chat.members.includes(user._id))
-    );
-    // setActiveChatroom(
-    //   res.data.filter((chat) => chat.members.includes(userId))[0]
-    // );
-
-    // fetchUser();
+  const fetchCreateChatroom = async () => {
+    let data = {};
+    let res = await post(`/protected/create-chatroom`, data);
+    // setChatroomMessages(res.data);
+    // setLoading(false);
   };
-
-  // useEffect(async () => {
-  //   const abortController = new AbortController();
-  //   await fetchMessages(abortController.signal);
-  //   return () => abortController.abort();
-  // }, []);
 
   useEffect(() => {
     ws.onopen = () => {
@@ -103,7 +88,7 @@ export const PageDashboard = () => {
       const message = JSON.parse(e.data);
       console.log(message);
       if (user._id === message.sender) {
-        await post(`/create-message`, message);
+        await post(`/protected/create-message`, message);
       }
 
       if (message.chatroom === activeChatroom._id) {
@@ -111,15 +96,14 @@ export const PageDashboard = () => {
       }
     };
 
-    return () => {
-      ws.onclose = () => {
-        console.log("WebSocket Disconnected");
-        setWs(new WebSocket("ws://localhost:5002"));
-      };
+    ws.onclose = () => {
+      console.log("WebSocket Disconnected");
+      setWs(new WebSocket("ws://localhost:5002"));
     };
-  }, [ws.onmessage, ws.onopen, ws.onclose, messages]);
+  }, [ws.onmessage, ws.onopen, messages, ws.onclose]);
 
   useEffect(() => {
+    // ****
     let changeW = window.addEventListener("resize", () =>
       setW(window.innerWidth)
     );
@@ -165,6 +149,8 @@ export const PageDashboard = () => {
             <Nav
               setDashboardNavState={setDashboardNavState}
               dashboardNavState={dashboardNavState}
+              createChatroom={createChatroom}
+              setCreateChatroom={setCreateChatroom}
             />
           </Col>
 
@@ -191,6 +177,7 @@ export const PageDashboard = () => {
               setActiveChatroom={setActiveChatroom}
               searchJoinableChatroomsCheckbox={searchJoinableChatroomsCheckbox}
             />
+<<<<<<< HEAD
 
         <div className= "flex create-chatroom-con">
         <input type="text" name="name" id="" placeholder="chatroom name" />
@@ -199,6 +186,29 @@ export const PageDashboard = () => {
         <button type="button">create</button>
         </div>
 
+=======
+            {/* <div>
+              <input
+                type="text"
+                name="name"
+                id=""
+                placeholder="chatroom name"
+              />
+              <input type="text" name="creater" id="" value={user._id} hidden />
+
+              <button type="submit" onClick={() => fetchCreateChatroom}>
+                create
+              </button>
+            </div> */}
+
+            <button
+              onClick={() => {
+                setCreateChatroom(true);
+              }}
+            >
+              create
+            </button>
+>>>>>>> b2de89e4bef37e0e8251060c018980af3584b308
           </Col>
           {W > breakpoints.medium ? (
             <Col
@@ -215,6 +225,9 @@ export const PageDashboard = () => {
                 setMessage={setMessage}
                 messages={messages}
                 setMessages={setMessages}
+                createChatroom={createChatroom}
+                setCreateChatroom={setCreateChatroom}
+                fetchChatrooms={fetchChatrooms}
               />
             </Col>
           ) : null}

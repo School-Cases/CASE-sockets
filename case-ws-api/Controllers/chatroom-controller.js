@@ -111,14 +111,16 @@ export const get_all_chatrooms = async (req, res) => {
 };
 
 export const create_chatroom = async (req, res) => {
+  console.log(req.body);
   try {
     let chatroom = await new chatroomModel({
       name: req.body.name,
-      admins: req.body.creater,
-      members: req.body.creater,
+      admins: req.body.admins,
+      members: req.body.members,
+      theme: req.body.theme,
     });
 
-    await userModel.findByIdAndUpdate(req.body.creater, {
+    await userModel.findByIdAndUpdate(req.body.admins, {
       $push: {
         chatrooms: chatroom._id,
       },

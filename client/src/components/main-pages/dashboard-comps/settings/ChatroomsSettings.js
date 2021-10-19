@@ -32,17 +32,17 @@ const Chatroom = ({
   const [isAdmin, setIsAdmin] = useState(null);
 
   const fetchAllUsers = async (signal) => {
-    let res = await get(`/get-all-users`, signal);
+    let res = await get(`/protected/get-all-users`, signal);
     setRoomMembers(res.data.filter((u) => room.members.includes(u._id)));
     setNotRoomMembers(res.data.filter((u) => !room.members.includes(u._id)));
   };
 
   const fetchAddUserToChatroom = async (room, m) => {
-    await post(`/join-chatroom/${room._id}/${m._id}`);
+    await post(`/protected/join-chatroom/${room._id}/${m._id}`);
   };
 
   const fetchKickUserFromChatroom = async (room, m) => {
-    await post(`/leave-chatroom/${room._id}/${m._id}`);
+    await post(`/protected/leave-chatroom/${room._id}/${m._id}`);
 
     let newState = notRoomMembers;
     return setNotRoomMembers([...newState]);

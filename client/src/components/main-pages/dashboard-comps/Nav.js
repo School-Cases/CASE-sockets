@@ -1,13 +1,31 @@
-import { api_address } from "../../../utils/http";
+import { api_address, get } from "../../../utils/http";
+import { useHistory } from "react-router";
 
+export const Nav = ({
+  setDashboardNavState,
+  dashboardNavState,
+  createChatroom,
+  setCreateChatroom,
+}) => {
+  const history = useHistory();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    history.push("/", null);
+  };
+
+<<<<<<< HEAD
 
 export const Nav = ({ setDashboardNavState }) => {
+=======
+>>>>>>> b2de89e4bef37e0e8251060c018980af3584b308
   return (
     <section className="flex col1-nav-con">
       <div
         className="nav-con-li"
         onClick={() => {
           setDashboardNavState("home");
+          if (createChatroom) setCreateChatroom(false);
         }}
       >
         <span>
@@ -26,6 +44,7 @@ export const Nav = ({ setDashboardNavState }) => {
         className="nav-con-li"
         onClick={() => {
           setDashboardNavState("settings");
+          if (createChatroom) setCreateChatroom(false);
         }}
       >
         <span>
@@ -38,6 +57,7 @@ export const Nav = ({ setDashboardNavState }) => {
           </svg>
         </span> SETTINGS
       </div>
+<<<<<<< HEAD
       <a href={api_address + "/user-logout"} className="nav-con-li">
         <span>
           <svg xmlns="http://www.w3.org/2000/svg" width="31" height="26.167" viewBox="0 0 31 26.167">
@@ -49,7 +69,11 @@ export const Nav = ({ setDashboardNavState }) => {
           </svg>
         </span> LOG OUT
       </a>
+=======
+      <div onClick={logout} className="nav-con-li">
+        <span>icon</span>log out
+      </div>
+>>>>>>> b2de89e4bef37e0e8251060c018980af3584b308
     </section>
   );
 };
-

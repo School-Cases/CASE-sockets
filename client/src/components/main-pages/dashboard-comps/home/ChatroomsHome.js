@@ -35,12 +35,15 @@ export const ChatroomsHome = ({
               ) : null;
             })}
       </div>
+<<<<<<< HEAD
       {/* <form action={api_address + "/create-chatroom"} method="post">
         <input type="text" name="name" id="" placeholder="chatroom name" />
         <input type="text" name="creater" id="" value={user._id} hidden />
 
         <button type="submit">create</button>
       </form> */}
+=======
+>>>>>>> b2de89e4bef37e0e8251060c018980af3584b308
     </section>
   );
 };
@@ -52,7 +55,10 @@ const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
   const [loading, setLoading] = useState(true);
 
   const fetchLastMessage = async (signal) => {
-    let lastMessage = await get(`/get-message/${room.messages.at(-1)}`, signal);
+    let lastMessage = await get(
+      `/protected/get-message/${room.messages.at(-1)}`,
+      signal
+    );
 
     setLastMessage(lastMessage.data);
 
@@ -69,8 +75,6 @@ const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
   if (loading) {
     <h4>loading ...</h4>;
   }
-
-  console.log(lastMessage);
 
   useEffect(async () => {
     if (joinable === "notJoinable") {
@@ -90,7 +94,14 @@ const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
         >
           <div className="flex chatroom-con-title-fav-con">
             <h5>{room.name}</h5>
-            <div className="title-fav-con-fav">O</div>
+            <div
+              className="title-fav-con-fav"
+              onClick={() => {
+                console.log("sho");
+              }}
+            >
+              O
+            </div>
           </div>
           {lastMessage !== null ? (
             <div className="flex chatroom-con-mes">
@@ -112,7 +123,7 @@ const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
           </div>
           <button
             onClick={async () => {
-              await post(`/join-chatroom/${room._id}/${user._id}`);
+              await post(`/protected/join-chatroom/${room._id}/${user._id}`);
             }}
           >
             join

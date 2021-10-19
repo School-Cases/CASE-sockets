@@ -6,10 +6,11 @@ import jwt from "jsonwebtoken";
 import { userModel } from "../Models/user-model";
 
 import { clientAddress } from "../utils/address";
+import { encode } from "../utils/jwt";
 
 export const get_user = async (req, res) => {
   try {
-    const id = req.headers["userId"];
+    const id = req.userId;
     let user = await userModel.findById(id).exec();
     return res.json({
       message: "find user success",
@@ -221,7 +222,8 @@ export const user_login = async (req, res) => {
             : user.theme,
       });
 
-      const token = jwt.sign({ _id: user._id }, "hemlighet");
+      const payload = { _id: user._id };
+      const token = encode(payload);
 
       return res.json({
         message: "login success",
@@ -248,21 +250,6 @@ export const user_login = async (req, res) => {
       data: null,
     });
   }
-};
-
-export const user_logout = async (req, res) => {
-  // try {
-  req.session.destroy((error) => {
-    res.redirect(clientAddress);
-    console.log("destroyed");
-  });
-  // } catch (err) {
-  //   return res.json({
-  //     message: "login user fail" + err,
-  //     success: false,
-  //     data: null,
-  //   });
-  // }
 };
 
 export const user_join_chatroom = async (req, res) => {

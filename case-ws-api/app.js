@@ -76,7 +76,6 @@ wss.on("connection", (ws) => {
 
   ws.on("message", (data, isBinary) => {
     console.log(data.toString(), isBinary);
-
     emitMessage(data.toString(), isBinary);
   });
 });

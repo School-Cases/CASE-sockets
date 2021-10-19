@@ -52,7 +52,6 @@ export const LoginSignup = ({
         type="button"
         className="center login-btn"
         onClick={() => submitFetch(loginSignup)}
-        // onClick={() => submitFetch()}
       >
         {loginSingupTexts[0]}
       </button>
