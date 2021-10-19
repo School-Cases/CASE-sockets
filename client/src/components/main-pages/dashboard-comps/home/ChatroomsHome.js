@@ -8,6 +8,7 @@ export const ChatroomsHome = ({
   searchChatrooms,
   setActiveChatroom,
   searchJoinableChatroomsCheckbox,
+  setCreateChatroom,
 }) => {
   return (
     <section className="flex dash-home-chatrooms">
@@ -21,6 +22,7 @@ export const ChatroomsHome = ({
                   setActiveChatroom={setActiveChatroom}
                   room={room}
                   user={user}
+                  setCreateChatroom={setCreateChatroom}
                 />
               ) : null;
             })
@@ -39,7 +41,13 @@ export const ChatroomsHome = ({
   );
 };
 
-const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
+const Chatroom = ({
+  joinable,
+  room,
+  setActiveChatroom,
+  user,
+  setCreateChatroom,
+}) => {
   const [lastMessage, setLastMessage] = useState({});
   const [lastMessageSender, setLastMessageSender] = useState({});
 
@@ -81,14 +89,15 @@ const Chatroom = ({ joinable, room, setActiveChatroom, user }) => {
           className="col2-chatroom-con"
           onClick={() => {
             setActiveChatroom(room);
+            setCreateChatroom(false);
           }}
         >
           <div className="flex chatroom-con-title-fav-con">
             <h5>{room.name}</h5>
             <div
               className="title-fav-con-fav"
-              onClick={() => {
-                console.log("sho");
+              onClick={(e) => {
+                console.log("sho", e.target);
               }}
             >
               O
