@@ -160,22 +160,54 @@ body,
                     box-shadow: 0px 3px 6px #00000029;
                     border-radius: 23px;
                     height: 100%;
-                    padding: 1.5rem;
+                    padding: 1rem 1.5rem 1.5rem 1.5rem;
 
                     .chat-con-top {
                         justify-content: space-between;
+                        border-bottom: 3px solid $olfRedL;
+                        height: 9vh;
+                        padding-bottom: 0.5rem;
+
+                        .top-userinfo {
+                            
+                            .userinfo-avatar {
+                                color: $greyL;
+                                width: 50px;
+                                background-color: $greyL;
+                                border-radius: 50px;
+                            }
+                        }
+
+                        
                     }
 
                     .chat-con-mid {
-                        height: 72vh;
+                        height: 65vh;
+                        padding: 0 2rem;
                         overflow: scroll;
                         -ms-overflow-style: none;
                         /* IE and Edge */
                         scrollbar-width: none;
                         /* Firefox */
-                        
 
-                        div {
+
+                        .message-right,
+                        .message-left {
+                            color: white;
+                            padding: 0.5rem 2.5rem;
+                            display: table;
+                            border-radius: 23px;
+                            margin-bottom: 1rem;
+                            box-shadow: 0px 3px 2px #00000029;
+                        }
+
+                        .message-right {
+                            background-color: $olfred;
+                            margin-left: auto;
+                        }
+
+                        .message-left {
+                            background-color: $greenC;
                         }
                     }
 
@@ -183,7 +215,40 @@ body,
                         display: none;
                     }
 
-                    .chat-con-bot {}
+                    .chat-con-bot {
+                        justify-content: space-between;
+
+                        .con-bot-con-message {
+                            width: 100%;
+                            padding-right: 1rem;
+
+                            input {
+                                border-style: none;
+                                border-radius: 23px;
+                                height: 6vh;
+                                background-color: $greyL;
+                                padding: 0.3rem 1rem;
+                                width: 100%;
+                            }
+
+                            input:focus {
+                                outline: none;
+                                color: $greyD;
+                            }
+
+                            ::placeholder {
+                                opacity: 0.8;
+                            }
+                        }
+
+                        button {
+                            background-color: $olfred;
+                            border-style: none;
+                            border-radius: 23px;
+                            color: white;
+                            padding: 0.5rem 1rem;
+                        }
+                    }
                 }
 
                 .send-message-con {
