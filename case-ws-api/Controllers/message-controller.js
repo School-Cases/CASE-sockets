@@ -66,7 +66,7 @@ export const create_message = async (req, res) => {
       //   time: req.body.time,
       //   chatroom: "chatroom1",
       //   sender: "haakon",
-      //   time: "13/2-21 13.37",
+      time: req.body.time,
       text: req.body.text,
       // reactions: [],
     });

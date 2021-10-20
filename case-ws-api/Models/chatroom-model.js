@@ -10,8 +10,8 @@ const chatroomSchema = new Schema({
     required: true,
   },
   theme: {
-    type: Number,
-    default: 0,
+    type: String,
+    default: "#FFFFFF",
   },
   admins: [
     {

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { api_address, post, get } from "../../../../utils/http";
 
+import styled from "styled-components";
+
 import { If } from "../../../../utils/If";
 
 export const ChatroomsHome = ({
@@ -12,8 +14,21 @@ export const ChatroomsHome = ({
   searchJoinableChatroomsCheckbox,
   setCreateChatroom,
 }) => {
+  const fetchDeleteChatrooms = async (signal) => {
+    await get(`/protected/delete-all-chatrooms`, signal);
+  };
+
   return (
     <section className="flex dash-home-chatrooms">
+      <button
+        onClick={() => {
+          const abortController = new AbortController();
+          fetchDeleteChatrooms(abortController.signal);
+          return () => abortController.abort();
+        }}
+      >
+        delete chatrooms
+      </button>
       <div className="flex home-chatrooms-con">
         {/* korta ner detta */}
 
@@ -60,6 +75,16 @@ const Chatroom = ({
 
   const [loading, setLoading] = useState(true);
 
+  const StyledSection = styled.section`
+    background: linear-gradient(
+      235deg,
+      ${room.theme} 25%,
+      rgba(255, 255, 255, 1) 25%
+    );
+  `;
+
+  // background: linear-gradient(235deg, ${room.theme} 25%, rgba(255, 255, 255, 1) 25%);
+
   const fetchLastMessage = async (signal) => {
     let lastMessage = await get(
       `/protected/get-message/${room.messages.at(-1)}`,
@@ -99,9 +124,9 @@ const Chatroom = ({
   }
 
   return (
-    <section>
+    <>
       {joinable === "notJoinable" ? (
-        <section
+        <StyledSection
           className="col2-chatroom-con"
           onClick={() => {
             setActiveChatroom(room);
@@ -134,15 +159,15 @@ const Chatroom = ({
           ) : (
             <div>no messages</div>
           )}
-        </section>
+        </StyledSection>
       ) : (
-        <section className="col2-chatroom-con">
+        <StyledSection className="col2-chatroom-con">
           <div className="flex chatroom-con-title-fav-con">
             <h5>{room.name}</h5>
           </div>
           <button onClick={() => fetchJoinChatroom()}>join</button>
-        </section>
+        </StyledSection>
       )}
-    </section>
+    </>
   );
 };

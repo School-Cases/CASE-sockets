@@ -11,7 +11,7 @@ export const CreateChatroom = ({
 }) => {
   const [loading, setLoading] = useState(true);
   const [newRoomName, setNewRoomName] = useState("");
-  const [newRoomTheme, setNewRoomTheme] = useState(0);
+  const [newRoomTheme, setNewRoomTheme] = useState("#FA0000");
   const [newRoomMembers, setNewRoomMembers] = useState([user._id]);
   const [addableUsers, setAddableUsers] = useState([]);
   const [searchUsersInput, setSearchUsersInput] = useState("");
@@ -59,12 +59,14 @@ export const CreateChatroom = ({
 
       <div>color:</div>
       <div className="flex">
-        <div onClick={() => setNewRoomTheme(0)}>röd</div>
-        <div onClick={() => setNewRoomTheme(1)}>grön</div>
-        <div onClick={() => setNewRoomTheme(2)}>blå</div>
-        <div onClick={() => setNewRoomTheme(3)}>orange</div>
-        <div onClick={() => setNewRoomTheme(4)}>svart</div>
+        <div onClick={() => setNewRoomTheme("#FA0000")}>röd</div>
+        <div onClick={() => setNewRoomTheme("#00FF1E")}>grön</div>
+        <div onClick={() => setNewRoomTheme("#009AFA")}>blå</div>
+        <div onClick={() => setNewRoomTheme("#E900FA")}>gul</div>
+        <div onClick={() => setNewRoomTheme("#000000")}>svart</div>
       </div>
+
+      <input type="color" onChange={(e) => setNewRoomTheme(e.target.value)} />
 
       <label htmlFor="">add ppl:</label>
       <input

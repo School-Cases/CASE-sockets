@@ -1,4 +1,5 @@
 import { If } from "../../../../utils/If";
+import { ChatSettingsAcc } from "./ChatSettingsAcc";
 
 export const Chat = ({
   activeChatroom,
@@ -14,10 +15,13 @@ export const Chat = ({
         <div className="flex top-userinfo">
           <div className="userinfo-avatar">ava</div>
           {/* <div className="userinfo-name">{user.name}</div> */}
-          <div className="top-userinfo-chatroom-name">{activeChatroom.name}</div>
+          <div className="top-userinfo-chatroom-name">
+            {activeChatroom.name}
+          </div>
         </div>
         <div className="flex top-settings">
           <div className="userinfo-avatar">...</div>
+          {/* <ChatSettingsAcc /> */}
         </div>
       </section>
 
@@ -45,9 +49,9 @@ export const Chat = ({
           />
         </div>
 
-          <button type="button" onClick={() => send()}>
-            send
-          </button>
+        <button type="button" onClick={() => send()}>
+          send
+        </button>
       </section>
     </>
   );

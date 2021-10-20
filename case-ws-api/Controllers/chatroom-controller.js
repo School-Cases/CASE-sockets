@@ -1,6 +1,7 @@
 /** @format */
 
 import { chatroomModel } from "../Models/chatroom-model";
+import { messageModel } from "../Models/message-model";
 import { userModel } from "../Models/user-model";
 
 export const get_chatroom = async (req, res) => {
@@ -216,4 +217,29 @@ export const delete_chatroom = async (req, res) => {
       data: null,
     });
   }
+};
+
+export const delete_all_chatrooms = async (req, res) => {
+  await chatroomModel.deleteMany({}).exec();
+  await userModel
+    .updateMany(
+      {},
+      {
+        chatrooms: [],
+      }
+    )
+    .exec();
+  await messageModel
+    .updateMany(
+      {},
+      {
+        chatroom: null,
+      }
+    )
+    .exec();
+  // allChats.forEach((chat) => {
+  //   console.log(chat);
+  //   chat.messages = [];
+  // });
+  res.redirect(clientAddress);
 };
