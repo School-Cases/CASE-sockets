@@ -78,6 +78,14 @@ const Chatroom = ({
     setLoading(false);
   };
 
+  const fetchStarmarkChatroom = async () => {
+    await post(`/protected/starmark-chatroom/${room._id}/${user._id}`);
+  };
+
+  const fetchJoinChatroom = async () => {
+    await post(`/protected/join-chatroom/${room._id}/${user._id}`);
+  };
+
   useEffect(async () => {
     if (joinable === "notJoinable") {
       const abortController = new AbortController();
@@ -103,9 +111,13 @@ const Chatroom = ({
           <div className="flex chatroom-con-title-fav-con">
             <h5>{room.name}</h5>
             <div
-              className="title-fav-con-fav"
+              className={`${
+                room.starmarked.includes(user._id) ? "starmarked" : null
+              } title-fav-con-fav`}
               onClick={(e) => {
-                console.log("sho", e.target);
+                // e.target.style.backgroundColor = "red";
+                e.target.classList.toggle("starmarked");
+                fetchStarmarkChatroom();
               }}
             >
               O
@@ -129,13 +141,7 @@ const Chatroom = ({
           <div className="flex chatroom-con-title-fav-con">
             <h5>{room.name}</h5>
           </div>
-          <button
-            onClick={async () => {
-              await post(`/protected/join-chatroom/${room._id}/${user._id}`);
-            }}
-          >
-            join
-          </button>
+          <button onClick={() => fetchJoinChatroom()}>join</button>
         </section>
       )}
     </section>

@@ -19,6 +19,7 @@ import {
   get_all_chatrooms,
   create_chatroom,
   update_chatroom,
+  starmark_chatroom,
   delete_chatroom,
   join_chatroom,
   leave_chatroom,
@@ -75,6 +76,7 @@ router.get("/get-all-chatrooms", get_all_chatrooms);
 router.post("/create-chatroom", create_chatroom);
 router.post("/update-chatroom/:id", update_chatroom);
 router.get("/delete-chatroom/:id", delete_chatroom);
+router.post("/starmark-chatroom/:chatroomId/:userId", starmark_chatroom);
 router.post("/join-chatroom/:chatroomId/:userId", join_chatroom);
 router.post("/leave-chatroom/:chatroomId/:userId", leave_chatroom);
 
