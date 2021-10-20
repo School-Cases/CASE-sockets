@@ -98,7 +98,7 @@ export const Col3 = ({
             />
           ) : (
             <>
-              <button onClick={() => setCreateChatroom(true)}>
+              <button className="create-chatroom-button" onClick={() => setCreateChatroom(true)}>
                 create chatroom
               </button>
             </>
