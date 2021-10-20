@@ -116,6 +116,24 @@ body,
                                     $blueC 25%,
                                     rgba(255, 255, 255, 1) 25%);
 
+                            path,
+                            svg {
+                                fill: white;
+                                transform: scale(0.9);
+                                -ms-transform: scale(0.9);
+                                -webkit-transform: scale(0.9);
+                            }
+
+                            .starmarked {
+                                path, 
+                                svg {
+                                    fill: $olfred;
+                                transform: scale(0.9);
+                                -ms-transform: scale(0.9);
+                                -webkit-transform: scale(0.9);
+                                }
+                            }
+
                             .chatroom-con-title-fav-con {
                                 justify-content: space-between;
 
@@ -124,7 +142,14 @@ body,
                                 }
                             }
 
+                            .con-mes-no-message {
+                                @include font-red-basic;
+                                font-style: italic;
+                                padding: 0 0.5rem;
+                            }
+
                             .chatroom-con-mes {
+
                                 .con-mes-avatar {
                                     background-color: $greyM;
                                     color: $greyM;
@@ -136,22 +161,23 @@ body,
                                 .con-mes-message {
                                     @include font-red-basic;
                                     font-style: italic;
+                                    padding: 0 0.5rem;
                                 }
 
                                 .con-mes-message-time {
                                     @include grey-text-small;
-
+                                    padding: 0 0.5rem;
                                 }
                             }
 
                             button {
                                 cursor: pointer;
                                 width: fit-content;
-                                background-color: $olfred;
+                                background-color: transparent;
                                 border-style: none;
-                                border-radius: 23px;
-                                padding: 0.3rem 0.7rem 0.4rem 0.8rem;
-                                color: white;
+                                font-style: italic;
+                                text-decoration-line: underline;
+                                color: $olfred;
                             }
                         }
                     }
@@ -182,6 +208,20 @@ body,
                     height: 100%;
                     padding: 1rem 1.5rem 1.5rem 1.5rem;
 
+                    .create-chatroom-button {
+                        align-self: center;
+                        background-color: $olfred;
+                        border-style: none;
+                        color: white;
+                        border-radius: 23px;
+                        padding: 0.5rem 1.5rem;
+                        position: absolute;
+                        top: 50%;
+                        -ms-transform: translateY(-50%);
+                        transform: translateY(-50%);
+
+                    }
+
                     .chat-con-top {
                         justify-content: space-between;
                         border-bottom: 3px solid $olfRedL;
@@ -189,7 +229,7 @@ body,
                         padding-bottom: 0.5rem;
 
                         .top-userinfo {
-                            
+
                             .userinfo-avatar {
                                 color: $greyL;
                                 width: 50px;
@@ -211,7 +251,7 @@ body,
                             }
                         }
 
-                        
+
                     }
 
                     .chat-con-mid {
@@ -395,11 +435,17 @@ body,
                 width: 100%;
             }
 
-            .dashboard-con-col2 {}
+            .col12-chatroom-con {
+            }
+
+            .dashboard-con-col2 {
+                padding: 0 1rem;
+            }
 
             .dash-home-chatrooms {
+                padding-top: 1rem;
                 height: 80vh;
-                overflow: hidden;
+                overflow: scroll;
 
                 .home-chatrooms-con {}
 

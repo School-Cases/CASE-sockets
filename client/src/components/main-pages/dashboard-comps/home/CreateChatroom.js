@@ -49,7 +49,7 @@ export const CreateChatroom = ({
   return (
     <section>
       <button onClick={() => setCreateChatroom(false)}>back</button>
-      <h3>create a chatrum</h3>
+      <h3>create chatroom</h3>
       <input
         type="text"
         name="name"
