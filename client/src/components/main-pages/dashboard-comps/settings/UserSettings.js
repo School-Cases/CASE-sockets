@@ -18,7 +18,6 @@ export const UserSettings = ({ user }) => {
       avatar: avatar,
       theme: theme,
     });
-    console.log(res);
   };
   return (
     <div>

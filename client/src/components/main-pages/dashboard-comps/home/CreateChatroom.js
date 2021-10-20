@@ -1,14 +1,51 @@
+import { If } from "../../../../utils/If";
+import { useState, useEffect } from "react";
+
+import { post, get } from "../../../../utils/http";
+
 export const CreateChatroom = ({
+  fetchChatrooms,
   setCreateChatroom,
-  setNewRoomName,
-  setNewRoomTheme,
-  newRoomTheme,
-  searchUsersInput,
-  setSearchUsersInput,
-  setNewRoomMembers,
-  addableUsers,
-  fetchCreateChatroom,
+  createChatroom,
+  user,
 }) => {
+  const [loading, setLoading] = useState(true);
+  const [newRoomName, setNewRoomName] = useState("");
+  const [newRoomTheme, setNewRoomTheme] = useState(0);
+  const [newRoomMembers, setNewRoomMembers] = useState([user._id]);
+  const [addableUsers, setAddableUsers] = useState([]);
+  const [searchUsersInput, setSearchUsersInput] = useState("");
+
+  const fetchAllUsers = async (signal) => {
+    let res = await get(`/protected/get-all-users`, signal);
+
+    setAddableUsers(res.data);
+    setLoading(false);
+  };
+
+  const fetchCreateChatroom = async () => {
+    await post(`/protected/create-chatroom`, {
+      name: newRoomName,
+      admins: [user._id],
+      members: newRoomMembers,
+      theme: newRoomTheme,
+    });
+    setCreateChatroom(false);
+    const abortController = new AbortController();
+    fetchChatrooms(abortController.signal, user._id);
+    return () => abortController.abort();
+  };
+
+  useEffect(async () => {
+    const abortController = new AbortController();
+    if (createChatroom) await fetchAllUsers(abortController.signal);
+    return () => abortController.abort();
+  }, [createChatroom]);
+
+  if (loading) {
+    <h4>loading ...</h4>;
+  }
+
   return (
     <section>
       <button onClick={() => setCreateChatroom(false)}>back</button>
@@ -36,19 +73,23 @@ export const CreateChatroom = ({
         onChange={(e) => setSearchUsersInput(e.target.value)}
       />
       <div className="flex">
-        {searchUsersInput !== ""
-          ? addableUsers.map((m) => {
-              return m.name.includes(searchUsersInput) ? (
+        <If condition={searchUsersInput !== ""}>
+          {addableUsers.map((m) => {
+            return (
+              <If condition={m.name.includes(searchUsersInput)}>
                 <div
-                  onClick={() => {
-                    setNewRoomMembers((prev) => [...prev, m._id]);
-                  }}
+                  onClick={() =>
+                    setNewRoomMembers((prev) => {
+                      return [...prev, m._id];
+                    })
+                  }
                 >
                   {m.name} <span>+</span>
                 </div>
-              ) : null;
-            })
-          : null}
+              </If>
+            );
+          })}
+        </If>
       </div>
       <button onClick={() => fetchCreateChatroom()}>create it</button>
     </section>

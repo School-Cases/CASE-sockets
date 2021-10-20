@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { api_address, post, get } from "../../../../utils/http";
 
+import { If } from "../../../../utils/If";
+
 export const ChatroomsHome = ({
   user,
   userChatrooms,
@@ -14,27 +16,32 @@ export const ChatroomsHome = ({
     <section className="flex dash-home-chatrooms">
       <div className="flex home-chatrooms-con">
         {/* korta ner detta */}
+
         {searchJoinableChatroomsCheckbox === false
           ? userChatrooms.map((room) => {
-              return room.name.includes(searchChatrooms) ? (
-                <Chatroom
-                  joinable={"notJoinable"}
-                  setActiveChatroom={setActiveChatroom}
-                  room={room}
-                  user={user}
-                  setCreateChatroom={setCreateChatroom}
-                />
-              ) : null;
+              return (
+                <If condition={room.name.includes(searchChatrooms)}>
+                  <Chatroom
+                    joinable={"notJoinable"}
+                    setActiveChatroom={setActiveChatroom}
+                    room={room}
+                    user={user}
+                    setCreateChatroom={setCreateChatroom}
+                  />
+                </If>
+              );
             })
           : joinableChatrooms.map((room) => {
-              return room.name.includes(searchChatrooms) ? (
-                <Chatroom
-                  joinable={"joinable"}
-                  setActiveChatroom={setActiveChatroom}
-                  room={room}
-                  user={user}
-                />
-              ) : null;
+              return (
+                <If condition={room.name.includes(searchChatrooms)}>
+                  <Chatroom
+                    joinable={"joinable"}
+                    setActiveChatroom={setActiveChatroom}
+                    room={room}
+                    user={user}
+                  />
+                </If>
+              );
             })}
       </div>
     </section>
@@ -71,9 +78,13 @@ const Chatroom = ({
     setLoading(false);
   };
 
-  if (loading) {
-    <h4>loading ...</h4>;
-  }
+  const fetchStarmarkChatroom = async () => {
+    await post(`/protected/starmark-chatroom/${room._id}/${user._id}`);
+  };
+
+  const fetchJoinChatroom = async () => {
+    await post(`/protected/join-chatroom/${room._id}/${user._id}`);
+  };
 
   useEffect(async () => {
     if (joinable === "notJoinable") {
@@ -82,6 +93,11 @@ const Chatroom = ({
       return () => abortController.abort();
     }
   }, []);
+
+  if (loading) {
+    <h4>loading ...</h4>;
+  }
+
   return (
     <section>
       {joinable === "notJoinable" ? (
@@ -95,9 +111,13 @@ const Chatroom = ({
           <div className="flex chatroom-con-title-fav-con">
             <h5>{room.name}</h5>
             <div
-              className="title-fav-con-fav"
+              className={`${
+                room.starmarked.includes(user._id) ? "starmarked" : null
+              } title-fav-con-fav`}
               onClick={(e) => {
-                console.log("sho", e.target);
+                // e.target.style.backgroundColor = "red";
+                e.target.classList.toggle("starmarked");
+                fetchStarmarkChatroom();
               }}
             >
               O
@@ -121,13 +141,7 @@ const Chatroom = ({
           <div className="flex chatroom-con-title-fav-con">
             <h5>{room.name}</h5>
           </div>
-          <button
-            onClick={async () => {
-              await post(`/protected/join-chatroom/${room._id}/${user._id}`);
-            }}
-          >
-            join
-          </button>
+          <button onClick={() => fetchJoinChatroom()}>join</button>
         </section>
       )}
     </section>

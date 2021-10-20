@@ -167,6 +167,39 @@ export const update_chatroom = async (req, res) => {
   }
 };
 
+export const starmark_chatroom = async (req, res) => {
+  const chatroomId = req.params.chatroomId;
+  const userId = req.params.userId;
+
+  const chatroom = await chatroomModel.findById(req.params.chatroomId).exec();
+  try {
+    if (chatroom.starmarked.includes(userId)) {
+      await chatroomModel.findByIdAndUpdate(chatroomId, {
+        $pull: {
+          starmarked: userId,
+        },
+      });
+    } else {
+      await chatroomModel.findByIdAndUpdate(chatroomId, {
+        $push: {
+          starmarked: userId,
+        },
+      });
+    }
+    return res.json({
+      message: "update chatroom success",
+      success: true,
+      data: null,
+    });
+  } catch (err) {
+    return res.json({
+      message: "update chatroom failed",
+      success: false,
+      data: null,
+    });
+  }
+};
+
 export const delete_chatroom = async (req, res) => {
   const id = req.params.id;
   try {

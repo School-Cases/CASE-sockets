@@ -1,20 +1,24 @@
 import { useState, useEffect } from "react";
 import { get, post } from "../../../../utils/http";
 
+import { If } from "../../../../utils/If";
+
 export const ChatroomsSettings = ({ user, userChatrooms, searchChatrooms }) => {
   const [chatSettingsToggle, setChatSettingsToggle] = useState();
 
   return (
     <section className="flex dash-settings-chatrooms">
       {userChatrooms.map((room) => {
-        return room.name.includes(searchChatrooms) ? (
-          <Chatroom
-            user={user}
-            room={room}
-            chatSettingsToggle={chatSettingsToggle}
-            setChatSettingsToggle={setChatSettingsToggle}
-          />
-        ) : null;
+        return (
+          <If condition={room.name.includes(searchChatrooms)}>
+            <Chatroom
+              user={user}
+              room={room}
+              chatSettingsToggle={chatSettingsToggle}
+              setChatSettingsToggle={setChatSettingsToggle}
+            />
+          </If>
+        );
       })}
     </section>
   );
@@ -66,63 +70,69 @@ const Chatroom = ({
       className="col2-chatroom-con"
     >
       <h5>
-        {room.name} {isAdmin ? <span>admin</span> : null}
+        {room.name}
+        <If condition={isAdmin}>
+          <span>admin</span>
+        </If>
       </h5>
-      {chatSettingsToggle === room._id ? (
+      <If condition={chatSettingsToggle === room._id}>
+        <p>{room.members.length} members</p>
+        <label>name:</label>
+        <input type="text" placeholder={room.name} />
+        <div>Members:</div>
+        <div className="flex">
+          {roomMembers.map((m, i) => {
+            return (
+              <div>
+                <div>{m.name}</div>
+                <If condition={isAdmin && m._id !== user._id}>
+                  <div onClick={() => fetchKickUserFromChatroom(room, m)}>
+                    kick
+                  </div>
+                </If>
+              </div>
+            );
+          })}
+        </div>
+        <div className="flex">
+          <label>add ppl:</label>
+          <input
+            type="text"
+            placeholder="search user"
+            onChange={(e) => setSearchUsersInput(e.target.value)}
+          />
+        </div>
         <div>
-          <p>{room.members.length} members</p>
-          <div>Members:</div>
-          <div className="flex">
-            {roomMembers.map((m, i) => {
+          <If condition={searchUsersInput !== ""}>
+            {notRoomMembers.map((m) => {
               return (
-                <div>
-                  <div>{m.name}</div>
-                  {isAdmin && m._id !== user._id ? (
-                    <div onClick={() => fetchKickUserFromChatroom(room, m)}>
-                      kick
-                    </div>
-                  ) : null}
-                </div>
+                <If condition={m.name.includes(searchUsersInput)}>
+                  <span onClick={() => fetchAddUserToChatroom(room, m)}>
+                    {m.name}
+                  </span>
+                </If>
               );
             })}
-          </div>
-          <div className="flex">
-            <label>add ppl:</label>
-            <input
-              type="text"
-              placeholder="search user"
-              onChange={(e) => setSearchUsersInput(e.target.value)}
-            />
-          </div>
-          <div>
-            {searchUsersInput !== ""
-              ? notRoomMembers.map((m) => {
-                  return m.name.includes(searchUsersInput) ? (
-                    <span onClick={() => fetchAddUserToChatroom(room, m)}>
-                      {m.name}
-                    </span>
-                  ) : null;
-                })
-              : null}
-          </div>
-
-          <hr />
-          <div>color:</div>
-          <span>röd</span>
-          <span>grön</span>
-          <span>blå</span>
-          <hr />
-          {isAdmin ? (
-            <div>
-              <span>icon</span> Delete chatroom
-            </div>
-          ) : (
-            <div>
-              <span>icon</span> Leave chatroom
-            </div>
-          )}
+          </If>
         </div>
-      ) : null}
+
+        <hr />
+
+        <div>color:</div>
+        <span>röd</span>
+        <span>grön</span>
+        <span>blå</span>
+        <hr />
+        {isAdmin ? (
+          <>
+            <span>icon</span> Delete chatroom
+          </>
+        ) : (
+          <>
+            <span>icon</span> Leave chatroom
+          </>
+        )}
+      </If>
     </section>
   );
 };

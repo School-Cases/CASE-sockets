@@ -14,7 +14,6 @@ export const get = async (endpoint, signal) => {
 };
 
 export const post = async (endpoint, data) => {
-  console.log(data);
   return await fetch(api_address + endpoint, {
     method: "POST",
     headers: {
