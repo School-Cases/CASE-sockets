@@ -124,6 +124,26 @@ body,
                                 }
                             }
 
+                            .chatroom-con-mes {
+                                .con-mes-avatar {
+                                    background-color: $greyM;
+                                    color: $greyM;
+                                    border-radius: 50px;
+                                    width: 40px;
+
+                                }
+
+                                .con-mes-message {
+                                    @include font-red-basic;
+                                    font-style: italic;
+                                }
+
+                                .con-mes-message-time {
+                                    @include grey-text-small;
+
+                                }
+                            }
+
                             button {
                                 cursor: pointer;
                                 width: fit-content;
@@ -175,6 +195,19 @@ body,
                                 width: 50px;
                                 background-color: $greyL;
                                 border-radius: 50px;
+                            }
+
+                            .top-userinfo-chatroom-name {
+                                @include olf-header-2;
+                                text-transform: uppercase;
+                                padding: 0.9rem 0 0 1rem;
+                            }
+                        }
+
+                        .top-settings {
+                            .userinfo-avatar {
+                                font-size: 30px;
+                                color: $olfred;
                             }
                         }
 

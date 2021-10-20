@@ -125,11 +125,11 @@ const Chatroom = ({
           </div>
           {lastMessage !== null ? (
             <div className="flex chatroom-con-mes">
-              <div>{lastMessageSender.avatar}</div>
+              <div className="con-mes-avatar">{lastMessageSender.avatar}</div>
 
               <div>
-                <div>{lastMessage.text}</div>
-                <div>{lastMessage.time}</div>
+                <div className="con-mes-message">{lastMessage.text}</div>
+                <div className="con-mes-message-time">{lastMessage.time}</div>
               </div>
             </div>
           ) : (

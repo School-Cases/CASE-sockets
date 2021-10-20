@@ -9,12 +9,12 @@ export const Chat = ({
   send,
 }) => {
   return (
-    <section>
+    <>
       <section className="flex chat-con-top">
         <div className="flex top-userinfo">
           <div className="userinfo-avatar">ava</div>
           {/* <div className="userinfo-name">{user.name}</div> */}
-          <div>{activeChatroom.name}</div>
+          <div className="top-userinfo-chatroom-name">{activeChatroom.name}</div>
         </div>
         <div className="flex top-settings">
           <div className="userinfo-avatar">...</div>
@@ -49,6 +49,6 @@ export const Chat = ({
             send
           </button>
       </section>
-    </section>
+    </>
   );
 };

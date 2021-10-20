@@ -16,6 +16,14 @@
     letter-spacing: 1px;
 }
 
+// olf red basic
+@mixin font-red-basic {
+    color: $olfred;
+    font-size: 15px;
+    letter-spacing: 1px;
+}
+
+
 // olf white basic small
 @mixin font-white-basic-small {
     color: $white;
@@ -53,4 +61,10 @@
 @mixin grey-text {
     color: $greyM;
     font-size: 17px;
+}
+
+// grey text
+@mixin grey-text-small {
+    color: $greyM;
+    font-size: 13px;
 }
