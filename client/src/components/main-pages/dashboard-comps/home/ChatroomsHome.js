@@ -112,10 +112,9 @@ const Chatroom = ({
             <h5>{room.name}</h5>
             <div
               className={`${
-                room.starmarked.includes(user._id) ? "starmarked" : null
+                room.starmarked.includes(user._id) ? "starmarked" : ""
               } title-fav-con-fav`}
               onClick={(e) => {
-                // e.target.style.backgroundColor = "red";
                 e.target.classList.toggle("starmarked");
                 fetchStarmarkChatroom();
               }}

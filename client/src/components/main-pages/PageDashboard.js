@@ -57,7 +57,16 @@ export const PageDashboard = () => {
     let res = await get(`/protected/get-all-chatrooms`, signal);
 
     setAllChatrooms(res.data);
-    setUserChatrooms(res.data.filter((chat) => chat.members.includes(userID)));
+    setUserChatrooms(
+      res.data
+        .filter((chat) => chat.members.includes(userID))
+        .sort((chatA, chatB) => {
+          return (
+            chatB.starmarked.includes(userID) -
+            chatA.starmarked.includes(userID)
+          );
+        })
+    );
     setJoinableChatrooms(
       res.data.filter((chat) => !chat.members.includes(userID))
     );
