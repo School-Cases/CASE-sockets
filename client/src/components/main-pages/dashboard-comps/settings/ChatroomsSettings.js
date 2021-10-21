@@ -31,25 +31,43 @@ const Chatroom = ({
   setChatSettingsToggle,
 }) => {
   const [searchUsersInput, setSearchUsersInput] = useState("");
+  const [roomAdmins, setRoomAdmins] = useState([]);
+  const [notRoomAdmins, setNotRoomAdmins] = useState([]);
   const [roomMembers, setRoomMembers] = useState([]);
   const [notRoomMembers, setNotRoomMembers] = useState([]);
   const [isAdmin, setIsAdmin] = useState(null);
+
+  const [newRoomName, setNewRoomName] = useState(room.name);
+  const [newRoomTheme, setNewRoomTheme] = useState(room.theme);
 
   const fetchAllUsers = async (signal) => {
     let res = await get(`/protected/get-all-users`, signal);
     setRoomMembers(res.data.filter((u) => room.members.includes(u._id)));
     setNotRoomMembers(res.data.filter((u) => !room.members.includes(u._id)));
+
+    setRoomAdmins(res.data.filter((u) => room.admins.includes(u._id)));
+    setNotRoomAdmins(res.data.filter((u) => !room.admins.includes(u._id)));
   };
 
-  const fetchAddUserToChatroom = async (room, m) => {
-    await post(`/protected/join-chatroom/${room._id}/${m._id}`);
+  const fetchDeleteChatroom = async (signal) => {
+    const abortController = new AbortController();
+    let res = await get(`/protected/delete-chatroom/` + room._id, signal);
+    return () => abortController.abort();
   };
 
-  const fetchKickUserFromChatroom = async (room, m) => {
-    await post(`/protected/leave-chatroom/${room._id}/${m._id}`);
+  const fetchUpdateChatroom = async () => {
+    let newRoomAdmins = [];
+    roomAdmins.forEach((a) => newRoomAdmins.push(a));
 
-    let newState = notRoomMembers;
-    return setNotRoomMembers([...newState]);
+    let newRoomMembers = [];
+    roomMembers.forEach((m) => newRoomMembers.push(m._id));
+
+    await post(`/protected/update-chatroom/` + room._id, {
+      name: newRoomName,
+      admins: newRoomAdmins,
+      members: newRoomMembers,
+      theme: newRoomTheme,
+    });
   };
 
   useEffect(async () => {
@@ -78,7 +96,18 @@ const Chatroom = ({
       <If condition={chatSettingsToggle === room._id}>
         <p>{room.members.length} members</p>
         <label>name:</label>
-        <input type="text" placeholder={room.name} />
+        <input
+          type="text"
+          placeholder={room.name}
+          onChange={(e) => {
+            if (e.target.value !== "") {
+              setNewRoomName(e.target.value);
+            } else {
+              setNewRoomName(room.name);
+            }
+          }}
+        />
+
         <div>Members:</div>
         <div className="flex">
           {roomMembers.map((m, i) => {
@@ -86,16 +115,36 @@ const Chatroom = ({
               <div>
                 <div>{m.name}</div>
                 <If condition={isAdmin && m._id !== user._id}>
-                  <div onClick={() => fetchKickUserFromChatroom(room, m)}>
-                    kick
-                  </div>
+                  <If condition={!roomAdmins.includes(m._id)}>
+                    <div
+                      onClick={() =>
+                        setRoomAdmins((prev) => {
+                          return [...prev, m._id];
+                        })
+                      }
+                    >
+                      make admin
+                    </div>
+                  </If>
+                  <If condition={!roomAdmins.includes(m._id)}>
+                    <div
+                      onClick={() => {
+                        let newArr = roomMembers.filter(
+                          (me) => me._id !== m._id
+                        );
+                        setRoomMembers(newArr);
+                      }}
+                    >
+                      kick
+                    </div>
+                  </If>
                 </If>
               </div>
             );
           })}
         </div>
         <div className="flex">
-          <label>add ppl:</label>
+          <label>search not members:</label>
           <input
             type="text"
             placeholder="search user"
@@ -106,8 +155,19 @@ const Chatroom = ({
           <If condition={searchUsersInput !== ""}>
             {notRoomMembers.map((m) => {
               return (
-                <If condition={m.name.includes(searchUsersInput)}>
-                  <span onClick={() => fetchAddUserToChatroom(room, m)}>
+                <If
+                  condition={
+                    m.name.includes(searchUsersInput) &&
+                    !roomMembers.includes(m)
+                  }
+                >
+                  <span
+                    onClick={() =>
+                      setRoomMembers((prev) => {
+                        return [...prev, m];
+                      })
+                    }
+                  >
                     {m.name}
                   </span>
                 </If>
@@ -119,18 +179,29 @@ const Chatroom = ({
         <hr />
 
         <div>color:</div>
-        <span>röd</span>
-        <span>grön</span>
-        <span>blå</span>
+        <div className="flex">
+          <div onClick={() => setNewRoomTheme("#A2DC68")}>greenC</div>
+          <div onClick={() => setNewRoomTheme("#68DCC4")}>blueC</div>
+          <div onClick={() => setNewRoomTheme("#DC68D0")}>purpleC</div>
+          <div onClick={() => setNewRoomTheme("#D8DC68")}>yellowC</div>
+        </div>
+
+        <input type="color" onChange={(e) => setNewRoomTheme(e.target.value)} />
+
         <hr />
+        <div onClick={() => fetchUpdateChatroom()}>save</div>
         {isAdmin ? (
-          <>
+          <div
+            onClick={() => {
+              fetchDeleteChatroom();
+            }}
+          >
             <span>icon</span> Delete chatroom
-          </>
+          </div>
         ) : (
-          <>
+          <div>
             <span>icon</span> Leave chatroom
-          </>
+          </div>
         )}
       </If>
     </section>
