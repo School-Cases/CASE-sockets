@@ -1,0 +1,161 @@
+@import "/src/style/login.scss";
+
+@import "/src/style/components/colours.scss";
+@import "/src/style/components/fonts.scss";
+@import "/src/style/components/buttons.scss";
+@import "../components/mixins.scss";
+@import url("https://use.typekit.net/rdr3hkg.css");
+
+.page {
+    margin: 0;
+    min-width: 100%;
+    min-height: 100vh;
+    background-image: url(../../images/Olf-pattern.png),
+        linear-gradient(#f6c658, #ff997d);
+
+    &.page-dashboard {
+
+        //   BOTH MOBILE AND DESKTOP
+
+        .dashboard-con {
+            min-height: 100vh;
+
+            .col3-chat-con,
+            .message-right,
+            .message-left {
+                box-shadow: 0px 3px 6px #00000029;
+                border-radius: 23px;
+            }
+
+            .chat-con-bot,
+            .col3-chat-con,
+            .chat-con-top {
+                justify-content: space-between;
+            }
+
+
+            .dashboard-con-col3 {
+                .col3-chat-con {
+                    flex-direction: column;
+                    background-color: white;
+                    height: 100%;
+                    padding: 1rem 1.5rem 1.5rem 1.5rem;
+
+                    .create-chatroom-button {
+                        @include button-small-red;
+                        align-self: center;
+                        position: absolute;
+                        top: 50%;
+                        -ms-transform: translateY(-50%);
+                        transform: translateY(-50%);
+                    }
+
+                    .chat-con-top {
+                        border-bottom: 3px solid $olfRedL;
+                        height: 9vh;
+                        padding-bottom: 0.5rem;
+
+                        .top-userinfo {
+                            .userinfo-avatar {
+                                color: $greyL;
+                                background-color: $greyL;
+                                width: 50px;
+                                border-radius: 50px;
+                            }
+
+                            .top-userinfo-chatroom-name {
+                                @include olf-header-2;
+                                text-transform: uppercase;
+                                padding: 0.9rem 0 0 1rem;
+                            }
+                        }
+
+                        .top-settings {
+                            .userinfo-avatar {
+                                font-size: 30px;
+                                color: $olfred;
+                            }
+                        }
+                    }
+
+                    .chat-con-mid {
+                        @include hidden-scroll;
+                        height: 65vh;
+                        padding: 0 2rem;
+
+                        .message-right,
+                        .message-left {
+                            color: white;
+                            display: table;
+                            margin-bottom: 1rem;
+                            padding: 0.5rem 1rem;
+                            max-width: 40%;
+                        }
+
+                        .message-right {
+                            background-color: $olfred;
+                            margin-left: auto;
+                        }
+
+                        .message-left {
+                            background-color: $greenC;
+                        }
+                    }
+
+                    .chat-con-mid::-webkit-scrollbar {
+                        display: none;
+                    }
+
+                    .chat-con-bot {
+
+                        .con-bot-con-message {
+                            width: 100%;
+                            padding-right: 1rem;
+
+                            input {
+                                @include grey-input-field;
+                                width: 100%;
+                                height: 6vh;
+                            }
+
+                            input:focus {
+                                outline: none;
+                                color: $greyD;
+                            }
+
+                            ::placeholder {
+                                opacity: 0.8;
+                            }
+                        }
+
+                        button {
+                            @include button-small-blue;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        //   ONLY ON WIDTH > MEDIUM (DESKTOP)
+
+        &.page-dashboard-desktop {
+
+            .dashboard-con {
+                padding: 3rem;
+            }
+
+            .dashboard-con-col3 {
+                width: 58%;
+                padding: 0 0 0 2rem;
+            }
+
+        }
+
+
+        //   ONLY ON WIDTH < MEDIUM (MOBILE)
+
+        &.page-dashboard-mobile {}
+
+    }
+}

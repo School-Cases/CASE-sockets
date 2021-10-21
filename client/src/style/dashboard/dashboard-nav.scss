@@ -1,0 +1,95 @@
+@import "/src/style/login.scss";
+
+@import "/src/style/components/colours.scss";
+@import "/src/style/components/fonts.scss";
+@import "/src/style/components/buttons.scss";
+@import "../components/mixins.scss";
+@import url("https://use.typekit.net/rdr3hkg.css");
+
+.page {
+    margin: 0;
+    min-width: 100%;
+    min-height: 100vh;
+    background-image: url(../../images/Olf-pattern.png),
+        linear-gradient(#f6c658, #ff997d);
+
+    &.page-dashboard {
+
+        //   BOTH MOBILE AND DESKTOP
+
+        .dashboard-con {
+            min-height: 100vh;s
+
+            .user-con-avatar {
+                &:after {
+                  content: "";
+                  background-color: hotpink;
+                  width: 1rem;
+                  height: 1rem;
+                  position: absolute;
+                }
+              }
+
+
+        }
+
+        //   ONLY ON WIDTH > MEDIUM (DESKTOP)
+
+        &.page-dashboard-desktop {
+
+            .dashboard-con {
+                padding: 3rem;
+              }
+
+              .dashboard-con-col1 {
+                flex-direction: column;
+                border-right: 3px solid white;
+        
+                .col1-user-con {
+                  @include font-white-basic;
+                  height: 30%;
+                  flex-direction: column;
+                  justify-content: space-between;
+                }
+        
+                .col1-nav-con {
+                  @include font-nav-basic;
+                  flex-direction: column;
+                  gap: 2rem;
+        
+                  svg {
+                    padding-left: 0.3rem;
+                    transform: translateY(-0.2rem);
+                  }
+        
+                  .nav-con-li {
+                    cursor: pointer;
+                  }
+        
+                  a {
+                    @include font-nav-basic;
+                    text-decoration: none;
+                    cursor: pointer;
+                  }
+                }
+              }
+
+
+        }
+
+
+
+        //   ONLY ON WIDTH < MEDIUM (MOBILE)
+
+        &.page-dashboard-mobile {
+
+            .dashboard-con-col1 {
+                height: 10vh;
+                width: 100%;
+              }
+
+
+        }
+
+    }
+}

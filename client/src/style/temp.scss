@@ -1,5 +1,10 @@
 @import "/src/style/login.scss";
-@import "/src/style/dashboard.scss";
+
+@import "./dashboard/dashboard-chatcards.scss";
+@import "./dashboard/dashboard-chatroom.scss";
+@import "./dashboard/dashboard-nav.scss";
+@import "./dashboard/dashboard-create.scss";
+
 @import "./settings.scss";
 
 @import "/src/style/components/colours.scss";
@@ -8,7 +13,7 @@
 @import url("https://use.typekit.net/rdr3hkg.css");
 
 * {
-  border: 1px solid black;
+  // border: 1px solid black;
   box-sizing: border-box;
   padding: 0;
   margin: 0;
@@ -33,4 +38,11 @@
 
 .col-nopad {
   padding: 0;
+}
+
+#root,
+.App,
+body,
+.page {
+  max-height: 100vh;
 }

@@ -35,7 +35,8 @@
 @mixin font-nav-basic {
     color: $white;
     font-size: 20px;
-    letter-spacing: 3px;
+    font-weight: 900;
+    letter-spacing: 2px;
 }
 
 // olf red basic
@@ -53,7 +54,6 @@
     color: $olfYellowD;
     font-size: 17px;
     font-weight: 900;
-    letter-spacing: 1px;
     text-transform: uppercase;
 }
    

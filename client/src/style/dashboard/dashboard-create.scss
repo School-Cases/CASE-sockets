@@ -1,0 +1,102 @@
+@import "/src/style/login.scss";
+
+@import "/src/style/components/colours.scss";
+@import "/src/style/components/fonts.scss";
+@import "/src/style/components/buttons.scss";
+@import "../components/mixins.scss";
+@import url("https://use.typekit.net/rdr3hkg.css");
+
+.page {
+    margin: 0;
+    min-width: 100%;
+    min-height: 100vh;
+    background-image: url(../../images/Olf-pattern.png),
+        linear-gradient(#f6c658, #ff997d);
+
+    &.page-dashboard {
+
+        //   BOTH MOBILE AND DESKTOP
+
+        .dashboard-con {
+            min-height: 100vh;
+
+            .dashboard-con-create-con {
+
+                .create-con-top {
+                    justify-content: space-between;
+                    width: 100%;
+                    padding-bottom: 1rem;
+                }
+
+                h3 {
+                    @include olf-header-1
+                }
+
+                .create-con-button-back {
+                    @include button-small-red;
+                }
+
+                .create-con-input-text {
+                    @include grey-input-field;
+                    font-style: italic;
+                }
+
+                input:focus {
+                    outline: none;
+                    color: $greyD;
+                }
+
+                ::placeholder {
+                    opacity: 0.9;
+                    color: $greyD;
+                }
+
+                .create-con-text {
+                    color: $olfred;
+                }
+
+                .create-con-color-picker {
+                    border-radius: 50%;
+                    height: 3rem;
+                    width: 3rem;
+                    border: none;
+                    outline: none;
+                    -webkit-appearance: none;
+                }
+
+                .create-con-color-picker::-webkit-color-swatch-wrapper {
+                    padding: 0; 
+                }
+                .create-con-color-picker::-webkit-color-swatch {
+                    border: none;
+                    border-radius: 50px;
+                }
+
+                .create-con-button-create {
+                    @include button-small-blue;   
+                }
+            }
+
+
+        }
+
+
+            //   ONLY ON WIDTH > MEDIUM (DESKTOP)
+
+            &.page-dashboard-desktop {
+
+
+
+            }
+
+
+            //   ONLY ON WIDTH < MEDIUM (MOBILE)
+
+            &.page-dashboard-mobile {
+
+
+
+            }
+        
+    }
+}

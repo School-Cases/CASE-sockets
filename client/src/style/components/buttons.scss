@@ -18,14 +18,14 @@
 
     &:hover {
         background-color: $blueC;
-    } 
+    }
 
     &:focus {
         transform: scale(1.1);
         box-shadow: 0px 3px 3px #00000029;
         background-color: $blueC;
     }
- 
+
 }
 
 @mixin button-large-white {
@@ -39,17 +39,30 @@
     font-style: normal;
     font-size: 22px;
 
-  
+
 }
 
-// slide right animation
+@mixin button-small-red {
+    border-radius: 23px;
+    border: none;
+    background-color: $olfred;
+    padding: 0.5rem 1rem;
+    color: white;
+}
+
+@mixin button-small-blue {
+    border-radius: 23px;
+    border: none;
+    background-color: $blueC;
+    padding: 0.5rem 1rem;
+    color: white;
+}
 
 
-
-
-// radius animation
-// transition: ease-in-out 0.2s;
-    
-// &:hover {
-//     border-radius: 10px;
-// }
+@mixin button-only-text {
+    cursor: pointer;
+    width: fit-content;
+    background-color: transparent;
+    border-style: none;
+    text-decoration-line: underline;
+}

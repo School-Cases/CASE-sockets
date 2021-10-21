@@ -1,0 +1,31 @@
+@import "/src/style/components/colours.scss";
+@import "/src/style/components/fonts.scss";
+
+@mixin grey-input-field {
+    border-style: none;
+    border-radius: 23px;
+    background-color: $greyL;
+    padding: 0.3rem 1rem;
+}
+
+@mixin hidden-scroll {
+    overflow: scroll;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+@mixin checkbox-style {
+    -webkit-appearance: none;
+    width: 17px;
+    height: 17px;
+    border-radius: 23px;
+    box-shadow: 0px 3px 6px #00000011;
+}
+
+@mixin svg-scale-small {
+    transform: scale(0.9);
+    -ms-transform: scale(0.9);
+    -webkit-transform: scale(0.9);
+}

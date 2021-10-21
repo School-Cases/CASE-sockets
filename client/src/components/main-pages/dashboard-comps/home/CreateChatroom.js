@@ -47,17 +47,26 @@ export const CreateChatroom = ({
   }
 
   return (
-    <section>
-      <button onClick={() => setCreateChatroom(false)}>back</button>
+    <section className= "dashboard-con-create-con">
+      <div className="flex create-con-top">
       <h3>create chatroom</h3>
-      <input
+      <button className="create-con-button-back" onClick={() => setCreateChatroom(false)}>back</button>
+      </div>
+
+      <div className="create-con-name">
+      <label className="create-con-text" htmlFor="">Name:</label>
+      <input className="create-con-input-text"
         type="text"
         name="name"
+        placeholder="Chatroom name"
         onChange={(e) => setNewRoomName(e.target.value)}
       />
-      <input type="text" name="theme" value={newRoomTheme} />
+      </div>
 
-      <div>color:</div>
+
+      <input type="text" name="theme" value={newRoomTheme} hidden />
+      
+      <div className="create-con-text">color:</div>
       <div className="flex">
         <div onClick={() => setNewRoomTheme("#FA0000")}>röd</div>
         <div onClick={() => setNewRoomTheme("#00FF1E")}>grön</div>
@@ -66,10 +75,10 @@ export const CreateChatroom = ({
         <div onClick={() => setNewRoomTheme("#000000")}>svart</div>
       </div>
 
-      <input type="color" onChange={(e) => setNewRoomTheme(e.target.value)} />
+      <input className="create-con-color-picker" type="color" onChange={(e) => setNewRoomTheme(e.target.value)} />
 
-      <label htmlFor="">add ppl:</label>
-      <input
+      <label className="create-con-text" htmlFor="">add ppl:</label>
+      <input className="create-con-input-text"
         type="text"
         placeholder="search user"
         onChange={(e) => setSearchUsersInput(e.target.value)}
@@ -93,7 +102,7 @@ export const CreateChatroom = ({
           })}
         </If>
       </div>
-      <button onClick={() => fetchCreateChatroom()}>create it</button>
+      <button className="create-con-button-create" onClick={() => fetchCreateChatroom()}>create it</button>
     </section>
   );
 };
