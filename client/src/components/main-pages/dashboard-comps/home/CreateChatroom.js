@@ -47,29 +47,51 @@ export const CreateChatroom = ({
   }
 
   return (
-    <section>
-      <button onClick={() => setCreateChatroom(false)}>back</button>
-      <h3>create chatroom</h3>
-      <input
-        type="text"
-        name="name"
-        onChange={(e) => setNewRoomName(e.target.value)}
-      />
-      <input type="text" name="theme" value={newRoomTheme} />
-
-      <div>color:</div>
-      <div className="flex">
-        <div onClick={() => setNewRoomTheme("#FA0000")}>röd</div>
-        <div onClick={() => setNewRoomTheme("#00FF1E")}>grön</div>
-        <div onClick={() => setNewRoomTheme("#009AFA")}>blå</div>
-        <div onClick={() => setNewRoomTheme("#E900FA")}>gul</div>
-        <div onClick={() => setNewRoomTheme("#000000")}>svart</div>
+    <section className="dashboard-con-create-con">
+      <div className="flex create-con-top">
+        <h3>create chatroom</h3>
+        <button
+          className="create-con-button-back"
+          onClick={() => setCreateChatroom(false)}
+        >
+          back
+        </button>
       </div>
 
-      <input type="color" onChange={(e) => setNewRoomTheme(e.target.value)} />
+      <div className="create-con-name">
+        <label htmlFor="" className="create-con-text">
+          Name:
+        </label>
 
-      <label htmlFor="">add ppl:</label>
+        <input
+          className="create-con-input-text"
+          type="text"
+          name="name"
+          onChange={(e) => setNewRoomName(e.target.value)}
+        />
+      </div>
+
+      <input type="text" name="theme" value={newRoomTheme} hidden />
+
+      <div className="create-con-text">color:</div>
+      <div className="flex">
+        <div onClick={() => setNewRoomTheme("#A2DC68")}>greenC</div>
+        <div onClick={() => setNewRoomTheme("#68DCC4")}>blueC</div>
+        <div onClick={() => setNewRoomTheme("#DC68D0")}>purpleC</div>
+        <div onClick={() => setNewRoomTheme("#D8DC68")}>yellowC</div>
+      </div>
+
       <input
+        className="create-con-color-picker"
+        type="color"
+        onChange={(e) => setNewRoomTheme(e.target.value)}
+      />
+
+      <label className="create-con-text" htmlFor="">
+        add ppl:
+      </label>
+      <input
+        className="create-con-input-text"
         type="text"
         placeholder="search user"
         onChange={(e) => setSearchUsersInput(e.target.value)}
@@ -93,7 +115,12 @@ export const CreateChatroom = ({
           })}
         </If>
       </div>
-      <button onClick={() => fetchCreateChatroom()}>create it</button>
+      <button
+        className="create-con-button-create"
+        onClick={() => fetchCreateChatroom()}
+      >
+        create it
+      </button>
     </section>
   );
 };

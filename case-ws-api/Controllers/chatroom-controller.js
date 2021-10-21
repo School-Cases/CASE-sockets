@@ -78,8 +78,6 @@ export const join_chatroom = async (req, res) => {
     chatroom.save();
     user.save();
 
-    // res.redirect()
-
     return res.json({
       message: "find chatroom success",
       success: true,
@@ -144,16 +142,51 @@ export const create_chatroom = async (req, res) => {
 };
 
 export const update_chatroom = async (req, res) => {
-  const id = req.params.id;
+  console.log(req.body, "reqbody");
   try {
-    await chatroomModel.findByIdAndUpdate(id, {
+    let chatroom = await chatroomModel.findById(req.params.id).exec();
+
+    console.log(chatroom);
+    chatroom.members.forEach(async (m) => {
+      if (!req.body.members.includes(m._id)) {
+        await userModel.findByIdAndUpdate(m._id, {
+          $pull: {
+            chatrooms: chatroom._id,
+          },
+        });
+      } else {
+        await userModel.findByIdAndUpdate(m._id, {
+          $push: {
+            chatrooms: chatroom._id,
+          },
+        });
+      }
+    });
+
+    await chatroomModel.findByIdAndUpdate(chatroom._id, {
       name: req.body.name,
       theme: req.body.theme,
-      //   members: req.body.members,
-      //   starmarked: [],
-      //   invites: [],
-      //   messages: [],
+      admins: req.body.admins,
+      members: req.body.members,
     });
+
+    // chatroom.members.forEach((m) => {
+    //   if (!m.chatrooms.includes(chatroom._id)) {
+    //     await userModel.findByIdAndUpdate(m._id, {
+    //       $push: {
+    //         chatrooms: chatroom._id,
+    //       },
+    //     });
+    //   }
+    // else {
+    //   await userModel.findByIdAndUpdate(m._id, {
+    //     $pull: {
+    //       chatrooms: chatroom._id,
+    //     },
+    //   });
+    // }
+    // });
+
     return res.json({
       message: "update chatroom success",
       success: true,
@@ -175,6 +208,7 @@ export const starmark_chatroom = async (req, res) => {
   const chatroom = await chatroomModel.findById(req.params.chatroomId).exec();
   try {
     if (chatroom.starmarked.includes(userId)) {
+      console.log("shud pull");
       await chatroomModel.findByIdAndUpdate(chatroomId, {
         $pull: {
           starmarked: userId,
@@ -204,7 +238,18 @@ export const starmark_chatroom = async (req, res) => {
 export const delete_chatroom = async (req, res) => {
   const id = req.params.id;
   try {
+    // console.log(await messageModel.find({ chatroom: id }));
+    await messageModel.deleteMany({ chatroom: id }).exec();
     await chatroomModel.findByIdAndDelete({ _id: id }).exec();
+
+    await userModel.find({ chatrooms: id }, (error, users) => {
+      users.forEach((user) => {
+        let index = user.chatrooms.findIndex((ch) => ch._id === id);
+        user.chatrooms.splice(index, 1);
+        user.save();
+      });
+    });
+
     return res.json({
       message: "delete chatroom success",
       success: true,

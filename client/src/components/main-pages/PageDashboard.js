@@ -97,6 +97,7 @@ export const PageDashboard = () => {
 
     ws.onmessage = async (e) => {
       const message = JSON.parse(e.data);
+
       console.log(message);
       if (user._id === message.sender) {
         await post(`/protected/create-message`, message);
