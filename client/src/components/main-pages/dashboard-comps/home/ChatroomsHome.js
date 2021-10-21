@@ -137,6 +137,9 @@ const Chatroom = ({
         >
           <div className="flex chatroom-con-title-fav-con">
             <h5>{room.name}</h5>
+            <If condition={room.admins.includes(user._id)}>
+              <div>A</div>
+            </If>
             <div
               className={`${
                 room.starmarked.includes(user._id) ? "starmarked" : ""

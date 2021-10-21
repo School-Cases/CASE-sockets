@@ -3,14 +3,13 @@
 @import "/src/style/components/buttons.scss";
 @import url("https://use.typekit.net/rdr3hkg.css");
 
+.dash-settings-chatrooms {
+  flex-direction: column;
 
-                .dash-settings-chatrooms {
-                    flex-direction: column;
-
-                    .col2-chatroom-con {
-                        cursor: pointer;
-                        background: linear-gradient(235deg,
-                                $blueC 25%,
-                                rgba(255, 255, 255, 1) 25%);
-                    }
-                }
+  .col2-chatroom-con {
+    cursor: pointer;
+    // background: linear-gradient(235deg,
+    //         $blueC 25%,
+    //         rgba(255, 255, 255, 1) 25%);
+  }
+}

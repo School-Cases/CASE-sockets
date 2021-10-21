@@ -1,5 +1,6 @@
 import { post } from "../../../utils/http";
 import { useHistory } from "react-router";
+import { useState } from "react";
 
 export const LoginSignup = ({
   loginSignup,
@@ -8,6 +9,7 @@ export const LoginSignup = ({
   passwordInput,
   theme,
   avatar,
+  setResponseMessage,
 }) => {
   const history = useHistory();
 
@@ -43,6 +45,8 @@ export const LoginSignup = ({
     if (response.success) {
       localStorage.setItem("token", response.data);
       return history.push("/dashboard");
+    } else {
+      setResponseMessage(response.message);
     }
   };
 

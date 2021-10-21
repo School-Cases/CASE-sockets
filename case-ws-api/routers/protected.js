@@ -60,14 +60,14 @@ router.get("/logged-in", loggedIn);
 
 // router.get("/get-user/:id", get_user);
 router.get("/get-all-users", get_all_users);
-router.post("/create-user", create_user);
+// router.post("/create-user", create_user);
 router.post("/update-user/:id", update_user);
 router.get("/delete-user/:id", delete_user);
 router.get("/delete-all-users", delete_all_users);
 
 router.post("/user-join-chatroom", user_join_chatroom);
 
-router.post("/user-login", user_login);
+// router.post("/user-login", user_login);
 
 // not used
 router.get("/user-dashboard/:id", user_dashboard);

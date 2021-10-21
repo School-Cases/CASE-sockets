@@ -240,6 +240,7 @@ export const delete_chatroom = async (req, res) => {
   try {
     // console.log(await messageModel.find({ chatroom: id }));
     await messageModel.deleteMany({ chatroom: id }).exec();
+
     await chatroomModel.findByIdAndDelete({ _id: id }).exec();
 
     await userModel.find({ chatrooms: id }, (error, users) => {

@@ -83,13 +83,6 @@ export const PageDashboard = () => {
     // setLoading(false);
   };
 
-  const fetchCreateChatroom = async () => {
-    let data = {};
-    let res = await post(`/protected/create-chatroom`, data);
-    // setChatroomMessages(res.data);
-    // setLoading(false);
-  };
-
   useEffect(() => {
     ws.onopen = () => {
       console.log("WebSocket Connected");

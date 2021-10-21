@@ -3,6 +3,8 @@ import { get, post } from "../../../../utils/http";
 
 import { If } from "../../../../utils/If";
 
+import styled from "styled-components";
+
 export const ChatroomsSettings = ({ user, userChatrooms, searchChatrooms }) => {
   const [chatSettingsToggle, setChatSettingsToggle] = useState();
 
@@ -70,6 +72,14 @@ const Chatroom = ({
     });
   };
 
+  const StyledSection = styled.section`
+    background: linear-gradient(
+      235deg,
+      ${room.theme} 25%,
+      rgba(255, 255, 255, 1) 25%
+    );
+  `;
+
   useEffect(async () => {
     const abortController = new AbortController();
     await fetchAllUsers(abortController.signal);
@@ -81,7 +91,7 @@ const Chatroom = ({
   }, []);
 
   return (
-    <section
+    <StyledSection
       onClick={() => {
         setChatSettingsToggle(room._id);
       }}
@@ -204,6 +214,6 @@ const Chatroom = ({
           </div>
         )}
       </If>
-    </section>
+    </StyledSection>
   );
 };

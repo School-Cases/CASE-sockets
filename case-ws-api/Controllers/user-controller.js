@@ -62,21 +62,18 @@ export const get_all_users = async (req, res) => {
 };
 
 export const create_user = async (req, res) => {
-  console.log(req);
   try {
     if (
       await userModel.findOne({
         name: req.body.name,
       })
     ) {
-      let workingName = req.body.name + Math.floor(Math.random() * 100);
-      req.session.message = {
-        msg: true,
-        type: "Fail",
-        message: "username exists alrdy! we suggest: " + workingName,
-      };
-      res.redirect("/");
-      return;
+      let workingName = req.body.name + Math.floor(Math.random() * 1000);
+      return res.json({
+        message: "username taken, we suggest " + workingName,
+        success: false,
+        data: null,
+      });
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -89,22 +86,16 @@ export const create_user = async (req, res) => {
       theme: req.body.theme,
     });
 
-    user.save((error, newuser) => {
-      if (error) {
-        console.log(error);
-      }
-      req.session.regenerate((error) => {
-        req.session.user = user;
-        return res.redirect(clientAddress + "/dashboard/" + user._id);
-      });
-    });
+    user.save();
 
-    // return res.json({
-    //   message: "create user success",
-    //   USER: user,
-    //   success: true,
-    //   data: null,
-    // });
+    const payload = { _id: user._id };
+    const token = encode(payload);
+
+    return res.json({
+      message: "create user success",
+      success: true,
+      data: token,
+    });
   } catch (err) {
     return res.json({
       message: "create user fail " + err,

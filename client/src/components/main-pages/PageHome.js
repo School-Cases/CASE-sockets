@@ -18,6 +18,8 @@ export const PageHome = () => {
   const [usernameInput, setUsernameInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 
+  const [responseMessage, setResponseMessage] = useState(null);
+
   useEffect(() => {
     let changeW = window.addEventListener("resize", () =>
       setW(window.innerWidth)
@@ -76,6 +78,10 @@ export const PageHome = () => {
                   />
                 </div>
 
+                <If condition={responseMessage !== null}>
+                  <div>{responseMessage}</div>
+                </If>
+
                 <If condition={W > breakpoints.medium}>
                   <LoginSignup
                     loginSignup={loginSignup}
@@ -84,6 +90,7 @@ export const PageHome = () => {
                     passwordInput={passwordInput}
                     theme={theme}
                     avatar={avatar}
+                    setResponseMessage={setResponseMessage}
                   />
                 </If>
               </section>
@@ -153,6 +160,7 @@ export const PageHome = () => {
           passwordInput={passwordInput}
           theme={theme}
           avatar={avatar}
+          setResponseMessage={setResponseMessage}
         />
       </If>
     </Container>
