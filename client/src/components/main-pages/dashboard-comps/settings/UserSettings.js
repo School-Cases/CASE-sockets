@@ -1,24 +1,46 @@
 import { useState, useEffect } from "react";
-import { api_address, post } from "../../../../utils/http";
+import { post, get } from "../../../../utils/http";
 
-export const UserSettings = ({ user }) => {
-  console.log(user);
+export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
+  const [loading, setLoading] = useState(true);
 
-  const [avatar, setAvatar] = useState(user.avatar);
-  const [theme, setTheme] = useState(user.theme);
-  const [name, setName] = useState(user.name);
+  const [user, setUser] = useState(null);
+  const [avatar, setAvatar] = useState(null);
+  const [theme, setTheme] = useState(null);
+  const [name, setName] = useState(null);
   const [newPassword, setNewPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
 
+  const fetchUser = async (signal) => {
+    let res = await get(`/protected/get-user`, signal);
+    setUser(res.data);
+    setName(res.data.name);
+    setAvatar(res.data.avatar);
+    setTheme(res.data.theme);
+    setLoading(false);
+  };
+
   const fetchUpdateUser = async () => {
-    let res = await post(`/update-user/${user._id}`, {
+    await post(`/protected/update-user/${user._id}`, {
       name: name,
       newPassword: newPassword,
       currentPassword: currentPassword,
       avatar: avatar,
       theme: theme,
     });
+    setFetchAgain(!fetchAgain);
   };
+
+  useEffect(async () => {
+    const abortController = new AbortController();
+    await fetchUser(abortController.signal);
+    return () => abortController.abort();
+  }, [fetchAgain]);
+
+  if (loading) {
+    return <h2 className="">Loading...</h2>;
+  }
+
   return (
     <div>
       <div className="user-settings-input-con">
@@ -27,7 +49,7 @@ export const UserSettings = ({ user }) => {
           type="text"
           name="name"
           id=""
-          placeholder={user.name}
+          placeholder={name}
           onChange={(e) => setName(e.target.value)}
         />
       </div>

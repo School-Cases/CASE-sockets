@@ -5,20 +5,330 @@ import { If } from "../../../../utils/If";
 
 import styled from "styled-components";
 
-export const ChatroomsSettings = ({ user, userChatrooms, searchChatrooms }) => {
-  const [chatSettingsToggle, setChatSettingsToggle] = useState();
+// import { Chatroom } from "./oneChatSettings";
+
+const StyledSection = styled("section")`
+  background: linear-gradient(
+    235deg,
+    ${(props) => props.theme} 25%,
+    rgba(255, 255, 255, 1) 25%
+  );
+`;
+
+export const ChatroomsSettings = ({
+  // user,
+  // userChatrooms,
+  searchChatrooms,
+  setFetchAgain,
+  fetchAgain,
+}) => {
+  const [user, setUser] = useState(null);
+
+  const [activeChatroom, setActiveChatroom] = useState(null);
+
+  const [loading, setLoading] = useState(true);
+
+  const [userChatrooms, setUserChatrooms] = useState([]);
+
+  // const [isAdmin, setIsAdmin] = useState(null);
+  const [roomName, setRoomName] = useState(null);
+  const [roomMembers, setRoomMembers] = useState([]);
+  const [roomAdmins, setRoomAdmins] = useState([]);
+  const [roomTheme, setRoomTheme] = useState(null);
+
+  const [notRoomMembers, setNotRoomMembers] = useState([]);
+
+  const [searchUsersInput, setSearchUsersInput] = useState("");
+
+  const fetchUser = async (signal) => {
+    let res = await get(`/protected/get-user`, signal);
+    setUser(res.data);
+    console.log("1", res.data);
+    // setFetchAgain(!fetchAgain);
+    await fetchChatrooms(signal, res.data._id);
+  };
+
+  const fetchChatrooms = async (signal, userID) => {
+    console.log("2", userID);
+    let res = await get(`/protected/get-all-chatrooms`, signal);
+    setUserChatrooms(
+      res.data
+        .filter((chat) => chat.members.includes(userID))
+        .sort((chatA, chatB) => {
+          return (
+            chatB.starmarked.includes(userID) -
+            chatA.starmarked.includes(userID)
+          );
+        })
+    );
+    setLoading(false);
+  };
+
+  const fetchAllUsers = async (signal, activeRoom) => {
+    console.log("3", activeRoom);
+    let res = await get(`/protected/get-all-users`, signal);
+    console.log(
+      "4",
+      res.data.filter((u) => activeRoom.admins.includes(u._id))
+    );
+    setRoomMembers(
+      res.data
+        .filter((u) => activeRoom.members.includes(u._id))
+        .sort((a, b) => {
+          return (
+            activeRoom.admins.includes(b._id) -
+            activeRoom.admins.includes(a._id)
+          );
+        })
+    );
+    setNotRoomMembers(
+      res.data.filter((u) => !activeRoom.members.includes(u._id))
+    );
+
+    setRoomAdmins(res.data.filter((u) => activeRoom.admins.includes(u._id)));
+    // setNotRoomAdmins(res.data.filter((u) => !room.admins.includes(u._id)));
+  };
+
+  const fetchUpdateChatroom = async (roomId) => {
+    let newRoomAdmins = [];
+    roomAdmins.forEach((a) => {
+      newRoomAdmins.push(a._id);
+    });
+
+    let newRoomMembers = [];
+    roomMembers.forEach((m) => newRoomMembers.push(m._id));
+
+    let newRoomTheme;
+    if (roomTheme === null) {
+      newRoomTheme = activeChatroom.theme;
+    } else {
+      newRoomTheme = roomTheme;
+    }
+
+    let newRoomName;
+    if (roomName === null) {
+      newRoomName = activeChatroom.name;
+    } else {
+      newRoomName = roomName;
+    }
+
+    // if (roomName === null) {
+    //   setRoomName()
+    // }
+
+    await post(`/protected/update-chatroom/` + roomId, {
+      name: newRoomName,
+      admins: newRoomAdmins,
+      members: newRoomMembers,
+      theme: newRoomTheme,
+    });
+    setFetchAgain(!fetchAgain);
+  };
+
+  const fetchDeleteChatroom = async (signal, roomId) => {
+    let res = await get(`/protected/delete-chatroom/` + roomId, signal);
+    setFetchAgain(!fetchAgain);
+  };
+
+  useEffect(async () => {
+    const abortController = new AbortController();
+    await fetchUser(abortController.signal);
+    return () => abortController.abort();
+  }, [fetchAgain]);
+
+  // useEffect(async () => {
+  //   const abortController = new AbortController();
+  //   if (user !== null) await fetchChatrooms(abortController.signal, user._id);
+  //   return () => abortController.abort();
+  // }, [fetchAgain]);
+
+  useEffect(async () => {
+    const abortController = new AbortController();
+    if (activeChatroom !== null)
+      await fetchAllUsers(abortController.signal, activeChatroom);
+    return () => abortController.abort();
+  }, [activeChatroom]);
+
+  // useEffect(() => {
+  //   setIsAdmin(room.admins.includes(user._id));
+  // }, []);
+
+  if (loading) {
+    return <h2 className="">Loading...</h2>;
+  }
 
   return (
     <section className="flex dash-settings-chatrooms">
       {userChatrooms.map((room) => {
+        // const StyledSection = styled.section`
+        //   background: linear-gradient(
+        //     235deg,
+        //     ${room.theme} 25%,
+        //     rgba(255, 255, 255, 1) 25%
+        //   );
+        // `;
+
         return (
           <If condition={room.name.includes(searchChatrooms)}>
-            <Chatroom
-              user={user}
-              room={room}
-              chatSettingsToggle={chatSettingsToggle}
-              setChatSettingsToggle={setChatSettingsToggle}
-            />
+            <StyledSection
+              theme={room.theme}
+              className="col2-chatroom-con"
+              onClick={() => {
+                setActiveChatroom(room);
+              }}
+            >
+              {console.log(roomAdmins)}
+
+              <h5>
+                {room.name}
+                <If condition={room.admins.includes(user._id)}>
+                  <span>admin</span>
+                </If>
+              </h5>
+              <If condition={activeChatroom === room}>
+                <p>{room.members.length} members</p>
+                <If condition={room.admins.includes(user._id)}>
+                  <label>name:</label>
+                  <input
+                    type="text"
+                    placeholder={room.name}
+                    // value={roomName}
+                    onChange={(e) => setRoomName(e.target.value)}
+                  />
+                </If>
+
+                <div>Members:</div>
+                <div className="flex">
+                  {roomMembers.map((m, i) => {
+                    return (
+                      <div>
+                        <div>
+                          {m.name}
+                          <If condition={roomAdmins.includes(m)}>
+                            <span>A</span>
+                          </If>
+                        </div>
+                        <If
+                          condition={
+                            room.admins.includes(user._id) && m._id !== user._id
+                          }
+                        >
+                          <If condition={!roomAdmins.includes(m)}>
+                            <div
+                              onClick={() =>
+                                setRoomAdmins((prev) => {
+                                  return [...prev, m];
+                                })
+                              }
+                            >
+                              make admin
+                            </div>
+                          </If>
+                          <If condition={!roomAdmins.includes(m)}>
+                            <div
+                              onClick={() => {
+                                let newArr = roomMembers.filter(
+                                  (me) => me._id !== m._id
+                                );
+                                setRoomMembers(newArr);
+                                let newArr2 = notRoomMembers;
+                                if (!newArr2.includes(m)) newArr2.push(m);
+                                setNotRoomMembers(newArr2);
+                                // setNotRoomMembers((prev) => {
+                                //   if (!prev.includes(m)) {
+                                //     return [...prev, m];
+                                //   } else {
+                                //     return [prev];
+                                //   }
+                                // });
+                              }}
+                            >
+                              kick
+                            </div>
+                          </If>
+                        </If>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="flex">
+                  <label>search not members:</label>
+                  <input
+                    type="text"
+                    placeholder="search user"
+                    value={searchUsersInput}
+                    onChange={(e) => setSearchUsersInput(e.target.value)}
+                  />
+                </div>
+                <div>
+                  <If condition={searchUsersInput !== ""}>
+                    {notRoomMembers.map((m) => {
+                      console.log(m);
+                      console.log("notmembers", notRoomMembers);
+                      console.log("members", roomMembers);
+
+                      return (
+                        <If condition={m !== undefined}>
+                          <If
+                            condition={
+                              m.name.includes(searchUsersInput) &&
+                              !roomMembers.includes(m)
+                            }
+                          >
+                            <span
+                              onClick={() =>
+                                setRoomMembers((prev) => {
+                                  return [...prev, m];
+                                })
+                              }
+                            >
+                              {m.name}
+                            </span>
+                          </If>
+                        </If>
+                      );
+                    })}
+                  </If>
+                </div>
+
+                <hr />
+
+                <div>color:</div>
+                <div className="flex">
+                  <div onClick={() => setRoomTheme("#A2DC68")}>greenC</div>
+                  <div onClick={() => setRoomTheme("#68DCC4")}>blueC</div>
+                  <div onClick={() => setRoomTheme("#DC68D0")}>purpleC</div>
+                  <div onClick={() => setRoomTheme("#D8DC68")}>yellowC</div>
+                </div>
+
+                <input
+                  type="color"
+                  onChange={(e) => setRoomTheme(e.target.value)}
+                />
+
+                <hr />
+                <div onClick={() => fetchUpdateChatroom(room._id)}>save</div>
+                {/* <div onClick={() => setChatSettingsToggle(null)}>save</div> */}
+                {roomAdmins.includes(user) ? (
+                  <div
+                    onClick={async () => {
+                      const abortController = new AbortController();
+                      await fetchDeleteChatroom(
+                        abortController.signal,
+                        room._id
+                      );
+                      return () => abortController.abort();
+                    }}
+                  >
+                    <span>icon</span> Delete chatroom
+                  </div>
+                ) : (
+                  <div>
+                    <span>icon</span> Leave chatroom
+                  </div>
+                )}
+              </If>
+            </StyledSection>
           </If>
         );
       })}
@@ -26,194 +336,457 @@ export const ChatroomsSettings = ({ user, userChatrooms, searchChatrooms }) => {
   );
 };
 
-const Chatroom = ({
-  user,
-  room,
-  chatSettingsToggle,
-  setChatSettingsToggle,
-}) => {
-  const [searchUsersInput, setSearchUsersInput] = useState("");
-  const [roomAdmins, setRoomAdmins] = useState([]);
-  const [notRoomAdmins, setNotRoomAdmins] = useState([]);
-  const [roomMembers, setRoomMembers] = useState([]);
-  const [notRoomMembers, setNotRoomMembers] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(null);
+// const Chatroom = ({
+//   user,
+//   room,
+//   chatSettingsToggle,
+//   setChatSettingsToggle,
+//   setFetchAgain,
+//   fetchAgain,
+// }) => {
+//   const [searchUsersInput, setSearchUsersInput] = useState("");
+//   const [roomAdmins, setRoomAdmins] = useState([]);
+//   const [notRoomAdmins, setNotRoomAdmins] = useState([]);
+//   const [roomMembers, setRoomMembers] = useState([]);
+//   const [notRoomMembers, setNotRoomMembers] = useState([]);
+//   const [isAdmin, setIsAdmin] = useState(null);
 
-  const [newRoomName, setNewRoomName] = useState(room.name);
-  const [newRoomTheme, setNewRoomTheme] = useState(room.theme);
+//   const [roomName, setRoomName] = useState("");
+//   const [newRoomTheme, setNewRoomTheme] = useState(room.theme);
 
-  const fetchAllUsers = async (signal) => {
-    let res = await get(`/protected/get-all-users`, signal);
-    setRoomMembers(res.data.filter((u) => room.members.includes(u._id)));
-    setNotRoomMembers(res.data.filter((u) => !room.members.includes(u._id)));
+//   const fetchAllUsers = async (signal) => {
+//     let res = await get(`/protected/get-all-users`, signal);
+//     setRoomMembers(
+//       res.data
+//         .filter((u) => room.members.includes(u._id))
+//         .sort((a, b) => {
+//           return room.admins.includes(b._id) - room.admins.includes(a._id);
+//         })
+//     );
+//     setNotRoomMembers(res.data.filter((u) => !room.members.includes(u._id)));
 
-    setRoomAdmins(res.data.filter((u) => room.admins.includes(u._id)));
-    setNotRoomAdmins(res.data.filter((u) => !room.admins.includes(u._id)));
-  };
+//     setRoomAdmins(res.data.filter((u) => room.admins.includes(u._id)));
+//     setNotRoomAdmins(res.data.filter((u) => !room.admins.includes(u._id)));
+//   };
 
-  const fetchDeleteChatroom = async (signal) => {
-    const abortController = new AbortController();
-    let res = await get(`/protected/delete-chatroom/` + room._id, signal);
-    return () => abortController.abort();
-  };
+//   const fetchDeleteChatroom = async (signal) => {
+//     const abortController = new AbortController();
+//     let res = await get(`/protected/delete-chatroom/` + room._id, signal);
+//     setFetchAgain(!fetchAgain);
+//     return () => abortController.abort();
+//   };
 
-  const fetchUpdateChatroom = async () => {
-    let newRoomAdmins = [];
-    roomAdmins.forEach((a) => newRoomAdmins.push(a));
+//   const fetchUpdateChatroom = async () => {
+//     let newRoomAdmins = [];
+//     roomAdmins.forEach((a) => {
+//       newRoomAdmins.push(a._id);
+//       console.log(a._id);
+//     });
 
-    let newRoomMembers = [];
-    roomMembers.forEach((m) => newRoomMembers.push(m._id));
+//     let newRoomMembers = [];
+//     roomMembers.forEach((m) => newRoomMembers.push(m._id));
 
-    await post(`/protected/update-chatroom/` + room._id, {
-      name: newRoomName,
-      admins: newRoomAdmins,
-      members: newRoomMembers,
-      theme: newRoomTheme,
-    });
-  };
+//     // let newRoomName = room.name;
+//     // if (roomName !== room.name && roomName !== "") {
+//     //   newRoomName = roomName;
+//     // }
+//     await post(`/protected/update-chatroom/` + room._id, {
+//       name: roomName,
+//       admins: newRoomAdmins,
+//       members: newRoomMembers,
+//       theme: newRoomTheme,
+//     });
+//     setFetchAgain(!fetchAgain);
+//   };
 
-  const StyledSection = styled.section`
-    background: linear-gradient(
-      235deg,
-      ${room.theme} 25%,
-      rgba(255, 255, 255, 1) 25%
-    );
-  `;
+//   const StyledSection = styled.section`
+//     background: linear-gradient(
+//       235deg,
+//       ${room.theme} 25%,
+//       rgba(255, 255, 255, 1) 25%
+//     );
+//   `;
 
-  useEffect(async () => {
-    const abortController = new AbortController();
-    await fetchAllUsers(abortController.signal);
-    return () => abortController.abort();
-  }, []);
+//   useEffect(async () => {
+//     const abortController = new AbortController();
+//     await fetchAllUsers(abortController.signal);
+//     return () => abortController.abort();
+//   }, []);
 
-  useEffect(() => {
-    setIsAdmin(room.admins.includes(user._id));
-  }, []);
+//   useEffect(() => {
+//     setIsAdmin(room.admins.includes(user._id));
+//   }, []);
 
-  return (
-    <StyledSection
-      onClick={() => {
-        setChatSettingsToggle(room._id);
-      }}
-      className="col2-chatroom-con"
-    >
-      <h5>
-        {room.name}
-        <If condition={isAdmin}>
-          <span>admin</span>
-        </If>
-      </h5>
-      <If condition={chatSettingsToggle === room._id}>
-        <p>{room.members.length} members</p>
-        <label>name:</label>
-        <input
-          type="text"
-          placeholder={room.name}
-          onChange={(e) => {
-            if (e.target.value !== "") {
-              setNewRoomName(e.target.value);
-            } else {
-              setNewRoomName(room.name);
-            }
-          }}
-        />
+//   return (
+//     <StyledSection
+//       onClick={() => {
+//         setChatSettingsToggle(room._id);
+//       }}
+//       className="col2-chatroom-con"
+//     >
+//       <h5>
+//         {room.name}
+//         <If condition={isAdmin}>
+//           <span>admin</span>
+//         </If>
+//       </h5>
+//       <If condition={chatSettingsToggle === room._id}>
+//         <p>{room.members.length} members</p>
+//         <If condition={isAdmin}>
+//           <label>name:</label>
+//           <input
+//             type="text"
+//             placeholder={room.name}
+//             // value={roomName}
+//             onChange={(e) => setRoomName(e.target.value)}
+//           />
+//         </If>
 
-        <div>Members:</div>
-        <div className="flex">
-          {roomMembers.map((m, i) => {
-            return (
-              <div>
-                <div>{m.name}</div>
-                <If condition={isAdmin && m._id !== user._id}>
-                  <If condition={!roomAdmins.includes(m._id)}>
-                    <div
-                      onClick={() =>
-                        setRoomAdmins((prev) => {
-                          return [...prev, m._id];
-                        })
-                      }
-                    >
-                      make admin
-                    </div>
-                  </If>
-                  <If condition={!roomAdmins.includes(m._id)}>
-                    <div
-                      onClick={() => {
-                        let newArr = roomMembers.filter(
-                          (me) => me._id !== m._id
-                        );
-                        setRoomMembers(newArr);
-                      }}
-                    >
-                      kick
-                    </div>
-                  </If>
-                </If>
-              </div>
-            );
-          })}
-        </div>
-        <div className="flex">
-          <label>search not members:</label>
-          <input
-            type="text"
-            placeholder="search user"
-            onChange={(e) => setSearchUsersInput(e.target.value)}
-          />
-        </div>
-        <div>
-          <If condition={searchUsersInput !== ""}>
-            {notRoomMembers.map((m) => {
-              return (
-                <If
-                  condition={
-                    m.name.includes(searchUsersInput) &&
-                    !roomMembers.includes(m)
-                  }
-                >
-                  <span
-                    onClick={() =>
-                      setRoomMembers((prev) => {
-                        return [...prev, m];
-                      })
-                    }
-                  >
-                    {m.name}
-                  </span>
-                </If>
-              );
-            })}
-          </If>
-        </div>
+//         <div>Members:</div>
+//         <div className="flex">
+//           {roomMembers.map((m, i) => {
+//             return (
+//               <div>
+//                 <div>
+//                   {m.name}
+//                   <If condition={roomAdmins.includes(m)}>
+//                     <span>A</span>
+//                   </If>
+//                 </div>
+//                 <If condition={isAdmin && m._id !== user._id}>
+//                   <If condition={!roomAdmins.includes(m)}>
+//                     <div
+//                       onClick={() =>
+//                         setRoomAdmins((prev) => {
+//                           return [...prev, m];
+//                         })
+//                       }
+//                     >
+//                       make admin
+//                     </div>
+//                   </If>
+//                   <If condition={!roomAdmins.includes(m)}>
+//                     <div
+//                       onClick={() => {
+//                         let newArr = roomMembers.filter(
+//                           (me) => me._id !== m._id
+//                         );
+//                         setRoomMembers(newArr);
+//                       }}
+//                     >
+//                       kick
+//                     </div>
+//                   </If>
+//                 </If>
+//               </div>
+//             );
+//           })}
+//         </div>
+//         <div className="flex">
+//           <label>search not members:</label>
+//           <input
+//             type="text"
+//             placeholder="search user"
+//             onChange={(e) => setSearchUsersInput(e.target.value)}
+//           />
+//         </div>
+//         <div>
+//           <If condition={searchUsersInput !== ""}>
+//             {notRoomMembers.map((m) => {
+//               return (
+//                 <If
+//                   condition={
+//                     m.name.includes(searchUsersInput) &&
+//                     !roomMembers.includes(m)
+//                   }
+//                 >
+//                   <span
+//                     onClick={() =>
+//                       setRoomMembers((prev) => {
+//                         return [...prev, m];
+//                       })
+//                     }
+//                   >
+//                     {m.name}
+//                   </span>
+//                 </If>
+//               );
+//             })}
+//           </If>
+//         </div>
 
-        <hr />
+//         <hr />
 
-        <div>color:</div>
-        <div className="flex">
-          <div onClick={() => setNewRoomTheme("#A2DC68")}>greenC</div>
-          <div onClick={() => setNewRoomTheme("#68DCC4")}>blueC</div>
-          <div onClick={() => setNewRoomTheme("#DC68D0")}>purpleC</div>
-          <div onClick={() => setNewRoomTheme("#D8DC68")}>yellowC</div>
-        </div>
+//         <div>color:</div>
+//         <div className="flex">
+//           <div onClick={() => setNewRoomTheme("#A2DC68")}>greenC</div>
+//           <div onClick={() => setNewRoomTheme("#68DCC4")}>blueC</div>
+//           <div onClick={() => setNewRoomTheme("#DC68D0")}>purpleC</div>
+//           <div onClick={() => setNewRoomTheme("#D8DC68")}>yellowC</div>
+//         </div>
 
-        <input type="color" onChange={(e) => setNewRoomTheme(e.target.value)} />
+//         <input type="color" onChange={(e) => setNewRoomTheme(e.target.value)} />
 
-        <hr />
-        <div onClick={() => fetchUpdateChatroom()}>save</div>
-        {isAdmin ? (
-          <div
-            onClick={() => {
-              fetchDeleteChatroom();
-            }}
-          >
-            <span>icon</span> Delete chatroom
-          </div>
-        ) : (
-          <div>
-            <span>icon</span> Leave chatroom
-          </div>
-        )}
-      </If>
-    </StyledSection>
-  );
-};
+//         <hr />
+//         <div onClick={() => fetchUpdateChatroom()}>save</div>
+//         {/* <div onClick={() => setChatSettingsToggle(null)}>save</div> */}
+//         {isAdmin ? (
+//           <div
+//             onClick={() => {
+//               fetchDeleteChatroom();
+//             }}
+//           >
+//             <span>icon</span> Delete chatroom
+//           </div>
+//         ) : (
+//           <div>
+//             <span>icon</span> Leave chatroom
+//           </div>
+//         )}
+//       </If>
+//     </StyledSection>
+//   );
+// };
+
+// before
+
+// export const ChatroomsSettings = ({
+//   user,
+//   userChatrooms,
+//   searchChatrooms,
+//   setFetchAgain,
+//   fetchAgain,
+// }) => {
+//   const [chatSettingsToggle, setChatSettingsToggle] = useState(null);
+
+//   return (
+//     <section className="flex dash-settings-chatrooms">
+//       {userChatrooms.map((room) => {
+//         return (
+//           <If condition={room.name.includes(searchChatrooms)}>
+//             <Chatroom
+//               user={user}
+//               room={room}
+//               chatSettingsToggle={chatSettingsToggle}
+//               setChatSettingsToggle={setChatSettingsToggle}
+//               setFetchAgain={setFetchAgain}
+//               fetchAgain={fetchAgain}
+//             />
+//           </If>
+//         );
+//       })}
+//     </section>
+//   );
+// };
+
+// const Chatroom = ({
+//   user,
+//   room,
+//   chatSettingsToggle,
+//   setChatSettingsToggle,
+//   setFetchAgain,
+//   fetchAgain,
+// }) => {
+//   const [searchUsersInput, setSearchUsersInput] = useState("");
+//   const [roomAdmins, setRoomAdmins] = useState([]);
+//   const [notRoomAdmins, setNotRoomAdmins] = useState([]);
+//   const [roomMembers, setRoomMembers] = useState([]);
+//   const [notRoomMembers, setNotRoomMembers] = useState([]);
+//   const [isAdmin, setIsAdmin] = useState(null);
+
+//   const [roomName, setRoomName] = useState("");
+//   const [newRoomTheme, setNewRoomTheme] = useState(room.theme);
+
+//   const fetchAllUsers = async (signal) => {
+//     let res = await get(`/protected/get-all-users`, signal);
+//     setRoomMembers(
+//       res.data
+//         .filter((u) => room.members.includes(u._id))
+//         .sort((a, b) => {
+//           return room.admins.includes(b._id) - room.admins.includes(a._id);
+//         })
+//     );
+//     setNotRoomMembers(res.data.filter((u) => !room.members.includes(u._id)));
+
+//     setRoomAdmins(res.data.filter((u) => room.admins.includes(u._id)));
+//     setNotRoomAdmins(res.data.filter((u) => !room.admins.includes(u._id)));
+//   };
+
+//   const fetchDeleteChatroom = async (signal) => {
+//     const abortController = new AbortController();
+//     let res = await get(`/protected/delete-chatroom/` + room._id, signal);
+//     setFetchAgain(!fetchAgain);
+//     return () => abortController.abort();
+//   };
+
+//   const fetchUpdateChatroom = async () => {
+//     let newRoomAdmins = [];
+//     roomAdmins.forEach((a) => {
+//       newRoomAdmins.push(a._id);
+//       console.log(a._id);
+//     });
+
+//     let newRoomMembers = [];
+//     roomMembers.forEach((m) => newRoomMembers.push(m._id));
+
+//     // let newRoomName = room.name;
+//     // if (roomName !== room.name && roomName !== "") {
+//     //   newRoomName = roomName;
+//     // }
+//     await post(`/protected/update-chatroom/` + room._id, {
+//       name: roomName,
+//       admins: newRoomAdmins,
+//       members: newRoomMembers,
+//       theme: newRoomTheme,
+//     });
+//     setFetchAgain(!fetchAgain);
+//   };
+
+//   const StyledSection = styled.section`
+//     background: linear-gradient(
+//       235deg,
+//       ${room.theme} 25%,
+//       rgba(255, 255, 255, 1) 25%
+//     );
+//   `;
+
+//   useEffect(async () => {
+//     const abortController = new AbortController();
+//     await fetchAllUsers(abortController.signal);
+//     return () => abortController.abort();
+//   }, []);
+
+//   useEffect(() => {
+//     setIsAdmin(room.admins.includes(user._id));
+//   }, []);
+
+//   return (
+//     <StyledSection
+//       onClick={() => {
+//         setChatSettingsToggle(room._id);
+//       }}
+//       className="col2-chatroom-con"
+//     >
+//       <h5>
+//         {room.name}
+//         <If condition={isAdmin}>
+//           <span>admin</span>
+//         </If>
+//       </h5>
+//       <If condition={chatSettingsToggle === room._id}>
+//         <p>{room.members.length} members</p>
+//         <If condition={isAdmin}>
+//           <label>name:</label>
+//           <input
+//             type="text"
+//             placeholder={room.name}
+//             // value={roomName}
+//             onChange={(e) => setRoomName(e.target.value)}
+//           />
+//         </If>
+
+//         <div>Members:</div>
+//         <div className="flex">
+//           {roomMembers.map((m, i) => {
+//             return (
+//               <div>
+//                 <div>
+//                   {m.name}
+//                   <If condition={roomAdmins.includes(m)}>
+//                     <span>A</span>
+//                   </If>
+//                 </div>
+//                 <If condition={isAdmin && m._id !== user._id}>
+//                   <If condition={!roomAdmins.includes(m)}>
+//                     <div
+//                       onClick={() =>
+//                         setRoomAdmins((prev) => {
+//                           return [...prev, m];
+//                         })
+//                       }
+//                     >
+//                       make admin
+//                     </div>
+//                   </If>
+//                   <If condition={!roomAdmins.includes(m)}>
+//                     <div
+//                       onClick={() => {
+//                         let newArr = roomMembers.filter(
+//                           (me) => me._id !== m._id
+//                         );
+//                         setRoomMembers(newArr);
+//                       }}
+//                     >
+//                       kick
+//                     </div>
+//                   </If>
+//                 </If>
+//               </div>
+//             );
+//           })}
+//         </div>
+//         <div className="flex">
+//           <label>search not members:</label>
+//           <input
+//             type="text"
+//             placeholder="search user"
+//             onChange={(e) => setSearchUsersInput(e.target.value)}
+//           />
+//         </div>
+//         <div>
+//           <If condition={searchUsersInput !== ""}>
+//             {notRoomMembers.map((m) => {
+//               return (
+//                 <If
+//                   condition={
+//                     m.name.includes(searchUsersInput) &&
+//                     !roomMembers.includes(m)
+//                   }
+//                 >
+//                   <span
+//                     onClick={() =>
+//                       setRoomMembers((prev) => {
+//                         return [...prev, m];
+//                       })
+//                     }
+//                   >
+//                     {m.name}
+//                   </span>
+//                 </If>
+//               );
+//             })}
+//           </If>
+//         </div>
+
+//         <hr />
+
+//         <div>color:</div>
+//         <div className="flex">
+//           <div onClick={() => setNewRoomTheme("#A2DC68")}>greenC</div>
+//           <div onClick={() => setNewRoomTheme("#68DCC4")}>blueC</div>
+//           <div onClick={() => setNewRoomTheme("#DC68D0")}>purpleC</div>
+//           <div onClick={() => setNewRoomTheme("#D8DC68")}>yellowC</div>
+//         </div>
+
+//         <input type="color" onChange={(e) => setNewRoomTheme(e.target.value)} />
+
+//         <hr />
+//         <div onClick={() => fetchUpdateChatroom()}>save</div>
+//         {/* <div onClick={() => setChatSettingsToggle(null)}>save</div> */}
+//         {isAdmin ? (
+//           <div
+//             onClick={() => {
+//               fetchDeleteChatroom();
+//             }}
+//           >
+//             <span>icon</span> Delete chatroom
+//           </div>
+//         ) : (
+//           <div>
+//             <span>icon</span> Leave chatroom
+//           </div>
+//         )}
+//       </If>
+//     </StyledSection>
+//   );
+// };

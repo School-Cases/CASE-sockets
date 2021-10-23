@@ -148,14 +148,15 @@ export const update_chatroom = async (req, res) => {
 
     console.log(chatroom);
     chatroom.members.forEach(async (m) => {
-      if (!req.body.members.includes(m._id)) {
-        await userModel.findByIdAndUpdate(m._id, {
+      console.log(m);
+      if (!req.body.members.includes(m)) {
+        await userModel.findByIdAndUpdate(m, {
           $pull: {
             chatrooms: chatroom._id,
           },
         });
       } else {
-        await userModel.findByIdAndUpdate(m._id, {
+        await userModel.findByIdAndUpdate(m, {
           $push: {
             chatrooms: chatroom._id,
           },

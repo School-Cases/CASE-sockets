@@ -21,12 +21,13 @@ import { SearchChatrooms } from "./dashboard-comps/SearchChatrooms";
 import { PageSettings } from "./dashboard-comps/PageSettings";
 
 export const PageDashboard = () => {
-  const [ws, setWs] = useState(
-    new WebSocket(
-      "ws://localhost:5002"
-      // "ws://localhost:5002" + "/get-chatroom/" + activeChatroom._id
-    )
-  );
+  // const ws = new WebSocket("ws://localhost:5002");
+  // const [ws, setWs] = useState(
+  //   new WebSocket(
+  //     "ws://localhost:5002"
+  //     // "ws://localhost:5002" + "/get-chatroom/" + activeChatroom._id
+  //   )
+  // );
   const [message, setMessage] = useState([]);
   const [messages, setMessages] = useState([]);
 
@@ -47,9 +48,12 @@ export const PageDashboard = () => {
     useState(false);
   const [createChatroom, setCreateChatroom] = useState(false);
 
+  const [fetchAgain, setFetchAgain] = useState(false);
+
   const fetchUser = async (signal) => {
     let res = await get(`/protected/get-user`, signal);
     setUser(res.data);
+    // setFetchAgain(!fetchAgain);
     return fetchChatrooms(signal, res.data._id);
   };
 
@@ -83,29 +87,29 @@ export const PageDashboard = () => {
     // setLoading(false);
   };
 
-  useEffect(() => {
-    ws.onopen = () => {
-      console.log("WebSocket Connected");
-    };
+  // useEffect(() => {
+  //   ws.onopen = () => {
+  //     console.log("WebSocket Connected");
+  //   };
 
-    ws.onmessage = async (e) => {
-      const message = JSON.parse(e.data);
+  //   ws.onmessage = async (e) => {
+  //     const message = JSON.parse(e.data);
 
-      console.log(message);
-      if (user._id === message.sender) {
-        await post(`/protected/create-message`, message);
-      }
+  //     console.log(message);
+  //     if (user._id === message.sender) {
+  //       await post(`/protected/create-message`, message);
+  //     }
 
-      if (message.chatroom === activeChatroom._id) {
-        setMessages([...messages, message]);
-      }
-    };
+  //     if (message.chatroom === activeChatroom._id) {
+  //       setMessages([...messages, message]);
+  //     }
+  //   };
 
-    ws.onclose = () => {
-      console.log("WebSocket Disconnected");
-      setWs(new WebSocket("ws://localhost:5002"));
-    };
-  }, [ws.onmessage, ws.onopen, messages, ws.onclose]);
+  //   ws.onclose = () => {
+  //     console.log("WebSocket Disconnected");
+  //     // setWs(new WebSocket("ws://localhost:5002"));
+  //   };
+  // }, [ws.onmessage, ws.onopen, messages, ws.onclose]);
 
   useEffect(() => {
     // ****
@@ -119,7 +123,13 @@ export const PageDashboard = () => {
     const abortController = new AbortController();
     await fetchUser(abortController.signal);
     return () => abortController.abort();
-  }, []);
+  }, [fetchAgain]);
+
+  // useEffect(async () => {
+  //   const abortController = new AbortController();
+  //   if (user !== null) await fetchChatrooms(abortController.signal, user._id);
+  //   return () => abortController.abort();
+  // }, [fetchAgain]);
 
   if (loading) {
     return <h2 className="">Loading...</h2>;
@@ -141,6 +151,8 @@ export const PageDashboard = () => {
           userChatrooms={userChatrooms}
           searchChatrooms={searchChatrooms}
           user={user}
+          setFetchAgain={setFetchAgain}
+          fetchAgain={fetchAgain}
         />
       ) : (
         <Row className="dashboard-con">
@@ -202,7 +214,7 @@ export const PageDashboard = () => {
               <Col3
                 user={user}
                 activeChatroom={activeChatroom}
-                ws={ws}
+                // ws={ws}
                 message={message}
                 setMessage={setMessage}
                 messages={messages}

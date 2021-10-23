@@ -1,14 +1,102 @@
 import { If } from "../../../../utils/If";
 import { ChatSettingsAcc } from "./ChatSettingsAcc";
 
-export const Chat = ({
-  activeChatroom,
-  user,
-  messages,
-  message,
-  setMessage,
-  send,
-}) => {
+import { post, get } from "../../../../utils/http";
+
+import { useEffect } from "react";
+import { useState } from "react";
+
+import { getDateAndTime } from "../../../../utils/getDate&Time";
+
+export const Chat = ({ activeChatroom, user }) => {
+  // const [ws, setWs] = useState(
+  //   new WebSocket(
+  //     "ws://localhost:5002"
+  //     // "ws://localhost:5002" + "/protected/get-chatroom/" + activeChatroom._id
+  //   )
+  // );
+
+  const ws = new WebSocket(
+    "ws://localhost:5002"
+    // "ws://localhost:5002" + "/protected/get-chatroom/" + activeChatroom._id
+  );
+  console.log(activeChatroom);
+  const [message, setMessage] = useState([]);
+  const [messages, setMessages] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
+  const send = () => {
+    if (!message) return;
+
+    ws.send(
+      JSON.stringify({
+        sender: user._id,
+        chatroom: activeChatroom._id,
+        text: message,
+        time: getDateAndTime(),
+      })
+    );
+
+    // return setMessage("");
+    // if (messages.length !== 0) {
+    //   setMessages([...messages, message]);
+    // }
+    console.log(message);
+  };
+
+  const fetchMessages = async (signal) => {
+    let res = await get(
+      `/protected/get-chatroom-messages/` + activeChatroom._id,
+      signal
+    );
+    setMessages(res.data);
+    setLoading(false);
+  };
+
+  useEffect(async () => {
+    const abortController = new AbortController();
+    if (activeChatroom !== null) await fetchMessages(abortController.signal);
+    return () => abortController.abort();
+  }, [activeChatroom]);
+
+  if (loading) {
+    <h4>loading ...</h4>;
+  }
+
+  useEffect(() => {
+    ws.onopen = () => {
+      console.log("WebSocket Connected");
+    };
+
+    ws.onmessage = async (e) => {
+      // setMessage(JSON.parse(e.data));
+
+      let Message = JSON.parse(e.data);
+
+      console.log(Message);
+      if (user._id === Message.sender) {
+        await post(`/protected/create-message`, Message);
+      }
+
+      if (Message.chatroom === activeChatroom._id) {
+        setMessages([...messages, Message]);
+      }
+    };
+
+    ws.onclose = () => {
+      console.log("WebSocket Disconnected");
+      // setWs(
+      //   new WebSocket(
+      //     "ws://localhost:5002"
+      //     // "ws://localhost:5002" +
+      //     //   "/protected/get-chatroom/" +
+      //     //   activeChatroom._id
+      //   )
+      // );
+    };
+  }, [ws.onmessage, ws.onopen, messages, ws.onclose]);
+
   return (
     <>
       <section className="flex chat-con-top">

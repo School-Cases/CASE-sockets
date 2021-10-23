@@ -1,10 +1,8 @@
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Switch } from "react-router-dom";
 import { GuardProvider, GuardedRoute } from "react-router-guards";
 
 import { PageHome } from "./components/main-pages/PageHome";
 import { PageDashboard } from "./components/main-pages/PageDashboard";
-
-import { parse } from "./utils/parse";
 
 import { get } from "./utils/http";
 

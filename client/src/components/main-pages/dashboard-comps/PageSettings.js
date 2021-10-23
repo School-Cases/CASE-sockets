@@ -20,6 +20,8 @@ export const PageSettings = ({
   userChatrooms,
   searchChatrooms,
   user,
+  setFetchAgain,
+  fetchAgain,
 }) => {
   const [W, setW] = useState(window.innerWidth);
 
@@ -62,9 +64,11 @@ export const PageSettings = ({
           page={dashboardNavState}
         />
         <ChatroomsSettings
-          user={user}
-          userChatrooms={userChatrooms}
+          // user={user}
+          // userChatrooms={userChatrooms}
           searchChatrooms={searchChatrooms}
+          setFetchAgain={setFetchAgain}
+          fetchAgain={fetchAgain}
         />
       </Col>
       <Col
@@ -73,7 +77,11 @@ export const PageSettings = ({
         xs={{ span: 12, order: 3 }}
         className="dashboard-con-col3"
       >
-        <UserSettings user={user} />
+        <UserSettings
+          user={user}
+          setFetchAgain={setFetchAgain}
+          fetchAgain={fetchAgain}
+        />
       </Col>
     </Row>
   );

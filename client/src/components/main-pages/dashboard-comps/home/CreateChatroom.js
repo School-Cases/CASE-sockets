@@ -71,7 +71,7 @@ export const CreateChatroom = ({
         />
       </div>
 
-      <input type="text" name="theme" value={newRoomTheme} hidden />
+      {/* <input type="text" name="theme" value={newRoomTheme} hidden /> */}
 
       <div className="create-con-text">color:</div>
       <div className="flex">

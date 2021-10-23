@@ -5,6 +5,14 @@ import styled from "styled-components";
 
 import { If } from "../../../../utils/If";
 
+const StyledSection = styled("section")`
+  background: linear-gradient(
+    235deg,
+    ${(props) => props.theme} 25%,
+    rgba(255, 255, 255, 1) 25%
+  );
+`;
+
 export const ChatroomsHome = ({
   user,
   userChatrooms,
@@ -75,16 +83,6 @@ const Chatroom = ({
 
   const [loading, setLoading] = useState(true);
 
-  const StyledSection = styled.section`
-    background: linear-gradient(
-      235deg,
-      ${room.theme} 25%,
-      rgba(255, 255, 255, 1) 25%
-    );
-  `;
-
-  // background: linear-gradient(235deg, ${room.theme} 25%, rgba(255, 255, 255, 1) 25%);
-
   const fetchLastMessage = async (signal) => {
     let lastMessage = await get(
       `/protected/get-message/${room.messages.at(-1)}`,
@@ -129,12 +127,20 @@ const Chatroom = ({
     <>
       {joinable === "notJoinable" ? (
         <StyledSection
+          theme={room.theme}
           className="col2-chatroom-con"
           onClick={() => {
             setActiveChatroom(room);
             setCreateChatroom(false);
           }}
         >
+          {/* <div
+          className="col2-chatroom-con"
+          onClick={() => {
+            setActiveChatroom(room);
+            setCreateChatroom(false);
+          }}
+        > */}
           <div className="flex chatroom-con-title-fav-con">
             <h5>{room.name}</h5>
             <If condition={room.admins.includes(user._id)}>
@@ -173,7 +179,7 @@ const Chatroom = ({
           )}
         </StyledSection>
       ) : (
-        <StyledSection className="col2-chatroom-con">
+        <StyledSection className="col2-chatroom-con" theme={room.theme}>
           <div className="flex chatroom-con-title-fav-con">
             <h5>{room.name}</h5>
           </div>
