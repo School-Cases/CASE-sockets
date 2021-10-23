@@ -29,3 +29,9 @@
     -ms-transform: scale(0.9);
     -webkit-transform: scale(0.9);
 }
+
+@mixin color-default-size {
+    width: 4rem;
+    height: 3rem;
+    border-radius: 10px;
+}

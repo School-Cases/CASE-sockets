@@ -7,12 +7,7 @@
 @import url("https://use.typekit.net/rdr3hkg.css");
 
 .page {
-    margin: 0;
-    min-width: 100%;
-    min-height: 100vh;
-    background-image: url(../../images/Olf-pattern.png),
-        linear-gradient(#f6c658, #ff997d);
-
+    
     &.page-dashboard {
 
         //   BOTH MOBILE AND DESKTOP
@@ -116,7 +111,18 @@
 
                             h5 {
                                 @include olf-header-2;
+                                padding-right: 0.5rem;
                             }
+                        }
+
+                        .fav-con-admin-icon {
+                            font-size: 13px;
+                            color: white;
+                            background-color: $olfYellow;
+                            border-radius: 50%;
+                            height: 75%;
+                            padding: 0 0.4rem;
+                            // transform: translateY(-5px)
                         }
 
                         .con-mes-no-message {
@@ -163,7 +169,6 @@
         &.page-dashboard-desktop {
 
             .dashboard-con {
-                padding: 3rem;
             }
 
             .search-chatroom-con {

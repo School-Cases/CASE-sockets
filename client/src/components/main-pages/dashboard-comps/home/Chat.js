@@ -33,7 +33,8 @@ export const Chat = ({
                 className={
                   m.sender === user._id ? "message-right" : "message-left"
                 }
-              >
+                contenteditable
+                >
                 {m.text}
               </div>
             );

@@ -44,7 +44,7 @@ export const Nav = ({
                   stroke="#fff"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  stroke-width="2"
+                  stroke-width="3"
                 />
                 <path
                   id="Path_2"
@@ -55,7 +55,7 @@ export const Nav = ({
                   stroke="#fff"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  stroke-width="2"
+                  stroke-width="3"
                 />
                 <path
                   id="Path_3"
@@ -66,7 +66,7 @@ export const Nav = ({
                   stroke="#fff"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  stroke-width="2"
+                  stroke-width="3"
                 />
               </g>
             </g>
@@ -103,7 +103,7 @@ export const Nav = ({
                   stroke="#fff"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  stroke-width="2"
+                  stroke-width="3"
                 />
               </g>
             </g>
@@ -129,7 +129,7 @@ export const Nav = ({
                 stroke="#fff"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                stroke-width="2"
+                stroke-width="3"
               />
               <path
                 id="Path_12"
@@ -140,7 +140,7 @@ export const Nav = ({
                 stroke="#fff"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                stroke-width="2"
+                stroke-width="3"
               />
               <line
                 id="Line_1"
@@ -151,7 +151,7 @@ export const Nav = ({
                 stroke="#fff"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                stroke-width="2"
+                stroke-width="3"
               />
             </g>
           </svg>

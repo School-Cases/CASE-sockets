@@ -49,7 +49,7 @@ export const CreateChatroom = ({
   return (
     <section className="dashboard-con-create-con">
       <div className="flex create-con-top">
-        <h3>create chatroom</h3>
+        <h3>Create chatroom</h3>
         <button
           className="create-con-button-back"
           onClick={() => setCreateChatroom(false)}
@@ -66,27 +66,33 @@ export const CreateChatroom = ({
         <input
           className="create-con-input-text"
           type="text"
+          placeholder="chatroom name"
           name="name"
           onChange={(e) => setNewRoomName(e.target.value)}
         />
       </div>
 
+      <div className="flex create-con-theme-color">
       <input type="text" name="theme" value={newRoomTheme} hidden />
-
       <div className="create-con-text">color:</div>
-      <div className="flex">
-        <div onClick={() => setNewRoomTheme("#A2DC68")}>greenC</div>
-        <div onClick={() => setNewRoomTheme("#68DCC4")}>blueC</div>
-        <div onClick={() => setNewRoomTheme("#DC68D0")}>purpleC</div>
-        <div onClick={() => setNewRoomTheme("#D8DC68")}>yellowC</div>
+      <div className="flex create-con-default-colors">
+        <div className="create-con-green" onClick={() => setNewRoomTheme("#A2DC68")}></div>
+        <div className="create-con-blue" onClick={() => setNewRoomTheme("#68DCC4")}></div>
+        <div className="create-con-purple" onClick={() => setNewRoomTheme("#DC68D0")}></div>
+        <div className="create-con-yellow" onClick={() => setNewRoomTheme("#D8DC68")}></div>
+      </div>
       </div>
 
+      <div className="flex create-con-pick-color">
+      <div className="create-con-text">pick your own:</div>
       <input
         className="create-con-color-picker"
         type="color"
         onChange={(e) => setNewRoomTheme(e.target.value)}
       />
+      </div>
 
+      <div className="create-con-add-user">
       <label className="create-con-text" htmlFor="">
         add ppl:
       </label>
@@ -96,24 +102,26 @@ export const CreateChatroom = ({
         placeholder="search user"
         onChange={(e) => setSearchUsersInput(e.target.value)}
       />
-      <div className="flex">
+      <div className="flex add-user-user-container">
         <If condition={searchUsersInput !== ""}>
           {addableUsers.map((m) => {
             return (
               <If condition={m.name.includes(searchUsersInput)}>
                 <div
+                className="flex"
                   onClick={() =>
                     setNewRoomMembers((prev) => {
                       return [...prev, m._id];
                     })
                   }
                 >
-                  {m.name} <span>+</span>
+                 <div className="user-add-name"> {m.name} </div> <span>+</span>
                 </div>
               </If>
             );
           })}
         </If>
+      </div>
       </div>
       <button
         className="create-con-button-create"

@@ -7,11 +7,6 @@
 @import url("https://use.typekit.net/rdr3hkg.css");
 
 .page {
-    margin: 0;
-    min-width: 100%;
-    min-height: 100vh;
-    background-image: url(../../images/Olf-pattern.png),
-        linear-gradient(#f6c658, #ff997d);
 
     &.page-dashboard {
 
@@ -20,9 +15,7 @@
         .dashboard-con {
             min-height: 100vh;
 
-            .col3-chat-con,
-            .message-right,
-            .message-left {
+            .col3-chat-con {
                 box-shadow: 0px 3px 6px #00000029;
                 border-radius: 23px;
             }
@@ -38,8 +31,7 @@
                 .col3-chat-con {
                     flex-direction: column;
                     background-color: white;
-                    height: 100%;
-                    padding: 1rem 1.5rem 1.5rem 1.5rem;
+                    padding: 1.5rem 2rem 2rem 2rem;
 
                     .create-chatroom-button {
                         @include button-small-red;
@@ -80,7 +72,7 @@
 
                     .chat-con-mid {
                         @include hidden-scroll;
-                        height: 65vh;
+                        height: 62vh;
                         padding: 0 2rem;
 
                         .message-right,
@@ -90,6 +82,7 @@
                             margin-bottom: 1rem;
                             padding: 0.5rem 1rem;
                             max-width: 40%;
+                            border-radius: 23px;
                         }
 
                         .message-right {
@@ -142,7 +135,7 @@
         &.page-dashboard-desktop {
 
             .dashboard-con {
-                padding: 3rem;
+                // padding: 3rem;
             }
 
             .dashboard-con-col3 {
