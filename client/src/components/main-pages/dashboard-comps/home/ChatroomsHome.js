@@ -162,28 +162,30 @@ const Chatroom = ({
           }}
         >
           <div className="flex chatroom-con-title-fav-con">
-            <h5>{room.name}</h5>
-            <If condition={room.admins.includes(user._id)}>
-              <div>A</div>
-            </If>
+            <div className="flex fav-con-name-admin">
+              <h5>{room.name}</h5>
+              <If condition={room.admins.includes(user._id)}>
+                <div className="fav-con-admin-icon">A</div>
+              </If>
 
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <path
-                className={`${
-                  room.starmarked.includes(user._id) ? "starmarked" : ""
-                } title-fav-con-fav`}
-                onClick={(e) => {
-                  e.target.classList.toggle("starmarked");
-                  fetchStarmarkChatroom();
-                }}
-                d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-              />
-            </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  className={`${
+                    room.starmarked.includes(user._id) ? "starmarked" : ""
+                  } title-fav-con-fav`}
+                  onClick={(e) => {
+                    e.target.classList.toggle("starmarked");
+                    fetchStarmarkChatroom();
+                  }}
+                  d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
+                />
+              </svg>
+            </div>
           </div>
           {lastMessage !== null ? (
             <div className="flex chatroom-con-mes">
