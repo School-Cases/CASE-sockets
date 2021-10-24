@@ -70,6 +70,7 @@ export const create_message = async (req, res) => {
       text: req.body.text,
       // reactions: [],
     });
+    let MaM = message;
 
     await chatroomModel.findByIdAndUpdate(req.body.chatroom, {
       $push: {
@@ -82,7 +83,7 @@ export const create_message = async (req, res) => {
     return res.json({
       message: "create message success",
       success: true,
-      data: null,
+      data: MaM,
     });
   } catch (err) {
     return res.json({

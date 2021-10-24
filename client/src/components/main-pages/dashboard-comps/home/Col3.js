@@ -6,14 +6,18 @@ import { CreateChatroom } from "./CreateChatroom";
 export const Col3 = ({
   user,
   activeChatroom,
+  setActiveChatroom,
   ws,
-  message,
-  setMessage,
-  messages,
-  setMessages,
   createChatroom,
   setCreateChatroom,
   fetchChatrooms,
+  fetchLastMsg,
+  setFetchLastMsg,
+  send,
+  message,
+  messages,
+  setMessage,
+  setMessages,
 }) => {
   // const [loading, setLoading] = useState(true);
 
@@ -90,11 +94,20 @@ export const Col3 = ({
           {activeChatroom !== null ? (
             <Chat
               activeChatroom={activeChatroom}
+              setActiveChatroom={setActiveChatroom}
               user={user}
-              messages={messages}
+              // messages={messages}
+              // message={message}
+              // setMessage={setMessage}
+              // send={send}
+              fetchLastMsg={fetchLastMsg}
+              setFetchLastMsg={setFetchLastMsg}
+              send={send}
               message={message}
               setMessage={setMessage}
-              // send={send}
+              messages={messages}
+              setMessages={setMessages}
+              ws={ws}
             />
           ) : (
             <>

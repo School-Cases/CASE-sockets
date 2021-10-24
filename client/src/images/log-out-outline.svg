@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="31" height="26.167" viewBox="0 0 31 26.167">
   <g id="log-out-outline" transform="translate(1 1)">
-    <path id="Path_11" data-name="Path 11" d="M81.969,114.125v3.021a3.008,3.008,0,0,1-2.995,3.021H66.995A3.008,3.008,0,0,1,64,117.146V99.021A3.008,3.008,0,0,1,66.995,96h11.38c1.654,0,3.594,1.353,3.594,3.021v3.021" transform="translate(-64 -96)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-    <path id="Path_12" data-name="Path 12" d="M368,187.979l5.99-5.99L368,176" transform="translate(-344.99 -169.906)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-    <line id="Line_1" data-name="Line 1" x2="19" transform="translate(8.625 12.083)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <path id="Path_11" data-name="Path 11" d="M81.969,114.125v3.021a3.008,3.008,0,0,1-2.995,3.021H66.995A3.008,3.008,0,0,1,64,117.146V99.021A3.008,3.008,0,0,1,66.995,96h11.38c1.654,0,3.594,1.353,3.594,3.021v3.021" transform="translate(-64 -96)" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/>
+    <path id="Path_12" data-name="Path 12" d="M368,187.979l5.99-5.99L368,176" transform="translate(-344.99 -169.906)" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/>
+    <line id="Line_1" data-name="Line 1" x2="19" transform="translate(8.625 12.083)" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/>
   </g>
 </svg>

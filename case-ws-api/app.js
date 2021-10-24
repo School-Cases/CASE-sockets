@@ -13,6 +13,8 @@ import { protectedMw } from "./middlewares/protected";
 import protectedRouter from "./routers/protected";
 import index from "./routers/index";
 
+import { create_message } from "./Controllers/message-controller";
+
 dotenv.config();
 const app = express();
 
@@ -69,14 +71,26 @@ wss.on("connection", (ws) => {
   console.log("Client connected from IP: ", ws._socket.remoteAddress);
   console.log("Number of connected clients: ", wss.clients.size);
 
+  // setTimeout(() => {
+  //   console.log(wss.clients.size);
+  // }, 5000);
+
   ws.on("close", (event) => {
     console.log("Client disconnected\n");
     console.log("Number of clients: ", wss.clients.size);
   });
 
-  ws.on("message", (data, isBinary) => {
-    console.log(data.toString(), isBinary);
-    emitMessage(data.toString(), isBinary);
+  ws.on("message", async (data, isBinary) => {
+    // console.log(data.toString(), isBinary);
+    console.log(JSON.parse(data), isBinary);
+    const event = JSON.parse(data);
+
+    switch (event.type) {
+      case "message":
+        return emitMessage(data.toString(), isBinary);
+    }
+    // await create_message(data, );
+    // emitMessage(data.toString(), isBinary);
   });
 });
 

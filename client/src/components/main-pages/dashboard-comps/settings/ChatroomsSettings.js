@@ -21,6 +21,8 @@ export const ChatroomsSettings = ({
   searchChatrooms,
   setFetchAgain,
   fetchAgain,
+  // setActiveChatroom,
+  // activeChatroom,
 }) => {
   const [user, setUser] = useState(null);
 
@@ -177,17 +179,19 @@ export const ChatroomsSettings = ({
                 setActiveChatroom(room);
               }}
             >
-              {console.log(roomAdmins)}
-
               <h5>
                 {room.name}
                 <If condition={room.admins.includes(user._id)}>
                   <span>admin</span>
                 </If>
               </h5>
+
+              {/* room active */}
               <If condition={activeChatroom === room}>
-                <p>{room.members.length} members</p>
+                {/* admin */}
                 <If condition={room.admins.includes(user._id)}>
+                  <p>{room.members.length} members</p>
+
                   <label>name:</label>
                   <input
                     type="text"
@@ -195,121 +199,104 @@ export const ChatroomsSettings = ({
                     // value={roomName}
                     onChange={(e) => setRoomName(e.target.value)}
                   />
-                </If>
 
-                <div>Members:</div>
-                <div className="flex">
-                  {roomMembers.map((m, i) => {
-                    return (
-                      <div>
+                  <div>Members:</div>
+                  <div className="flex">
+                    {roomMembers.map((m, i) => {
+                      return (
                         <div>
-                          {m.name}
-                          <If condition={roomAdmins.includes(m)}>
-                            <span>A</span>
+                          <div>
+                            {m.name}
+                            <If condition={roomAdmins.includes(m)}>
+                              <span>A</span>
+                            </If>
+                          </div>
+                          <If condition={m._id !== user._id}>
+                            <If condition={!roomAdmins.includes(m)}>
+                              <div
+                                onClick={() =>
+                                  setRoomAdmins((prev) => {
+                                    return [...prev, m];
+                                  })
+                                }
+                              >
+                                make admin
+                              </div>
+                            </If>
+                            <If condition={!roomAdmins.includes(m)}>
+                              <div
+                                onClick={() => {
+                                  let newArr = roomMembers.filter(
+                                    (me) => me._id !== m._id
+                                  );
+                                  setRoomMembers(newArr);
+                                  let newArr2 = notRoomMembers;
+                                  if (!newArr2.includes(m)) newArr2.push(m);
+                                  setNotRoomMembers(newArr2);
+                                }}
+                              >
+                                kick
+                              </div>
+                            </If>
                           </If>
                         </div>
-                        <If
-                          condition={
-                            room.admins.includes(user._id) && m._id !== user._id
-                          }
-                        >
-                          <If condition={!roomAdmins.includes(m)}>
-                            <div
-                              onClick={() =>
-                                setRoomAdmins((prev) => {
-                                  return [...prev, m];
-                                })
-                              }
-                            >
-                              make admin
-                            </div>
-                          </If>
-                          <If condition={!roomAdmins.includes(m)}>
-                            <div
-                              onClick={() => {
-                                let newArr = roomMembers.filter(
-                                  (me) => me._id !== m._id
-                                );
-                                setRoomMembers(newArr);
-                                let newArr2 = notRoomMembers;
-                                if (!newArr2.includes(m)) newArr2.push(m);
-                                setNotRoomMembers(newArr2);
-                                // setNotRoomMembers((prev) => {
-                                //   if (!prev.includes(m)) {
-                                //     return [...prev, m];
-                                //   } else {
-                                //     return [prev];
-                                //   }
-                                // });
-                              }}
-                            >
-                              kick
-                            </div>
-                          </If>
-                        </If>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="flex">
-                  <label>search not members:</label>
-                  <input
-                    type="text"
-                    placeholder="search user"
-                    value={searchUsersInput}
-                    onChange={(e) => setSearchUsersInput(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <If condition={searchUsersInput !== ""}>
-                    {notRoomMembers.map((m) => {
-                      console.log(m);
-                      console.log("notmembers", notRoomMembers);
-                      console.log("members", roomMembers);
-
-                      return (
-                        <If condition={m !== undefined}>
-                          <If
-                            condition={
-                              m.name.includes(searchUsersInput) &&
-                              !roomMembers.includes(m)
-                            }
-                          >
-                            <span
-                              onClick={() =>
-                                setRoomMembers((prev) => {
-                                  return [...prev, m];
-                                })
-                              }
-                            >
-                              {m.name}
-                            </span>
-                          </If>
-                        </If>
                       );
                     })}
-                  </If>
-                </div>
+                  </div>
+                  <div className="flex">
+                    <label>search not members:</label>
+                    <input
+                      type="text"
+                      placeholder="search user"
+                      value={searchUsersInput}
+                      onChange={(e) => setSearchUsersInput(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <If condition={searchUsersInput !== ""}>
+                      {notRoomMembers.map((m) => {
+                        return (
+                          <If condition={m !== undefined}>
+                            <If
+                              condition={
+                                m.name.includes(searchUsersInput) &&
+                                !roomMembers.includes(m)
+                              }
+                            >
+                              <span
+                                onClick={() =>
+                                  setRoomMembers((prev) => {
+                                    return [...prev, m];
+                                  })
+                                }
+                              >
+                                {m.name}
+                              </span>
+                            </If>
+                          </If>
+                        );
+                      })}
+                    </If>
+                  </div>
 
-                <hr />
+                  <hr />
 
-                <div>color:</div>
-                <div className="flex">
-                  <div onClick={() => setRoomTheme("#A2DC68")}>greenC</div>
-                  <div onClick={() => setRoomTheme("#68DCC4")}>blueC</div>
-                  <div onClick={() => setRoomTheme("#DC68D0")}>purpleC</div>
-                  <div onClick={() => setRoomTheme("#D8DC68")}>yellowC</div>
-                </div>
+                  <div>color:</div>
+                  <div className="flex">
+                    <div onClick={() => setRoomTheme("#A2DC68")}>greenC</div>
+                    <div onClick={() => setRoomTheme("#68DCC4")}>blueC</div>
+                    <div onClick={() => setRoomTheme("#DC68D0")}>purpleC</div>
+                    <div onClick={() => setRoomTheme("#D8DC68")}>yellowC</div>
+                  </div>
 
-                <input
-                  type="color"
-                  onChange={(e) => setRoomTheme(e.target.value)}
-                />
+                  <input
+                    type="color"
+                    onChange={(e) => setRoomTheme(e.target.value)}
+                  />
 
-                <hr />
-                <div onClick={() => fetchUpdateChatroom(room._id)}>save</div>
-                {/* <div onClick={() => setChatSettingsToggle(null)}>save</div> */}
-                {roomAdmins.includes(user) ? (
+                  <hr />
+                  <div onClick={() => fetchUpdateChatroom(room._id)}>save</div>
+
                   <div
                     onClick={async () => {
                       const abortController = new AbortController();
@@ -322,11 +309,84 @@ export const ChatroomsSettings = ({
                   >
                     <span>icon</span> Delete chatroom
                   </div>
-                ) : (
+                </If>
+
+                {/* not admin */}
+                <If condition={!room.admins.includes(user._id)}>
+                  <p>{room.members.length} members</p>
+
+                  <div>Members:</div>
+                  <div className="flex">
+                    {roomMembers.map((m, i) => {
+                      return (
+                        <div>
+                          <div>
+                            {m.name}
+                            <If condition={roomAdmins.includes(m)}>
+                              <span>A</span>
+                            </If>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="flex">
+                    <label>search not members:</label>
+                    <input
+                      type="text"
+                      placeholder="search user"
+                      value={searchUsersInput}
+                      onChange={(e) => setSearchUsersInput(e.target.value)}
+                    />
+                  </div>
+                  <div>
+                    <If condition={searchUsersInput !== ""}>
+                      {notRoomMembers.map((m) => {
+                        return (
+                          <If condition={m !== undefined}>
+                            <If
+                              condition={
+                                m.name.includes(searchUsersInput) &&
+                                !roomMembers.includes(m)
+                              }
+                            >
+                              <span
+                                onClick={() =>
+                                  setRoomMembers((prev) => {
+                                    return [...prev, m];
+                                  })
+                                }
+                              >
+                                {m.name}
+                              </span>
+                            </If>
+                          </If>
+                        );
+                      })}
+                    </If>
+                  </div>
+
+                  <hr />
+
+                  <div>color:</div>
+                  <div className="flex">
+                    <div onClick={() => setRoomTheme("#A2DC68")}>greenC</div>
+                    <div onClick={() => setRoomTheme("#68DCC4")}>blueC</div>
+                    <div onClick={() => setRoomTheme("#DC68D0")}>purpleC</div>
+                    <div onClick={() => setRoomTheme("#D8DC68")}>yellowC</div>
+                  </div>
+
+                  <input
+                    type="color"
+                    onChange={(e) => setRoomTheme(e.target.value)}
+                  />
+
+                  <hr />
+                  <div onClick={() => fetchUpdateChatroom(room._id)}>save</div>
                   <div>
                     <span>icon</span> Leave chatroom
                   </div>
-                )}
+                </If>
               </If>
             </StyledSection>
           </If>
@@ -335,6 +395,141 @@ export const ChatroomsSettings = ({
     </section>
   );
 };
+
+// admin and notadmin combined
+{
+  /* <If condition={activeChatroom === room}>
+  <p>{room.members.length} members</p>
+  <If condition={room.admins.includes(user._id)}>
+    <label>name:</label>
+    <input
+      type="text"
+      placeholder={room.name}
+      // value={roomName}
+      onChange={(e) => setRoomName(e.target.value)}
+    />
+  </If>
+
+  <div>Members:</div>
+  <div className="flex">
+    {roomMembers.map((m, i) => {
+      return (
+        <div>
+          <div>
+            {m.name}
+            <If condition={roomAdmins.includes(m)}>
+              <span>A</span>
+            </If>
+          </div>
+          <If condition={room.admins.includes(user._id) && m._id !== user._id}>
+            <If condition={!roomAdmins.includes(m)}>
+              <div
+                onClick={() =>
+                  setRoomAdmins((prev) => {
+                    return [...prev, m];
+                  })
+                }
+              >
+                make admin
+              </div>
+            </If>
+            <If condition={!roomAdmins.includes(m)}>
+              <div
+                onClick={() => {
+                  let newArr = roomMembers.filter((me) => me._id !== m._id);
+                  setRoomMembers(newArr);
+                  let newArr2 = notRoomMembers;
+                  if (!newArr2.includes(m)) newArr2.push(m);
+                  setNotRoomMembers(newArr2);
+                  // setNotRoomMembers((prev) => {
+                  //   if (!prev.includes(m)) {
+                  //     return [...prev, m];
+                  //   } else {
+                  //     return [prev];
+                  //   }
+                  // });
+                }}
+              >
+                kick
+              </div>
+            </If>
+          </If>
+        </div>
+      );
+    })}
+  </div>
+  <div className="flex">
+    <label>search not members:</label>
+    <input
+      type="text"
+      placeholder="search user"
+      value={searchUsersInput}
+      onChange={(e) => setSearchUsersInput(e.target.value)}
+    />
+  </div>
+  <div>
+    <If condition={searchUsersInput !== ""}>
+      {notRoomMembers.map((m) => {
+        console.log(m);
+        console.log("notmembers", notRoomMembers);
+        console.log("members", roomMembers);
+
+        return (
+          <If condition={m !== undefined}>
+            <If
+              condition={
+                m.name.includes(searchUsersInput) && !roomMembers.includes(m)
+              }
+            >
+              <span
+                onClick={() =>
+                  setRoomMembers((prev) => {
+                    return [...prev, m];
+                  })
+                }
+              >
+                {m.name}
+              </span>
+            </If>
+          </If>
+        );
+      })}
+    </If>
+  </div>
+
+  <hr />
+
+  <div>color:</div>
+  <div className="flex">
+    <div onClick={() => setRoomTheme("#A2DC68")}>greenC</div>
+    <div onClick={() => setRoomTheme("#68DCC4")}>blueC</div>
+    <div onClick={() => setRoomTheme("#DC68D0")}>purpleC</div>
+    <div onClick={() => setRoomTheme("#D8DC68")}>yellowC</div>
+  </div>
+
+  <input type="color" onChange={(e) => setRoomTheme(e.target.value)} />
+
+  <hr />
+  <div onClick={() => fetchUpdateChatroom(room._id)}>save</div>
+  {/* <div onClick={() => setChatSettingsToggle(null)}>save</div> */
+}
+//   {roomAdmins.includes(user) ? (
+//     <div
+//       onClick={async () => {
+//         const abortController = new AbortController();
+//         await fetchDeleteChatroom(abortController.signal, room._id);
+//         return () => abortController.abort();
+//       }}
+//     >
+//       <span>icon</span> Delete chatroom
+//     </div>
+//   ) : (
+//     <div>
+//       <span>icon</span> Leave chatroom
+//     </div>
+//   )}
+// </If>; */}
+// ----------------------------------------------
 
 // const Chatroom = ({
 //   user,

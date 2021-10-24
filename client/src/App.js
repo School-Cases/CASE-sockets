@@ -3,8 +3,12 @@ import { GuardProvider, GuardedRoute } from "react-router-guards";
 
 import { PageHome } from "./components/main-pages/PageHome";
 import { PageDashboard } from "./components/main-pages/PageDashboard";
-
+import { Test } from "./components/Test";
 import { get } from "./utils/http";
+
+import { useEffect } from "react";
+
+// import { ws } from "./utils/ws";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style/temp.scss";
@@ -30,6 +34,7 @@ const NotFound = () => {
 };
 
 function App() {
+  console.log("hehe");
   return (
     <div className="App">
       <BrowserRouter>
@@ -48,7 +53,7 @@ function App() {
             <GuardedRoute
               path="/dashboard"
               exact
-              component={PageDashboard}
+              component={Test}
               meta={{ auth: true }}
             />
             <GuardedRoute path="*" component={NotFound} />

@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="31.827" height="28.927" viewBox="0 0 31.827 28.927">
   <g id="Component_3_1" data-name="Component 3 – 1" transform="translate(1.414 1)">
     <g id="home-outline" transform="translate(0 0)">
-      <path id="Path_1" data-name="Path 1" d="M80,212v15.028a1.03,1.03,0,0,0,1.04,1.019h6.242v-8.66a1.545,1.545,0,0,1,1.56-1.528h5.2a1.545,1.545,0,0,1,1.56,1.528v8.66h6.242a1.03,1.03,0,0,0,1.04-1.019V212" transform="translate(-76.944 -201.119)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-      <path id="Path_2" data-name="Path 2" d="M61,61.261,47.2,48.271a1.107,1.107,0,0,0-1.41,0L32,61.261" transform="translate(-32 -48.017)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
-      <path id="Path_3" data-name="Path 3" d="M355.056,71.323V64H352v4.394" transform="translate(-331.245 -62.982)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <path id="Path_1" data-name="Path 1" d="M80,212v15.028a1.03,1.03,0,0,0,1.04,1.019h6.242v-8.66a1.545,1.545,0,0,1,1.56-1.528h5.2a1.545,1.545,0,0,1,1.56,1.528v8.66h6.242a1.03,1.03,0,0,0,1.04-1.019V212" transform="translate(-76.944 -201.119)" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/>
+      <path id="Path_2" data-name="Path 2" d="M61,61.261,47.2,48.271a1.107,1.107,0,0,0-1.41,0L32,61.261" transform="translate(-32 -48.017)" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/>
+      <path id="Path_3" data-name="Path 3" d="M355.056,71.323V64H352v4.394" transform="translate(-331.245 -62.982)" fill="none" stroke="#fff" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"/>
     </g>
   </g>
 </svg>

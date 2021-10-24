@@ -6,6 +6,8 @@ export const Nav = ({
   dashboardNavState,
   createChatroom,
   setCreateChatroom,
+  // setFetchAgain,
+  // fetchAgain,
 }) => {
   const history = useHistory();
 
@@ -17,9 +19,10 @@ export const Nav = ({
     <section className="flex col1-nav-con">
       <div
         className="nav-con-li"
-        onClick={() => {
+        onClick={async () => {
           setDashboardNavState("home");
           if (createChatroom) setCreateChatroom(false);
+          // await setFetchAgain(!fetchAgain);
         }}
       >
         <span>
@@ -42,9 +45,9 @@ export const Nav = ({
                   transform="translate(-76.944 -201.119)"
                   fill="none"
                   stroke="#fff"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                 />
                 <path
                   id="Path_2"
@@ -53,9 +56,9 @@ export const Nav = ({
                   transform="translate(-32 -48.017)"
                   fill="none"
                   stroke="#fff"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                 />
                 <path
                   id="Path_3"
@@ -64,14 +67,14 @@ export const Nav = ({
                   transform="translate(-331.245 -62.982)"
                   fill="none"
                   stroke="#fff"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                 />
               </g>
             </g>
           </svg>
-        </span>{" "}
+        </span>
         HOME
       </div>
       <div
@@ -101,9 +104,9 @@ export const Nav = ({
                   transform="translate(-47.985 -42)"
                   fill="none"
                   stroke="#fff"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
                 />
               </g>
             </g>
@@ -127,9 +130,9 @@ export const Nav = ({
                 transform="translate(-64 -96)"
                 fill="none"
                 stroke="#fff"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
               />
               <path
                 id="Path_12"
@@ -138,9 +141,9 @@ export const Nav = ({
                 transform="translate(-344.99 -169.906)"
                 fill="none"
                 stroke="#fff"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
               />
               <line
                 id="Line_1"
@@ -149,13 +152,13 @@ export const Nav = ({
                 transform="translate(8.625 12.083)"
                 fill="none"
                 stroke="#fff"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
               />
             </g>
           </svg>
-        </span>{" "}
+        </span>
         LOG OUT
       </div>
     </section>
