@@ -8,12 +8,15 @@ import styled from "styled-components";
 // import { Chatroom } from "./oneChatSettings";
 
 const StyledSection = styled("section")`
-  background: linear-gradient(
+  
+background: linear-gradient(
     235deg,
     ${(props) => props.theme} 25%,
     rgba(255, 255, 255, 1) 25%
   );
 `;
+
+
 
 export const ChatroomsSettings = ({
   // user,
@@ -179,10 +182,10 @@ export const ChatroomsSettings = ({
                 setActiveChatroom(room);
               }}
             >
-              <h5>
+              <h5 className="flex">
                 {room.name}
                 <If condition={room.admins.includes(user._id)}>
-                  <span>admin</span>
+                  <span>A</span>
                 </If>
               </h5>
 
@@ -190,7 +193,7 @@ export const ChatroomsSettings = ({
               <If condition={activeChatroom === room}>
                 {/* admin */}
                 <If condition={room.admins.includes(user._id)}>
-                  <p>{room.members.length} members</p>
+                  <p className="chat-settings-members">{room.members.length} members</p>
 
                   <label>name:</label>
                   <input
@@ -244,7 +247,7 @@ export const ChatroomsSettings = ({
                     })}
                   </div>
                   <div className="flex">
-                    <label>search not members:</label>
+                    <label>add member:</label>
                     <input
                       type="text"
                       placeholder="search user"

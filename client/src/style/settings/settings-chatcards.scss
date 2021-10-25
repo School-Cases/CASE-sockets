@@ -1,0 +1,67 @@
+@import "/src/style/login.scss";
+
+@import "/src/style/components/colours.scss";
+@import "/src/style/components/fonts.scss";
+@import "/src/style/components/buttons.scss";
+@import "../components/mixins.scss";
+@import url("https://use.typekit.net/rdr3hkg.css");
+
+
+.page {
+    &.page-dashboard {
+
+        // BOTH MOBILE AND DESKTOP
+
+        .dash-settings-chatrooms {
+            @include hidden-scroll;
+            height: 35rem;
+        }
+
+        .dash-settings-chatrooms::-webkit-scrollbar {
+            display: none;
+          }
+
+        .dash-settings-chatrooms {
+
+            .col2-chatroom-con {
+                border-radius: 23px;
+                box-shadow: 0px 3px 6px #00000029;
+                padding: 1rem;
+                cursor: pointer;
+            }
+
+            h5 {
+                @include olf-header-2;
+                margin: 0;
+                gap: 0.5rem;
+
+                span {
+                    font-size: 13px;
+                    color: white;
+                    background-color: $olfYellow;
+                    border-radius: 50%;
+                    padding: 0.1rem 0.4rem 0.3rem 0.4rem;
+                }
+            }
+
+        .chat-settings-members {
+            color: $greyM;
+        }
+
+    }
+
+
+s
+        //   ONLY ON WIDTH > MEDIUM (DESKTOP)
+
+        &.page-dashboard-desktop {}
+
+
+
+
+
+        //   ONLY ON WIDTH < MEDIUM (MOBILE)
+
+        &.page-dashboard-mobile {}
+    }
+}

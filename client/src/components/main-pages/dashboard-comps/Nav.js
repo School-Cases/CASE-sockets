@@ -18,7 +18,7 @@ export const Nav = ({
   return (
     <section className="flex col1-nav-con">
       <div
-        className="nav-con-li"
+        className="flex nav-con-li"
         onClick={async () => {
           setDashboardNavState("home");
           if (createChatroom) setCreateChatroom(false);
@@ -75,10 +75,12 @@ export const Nav = ({
             </g>
           </svg>
         </span>
-        HOME
+        <div className="nav-con-home">
+         HOME
+        </div>
       </div>
       <div
-        className="nav-con-li"
+        className="flex nav-con-li"
         onClick={() => {
           setDashboardNavState("settings");
           if (createChatroom) setCreateChatroom(false);
@@ -112,9 +114,11 @@ export const Nav = ({
             </g>
           </svg>
         </span>
-        SETTINGS
+        <div>
+         SETTINGS
+        </div>
       </div>
-      <div onClick={logout} className="nav-con-li">
+      <div onClick={logout} className="flex nav-con-li">
         <span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -159,7 +163,9 @@ export const Nav = ({
             </g>
           </svg>
         </span>
-        LOG OUT
+        <div>
+         LOG OUT
+        </div>
       </div>
     </section>
   );
