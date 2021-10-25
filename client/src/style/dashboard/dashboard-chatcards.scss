@@ -430,7 +430,8 @@
                 fill: white;
 
                 &.starmarked {
-                  fill: $olfred;
+                  // fill: $olfred;
+                  fill: yellow;
                 }
               }
             }

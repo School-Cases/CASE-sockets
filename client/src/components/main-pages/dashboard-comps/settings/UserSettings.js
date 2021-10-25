@@ -1,8 +1,28 @@
 import { useState, useEffect } from "react";
 import { post, get } from "../../../../utils/http";
 
+import { If } from "../../../../utils/If";
+
+import avatars from "../../../../utils/avatars";
+
+import styled from "styled-components";
+
+const StyledDiv = styled("div")`
+  background-image: url(../avatars/${(props) => props.img});
+`;
+
 export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
   const [loading, setLoading] = useState(true);
+
+  // <StyledDiv
+  //                 img={avatar[0]}
+  //                 className="chosen-avatar"
+  //               ></StyledDiv>
+  //               <button onClick={() => setAvatarSwitch(!avatarSwitch)}>
+  //                 byt
+  //               </button>
+
+  const [avatarSwitch, setAvatarSwitch] = useState(false);
 
   const [user, setUser] = useState(null);
   const [avatar, setAvatar] = useState(null);
@@ -15,7 +35,7 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
     let res = await get(`/protected/get-user`, signal);
     setUser(res.data);
     setName(res.data.name);
-    setAvatar(res.data.avatar);
+    setAvatar([res.data.avatar, 0]);
     setTheme(res.data.theme);
     setLoading(false);
   };
@@ -74,9 +94,23 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
 
       <div className="flex user-settings-input-con">
         <label htmlFor="avatar">Avatar:</label>
-        <div>avatarImg</div>
+        <StyledDiv img={avatar[0]} className="chosen-avatar"></StyledDiv>
+        <button onClick={() => setAvatarSwitch(!avatarSwitch)}>byt</button>
+        {console.log(avatar[0])}
+        {/* <div>avatarImg</div>
         <div>avatarImg2</div>
-        <div>avatarImg3</div>
+        <div>avatarImg3</div> */}
+        <If condition={avatarSwitch}>
+          {avatars.map((a) => {
+            return (
+              <StyledDiv
+                img={a}
+                className="avatars"
+                onClick={() => setAvatar([a, 1])}
+              ></StyledDiv>
+            );
+          })}
+        </If>
       </div>
       <div className="flex user-settings-input-con">
         <label htmlFor="theme">Theme:</label>
