@@ -14,8 +14,8 @@ const userSchema = new Schema({
     required: true,
   },
   avatar: {
-    type: Number,
-    default: 0,
+    type: String,
+    default: "avatar-prel.png",
     required: true,
   },
   theme: {
