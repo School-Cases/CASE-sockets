@@ -58,6 +58,14 @@
     color: white;
 }
 
+@mixin button-small-white {
+    border-radius: 23px;
+    border: none;
+    background-color: white;
+    padding: 0.5rem 1rem;
+    color: $olfred;
+}
+
 
 @mixin button-only-text {
     cursor: pointer;

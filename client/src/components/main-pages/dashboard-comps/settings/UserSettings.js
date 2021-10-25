@@ -44,8 +44,9 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
   return (
     <div>
       <div className="user-settings-input-con">
-        <label htmlFor="name">Name:</label>
+        <label className="user-settings-text" htmlFor="name">Name:</label>
         <input
+          className="user-settings-input"
           type="text"
           name="name"
           id=""
@@ -54,8 +55,9 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
         />
       </div>
       <div className="user-settings-input-con">
-        <label htmlFor="newPassword">New password:</label>
+        <label className="user-settings-text" htmlFor="newPassword">New password:</label>
         <input
+        className="user-settings-input"
           type="password"
           name="newPassword"
           id=""
@@ -63,8 +65,9 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
         />
       </div>
       <div className="user-settings-input-con">
-        <label htmlFor="password">Current password:</label>
+        <label className="user-settings-text" htmlFor="password">Current password:</label>
         <input
+        className="user-settings-input"
           type="password"
           name="password"
           id=""
@@ -73,17 +76,19 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
       </div>
 
       <div className="flex user-settings-input-con">
-        <label htmlFor="avatar">Avatar:</label>
+        <label className="user-settings-text" htmlFor="avatar">Avatar:</label>
         <div>avatarImg</div>
         <div>avatarImg2</div>
         <div>avatarImg3</div>
       </div>
       <div className="flex user-settings-input-con">
-        <label htmlFor="theme">Theme:</label>
-        <div onClick={() => setTheme(0)}>theme img1</div>
-        <div onClick={() => setTheme(1)}>theme img2</div>
+        <label className="user-settings-text" htmlFor="theme">Theme:</label>
+        <div className="flex user-settings-themes">
+        <div className="user-settings-theme-1" onClick={() => setTheme(0)}></div>
+        <div className="user-settings-theme-2" onClick={() => setTheme(1)}></div>
       </div>
-      <button onClick={() => fetchUpdateUser()}>save</button>
+      </div>
+      <button className="user-settings-save-button" onClick={() => fetchUpdateUser()}>save</button>
     </div>
   );
 };

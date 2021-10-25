@@ -195,21 +195,22 @@ export const ChatroomsSettings = ({
                 <If condition={room.admins.includes(user._id)}>
                   <p className="chat-settings-members">{room.members.length} members</p>
 
-                  <label>name:</label>
+                  <label className="chat-settings-text">Change name:</label>
                   <input
+                  className="chat-settings-input-text"
                     type="text"
                     placeholder={room.name}
                     // value={roomName}
                     onChange={(e) => setRoomName(e.target.value)}
                   />
 
-                  <div>Members:</div>
-                  <div className="flex">
+                  <div className="chat-settings-text">Members:</div>
+                  <div className="flex chat-settings-members-container">
                     {roomMembers.map((m, i) => {
                       return (
                         <div>
-                          <div>
-                            {m.name}
+                          <div className="flex chat-settings-current-members">
+                            <div className="current-members">{m.name} </div>
                             <If condition={roomAdmins.includes(m)}>
                               <span>A</span>
                             </If>
@@ -217,6 +218,7 @@ export const ChatroomsSettings = ({
                           <If condition={m._id !== user._id}>
                             <If condition={!roomAdmins.includes(m)}>
                               <div
+                              className="chat-settings-make-admin"
                                 onClick={() =>
                                   setRoomAdmins((prev) => {
                                     return [...prev, m];
@@ -228,6 +230,7 @@ export const ChatroomsSettings = ({
                             </If>
                             <If condition={!roomAdmins.includes(m)}>
                               <div
+                              className="chat-settings-kick"
                                 onClick={() => {
                                   let newArr = roomMembers.filter(
                                     (me) => me._id !== m._id
@@ -247,8 +250,9 @@ export const ChatroomsSettings = ({
                     })}
                   </div>
                   <div className="flex">
-                    <label>add member:</label>
+                    <label className="chat-settings-text">add member:</label>
                     <input
+                    className="chat-settings-input-text"
                       type="text"
                       placeholder="search user"
                       value={searchUsersInput}
@@ -267,6 +271,7 @@ export const ChatroomsSettings = ({
                               }
                             >
                               <span
+                              className="chat-settings-add-member-user"
                                 onClick={() =>
                                   setRoomMembers((prev) => {
                                     return [...prev, m];
@@ -284,23 +289,27 @@ export const ChatroomsSettings = ({
 
                   <hr />
 
-                  <div>color:</div>
-                  <div className="flex">
-                    <div onClick={() => setRoomTheme("#A2DC68")}>greenC</div>
-                    <div onClick={() => setRoomTheme("#68DCC4")}>blueC</div>
-                    <div onClick={() => setRoomTheme("#DC68D0")}>purpleC</div>
-                    <div onClick={() => setRoomTheme("#D8DC68")}>yellowC</div>
+                  <div className="chat-settings-text">color:</div>
+                  <div className="flex chat-settings-default-colors">
+                    <div className="settings-con-green" onClick={() => setRoomTheme("#A2DC68")}></div>
+                    <div className="settings-con-blue"onClick={() => setRoomTheme("#68DCC4")}></div>
+                    <div className="settings-con-purple"onClick={() => setRoomTheme("#DC68D0")}></div>
+                    <div className="settings-con-yellow"onClick={() => setRoomTheme("#D8DC68")}></div>
                   </div>
 
+                      <div className="flex chat-settings-color-pick">
+                      <div className="chat-settings-text">pick:</div>
                   <input
+                    className="chat-settings-color-picker"
                     type="color"
                     onChange={(e) => setRoomTheme(e.target.value)}
                   />
 
-                  <hr />
-                  <div onClick={() => fetchUpdateChatroom(room._id)}>save</div>
+                  </div>
 
+                  <hr />
                   <div
+                  className="chat-settings-delete"
                     onClick={async () => {
                       const abortController = new AbortController();
                       await fetchDeleteChatroom(
@@ -310,21 +319,26 @@ export const ChatroomsSettings = ({
                       return () => abortController.abort();
                     }}
                   >
-                    <span>icon</span> Delete chatroom
+                    <span>X</span> Delete chatroom
                   </div>
+                  <div
+                  className="chat-settings-save" 
+                  onClick={() => fetchUpdateChatroom(room._id)}>save</div>
+
+                 
                 </If>
 
                 {/* not admin */}
                 <If condition={!room.admins.includes(user._id)}>
-                  <p>{room.members.length} members</p>
+                  <p className="chat-settings-members">{room.members.length} members</p>
 
-                  <div>Members:</div>
-                  <div className="flex">
+                  <div className="chat-settings-text">Members:</div>
+                  <div className="flex chat-settings-members-container">
                     {roomMembers.map((m, i) => {
                       return (
                         <div>
-                          <div>
-                            {m.name}
+                          <div className="flex chat-settings-current-members">
+                            <div className="current-members">{m.name}</div>
                             <If condition={roomAdmins.includes(m)}>
                               <span>A</span>
                             </If>
@@ -334,8 +348,9 @@ export const ChatroomsSettings = ({
                     })}
                   </div>
                   <div className="flex">
-                    <label>search not members:</label>
+                    <label className="chat-settings-text">add members:</label>
                     <input
+                    className="chat-settings-input-text"
                       type="text"
                       placeholder="search user"
                       value={searchUsersInput}
@@ -354,6 +369,7 @@ export const ChatroomsSettings = ({
                               }
                             >
                               <span
+                              className="chat-settings-add-member-user"
                                 onClick={() =>
                                   setRoomMembers((prev) => {
                                     return [...prev, m];
@@ -371,24 +387,32 @@ export const ChatroomsSettings = ({
 
                   <hr />
 
-                  <div>color:</div>
-                  <div className="flex">
-                    <div onClick={() => setRoomTheme("#A2DC68")}>greenC</div>
-                    <div onClick={() => setRoomTheme("#68DCC4")}>blueC</div>
-                    <div onClick={() => setRoomTheme("#DC68D0")}>purpleC</div>
-                    <div onClick={() => setRoomTheme("#D8DC68")}>yellowC</div>
+                  <div className="chat-settings-text">color:</div>
+                  <div className="flex chat-settings-default-colors">
+                    <div className="settings-con-green" onClick={() => setRoomTheme("#A2DC68")}></div>
+                    <div className="settings-con-blue"onClick={() => setRoomTheme("#68DCC4")}></div>
+                    <div className="settings-con-purple"onClick={() => setRoomTheme("#DC68D0")}></div>
+                    <div className="settings-con-yellow"onClick={() => setRoomTheme("#D8DC68")}></div>
                   </div>
 
+                  <div className="flex chat-settings-color-pick">
+                      <div className="chat-settings-text">pick:</div>
                   <input
+                    className="chat-settings-color-picker"
                     type="color"
                     onChange={(e) => setRoomTheme(e.target.value)}
                   />
 
-                  <hr />
-                  <div onClick={() => fetchUpdateChatroom(room._id)}>save</div>
-                  <div>
-                    <span>icon</span> Leave chatroom
                   </div>
+
+                  <hr />
+                  <div className="chat-settings-delete">
+                    <span>X</span> Leave chatroom
+                  </div>
+                  <div
+                  className="chat-settings-save"
+                   onClick={() => fetchUpdateChatroom(room._id)}>save</div>
+                  
                 </If>
               </If>
             </StyledSection>

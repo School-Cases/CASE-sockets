@@ -1,0 +1,78 @@
+@import "/src/style/login.scss";
+
+@import "/src/style/components/colours.scss";
+@import "/src/style/components/fonts.scss";
+@import "/src/style/components/buttons.scss";
+@import "../components/mixins.scss";
+@import url("https://use.typekit.net/rdr3hkg.css");
+
+
+.page {
+    &.page-dashboard {
+
+        // BOTH MOBILE AND DESKTOP
+
+        .user-settings-text {
+            color: white;
+            padding-right: 0.5rem;
+            font-size: 20px;
+            // text-transform: uppercase;
+            padding-bottom: 1rem
+        }
+        
+        .user-settings-input {
+            @include white-input-field;
+            color: $greyD;
+        }
+
+        .user-settings-input::placeholder {
+            color: $greyD;
+        }
+
+        .user-settings-input:focus {
+            color: $greyD;
+            border: none;
+            outline: none;
+        }
+
+        .user-settings-save-button {
+            @include button-small-white;
+            font-weight: 900;
+        }
+
+        .user-settings-theme-1 {
+            background-color: $blueC;
+            border-radius: 23px;
+            padding: 1.3rem 0rem;
+            width: 5rem;
+            height: 3rem;
+        }
+
+        .user-settings-theme-2 {
+            background-color: $purpleC;
+            border-radius: 23px;
+            padding: 1.3rem 0rem;
+            width: 5rem;
+            height: 3rem;
+        }
+
+        .user-settings-themes {
+            gap: 0.5rem;
+            padding-bottom: 1rem;
+        }
+
+
+
+        //   ONLY ON WIDTH > MEDIUM (DESKTOP)
+
+        &.page-dashboard-desktop {}
+
+
+
+
+
+        //   ONLY ON WIDTH < MEDIUM (MOBILE)
+
+        &.page-dashboard-mobile {}
+    }
+}
