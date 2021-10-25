@@ -54,8 +54,8 @@ export const PageSettings = ({
         />
       </Col>
       <Col
-        lg={{ span: 4, order: 2 }}
-        md={{ span: 4, order: 2 }}
+        lg={{ span: 6, order: 2 }}
+        md={{ span: 6, order: 2 }}
         xs={{ span: 12, order: 2 }}
         className="dashboard-con-col2"
       >
@@ -76,8 +76,8 @@ export const PageSettings = ({
         />
       </Col>
       <Col
-        lg={{ span: 6, order: 3 }}
-        md={{ span: 6, order: 3 }}
+        lg={{ span: 4, order: 3 }}
+        md={{ span: 4, order: 3 }}
         xs={{ span: 12, order: 3 }}
         className="dashboard-con-col3"
       >

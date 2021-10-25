@@ -37,7 +37,7 @@ export const ChatroomsHome = ({
 
   return (
     <section className="flex dash-home-chatrooms">
-      <button
+      {/* <button
         onClick={() => {
           const abortController = new AbortController();
           fetchDeleteChatrooms(abortController.signal);
@@ -54,7 +54,7 @@ export const ChatroomsHome = ({
         }}
       >
         delete msgs
-      </button>
+      </button> */}
       <div className="flex home-chatrooms-con">
         {/* korta ner detta */}
 
@@ -163,11 +163,14 @@ const Chatroom = ({
         >
           <div className="flex chatroom-con-title-fav-con">
             <div className="flex fav-con-name-admin">
-              <h5>{room.name}</h5>
-              <If condition={room.admins.includes(user._id)}>
-                <div className="fav-con-admin-icon">A</div>
-              </If>
+              <div className="flex">
+                <h5>{room.name}</h5>
+                <If condition={room.admins.includes(user._id)}>
+                  <div className="fav-con-admin-icon">A</div>
+                </If>
+              </div>
 
+              {/* <div>lol</div> */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
