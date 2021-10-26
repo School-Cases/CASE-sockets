@@ -14,6 +14,10 @@ const StyledSection = styled("section")`
   );
 `;
 
+const StyledDiv = styled("div")`
+  background-image: url(../avatars/${(props) => props.img});
+`;
+
 const LastMsgContext = React.createContext("");
 
 export const ChatroomsHome = ({
@@ -27,6 +31,9 @@ export const ChatroomsHome = ({
   setCreateChatroom,
   fetchLastMsg,
   setFetchLastMsg,
+  Messages,
+  setmessages,
+  ws,
 }) => {
   const fetchDeleteChatrooms = async (signal) => {
     await get(`/protected/delete-all-chatrooms`, signal);
@@ -71,6 +78,9 @@ export const ChatroomsHome = ({
                     setCreateChatroom={setCreateChatroom}
                     fetchLastMsg={fetchLastMsg}
                     setFetchLastMsg={setFetchLastMsg}
+                    Messages={Messages}
+                    setmessages={setmessages}
+                    ws={ws}
                   />
                 </If>
               );
@@ -83,6 +93,7 @@ export const ChatroomsHome = ({
                     setActiveChatroom={setActiveChatroom}
                     room={room}
                     user={user}
+                    ws={ws}
                   />
                 </If>
               );
@@ -103,6 +114,9 @@ const Chatroom = ({
   // activeChatroom,
   fetchLastMsg,
   setFetchLastMsg,
+  Messages,
+  setmessages,
+  ws,
 }) => {
   const [lastMessage, setLastMessage] = useState({});
   const [lastMessageSender, setLastMessageSender] = useState({});
@@ -110,6 +124,7 @@ const Chatroom = ({
   const [loading, setLoading] = useState(true);
 
   const fetchLastMessage = async (signal) => {
+    console.log("fetch last");
     let lastMessage = await get(
       `/protected/get-message/${room.messages.at(-1)}`,
       signal
@@ -135,7 +150,13 @@ const Chatroom = ({
   };
 
   const fetchJoinChatroom = async () => {
-    await post(`/protected/join-chatroom/${room._id}/${user._id}`);
+    let res = await post(`/protected/join-chatroom/${room._id}/${user._id}`);
+    console.log(res);
+    ws.send(
+      JSON.stringify({
+        type: "roomsUpdate",
+      })
+    );
   };
 
   useEffect(async () => {
@@ -210,8 +231,11 @@ const Chatroom = ({
           {lastMessage !== null ? (
             <div className="flex chatroom-con-mes">
               {/* <Toolbar /> */}
-
-              <div className="con-mes-avatar">{lastMessageSender.avatar}</div>
+              <StyledDiv
+                img={lastMessageSender.avatar}
+                className="con-mes-avatar"
+              ></StyledDiv>
+              {/* <div className="con-mes-avatar">{lastMessageSender.avatar}</div> */}
               {/* <div>
                   <div className="con-mes-message">{lastMessage.text}</div>
                   <div className="con-mes-message-time">{lastMessage.time}</div>

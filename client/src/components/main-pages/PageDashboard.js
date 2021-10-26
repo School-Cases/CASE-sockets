@@ -60,7 +60,8 @@ export const PageDashboard = ({
   //   )
   // );
   const [message, setMessage] = useState([]);
-  const [messages, setMessages] = useState([]);
+  // const [messages, setMessages] = useState([]);
+  const [Messages, setmessages] = useState([]);
 
   const [W, setW] = useState(window.innerWidth);
   // const [user, setUser] = useState(null);
@@ -132,6 +133,15 @@ export const PageDashboard = ({
 
       ws.onclose = () => {
         console.log("WebSocket Gone");
+      };
+
+      ws.onmessage = (e) => {
+        console.log(e.data);
+        let theMessage = JSON.parse(e.data);
+        if (theMessage.type === "roomsUpdate") {
+          console.log("room update");
+          setFetchAgain(!fetchAgain);
+        }
       };
 
       // if (user) {
@@ -322,6 +332,9 @@ export const PageDashboard = ({
               setActiveChatroom={setActiveChatroom}
               searchJoinableChatroomsCheckbox={searchJoinableChatroomsCheckbox}
               setCreateChatroom={setCreateChatroom}
+              Messages={Messages}
+              setmessages={setmessages}
+              ws={ws}
             />
             {/* </LastMsgContext.Provider> */}
 
@@ -347,8 +360,8 @@ export const PageDashboard = ({
                 ws={ws}
                 message={message}
                 setMessage={setMessage}
-                messages={messages}
-                setMessages={setMessages}
+                Messages={Messages}
+                setmessages={setmessages}
                 createChatroom={createChatroom}
                 setCreateChatroom={setCreateChatroom}
                 fetchChatrooms={fetchChatrooms}

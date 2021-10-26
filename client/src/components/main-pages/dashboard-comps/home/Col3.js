@@ -88,6 +88,7 @@ export const Col3 = ({
           setCreateChatroom={setCreateChatroom}
           createChatroom={createChatroom}
           user={user}
+          ws={ws}
         />
       ) : (
         <>

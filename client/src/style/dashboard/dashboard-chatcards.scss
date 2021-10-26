@@ -113,7 +113,8 @@
                 fill: white;
 
                 &.starmarked {
-                  fill: $olfred;
+                  fill: $olfYellow;
+                  // fill: yellow;
                 }
               }
             }
@@ -126,10 +127,14 @@
 
             .chatroom-con-mes {
               .con-mes-avatar {
-                background-color: $greyM;
-                color: $greyM;
+                // background-color: $greyM;
                 border-radius: 50px;
-                width: 40px;
+                width: 3rem;
+                height: 3rem;
+                background-color: white;
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
               }
 
               .con-mes-message {

@@ -41,6 +41,7 @@ import {
   get_user,
   get_user_byId,
   get_all_users,
+  get_chatroom_users,
   create_user,
   update_user,
   delete_user,
@@ -60,6 +61,7 @@ router.get("/logged-in", loggedIn);
 
 // router.get("/get-user/:id", get_user);
 router.get("/get-all-users", get_all_users);
+router.get("/get-chatroom-users", get_chatroom_users);
 // router.post("/create-user", create_user);
 router.post("/update-user/:id", update_user);
 router.get("/delete-user/:id", delete_user);
