@@ -130,16 +130,7 @@ export const Test = () => {
       res.data.filter((chat) => !chat.members.includes(userID))
     );
 
-    // setActiveChatroom(
-    //   res.data
-    //     .filter((chat) => chat.members.includes(userID))
-    //     .sort((chatA, chatB) => {
-    //       return (
-    //         chatB.starmarked.includes(userID) -
-    //         chatA.starmarked.includes(userID)
-    //       );
-    //     })[0]
-    // );
+    console.log(fetchAgain);
     setLoading(false);
   };
 

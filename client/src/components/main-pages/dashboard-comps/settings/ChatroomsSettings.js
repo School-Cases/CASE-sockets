@@ -23,6 +23,7 @@ export const ChatroomsSettings = ({
   fetchAgain,
   // setActiveChatroom,
   // activeChatroom,
+  ws,
 }) => {
   const [user, setUser] = useState(null);
 
@@ -45,13 +46,11 @@ export const ChatroomsSettings = ({
   const fetchUser = async (signal) => {
     let res = await get(`/protected/get-user`, signal);
     setUser(res.data);
-    console.log("1", res.data);
     // setFetchAgain(!fetchAgain);
     await fetchChatrooms(signal, res.data._id);
   };
 
   const fetchChatrooms = async (signal, userID) => {
-    console.log("2", userID);
     let res = await get(`/protected/get-all-chatrooms`, signal);
     setUserChatrooms(
       res.data
@@ -135,7 +134,74 @@ export const ChatroomsSettings = ({
   const fetchDeleteChatroom = async (signal, roomId) => {
     let res = await get(`/protected/delete-chatroom/` + roomId, signal);
     setFetchAgain(!fetchAgain);
+    ws.send(
+      JSON.stringify({
+        type: "roomsUpdate",
+        detail: "roomDelete",
+      })
+    );
   };
+
+  const fetchLeaveChatroom = async (signal, roomId) => {
+    let res = await post(
+      `/protected/leave-chatroom/` + roomId + "/" + user._id,
+      signal
+    );
+    setFetchAgain(!fetchAgain);
+    ws.send(
+      JSON.stringify({
+        type: "roomsUpdate",
+        detail: "roomLeave",
+        room: roomId,
+        user: user._id,
+      })
+    );
+  };
+
+  useEffect(async () => {
+    ws.onmessage = async (e) => {
+      console.log(e.data);
+      let theMessage = JSON.parse(e.data);
+      console.log(theMessage);
+      if (theMessage.type === "roomsUpdate") {
+        if (theMessage.detail === "roomLeave") {
+          console.log(userChatrooms);
+
+          // console.log(
+          //   userChatrooms.some((room) => {
+          //     return room._id.includes(theMessage.room);
+          //   })
+          // );
+
+          if (
+            userChatrooms.some((room) => {
+              return room._id.includes(theMessage.room);
+            })
+          ) {
+            // if (activeChatroom._id === theMessage.room) {
+
+            // }
+
+            if (
+              activeChatroom._id === theMessage.room &&
+              theMessage.user !== user._id
+            ) {
+              const abortController = new AbortController();
+              await fetchChatrooms(abortController.signal, user._id);
+              setActiveChatroom(activeChatroom);
+            } else {
+              setFetchAgain(!fetchAgain);
+            }
+          }
+          // } console.log("room update");
+          // setFetchAgain(!fetchAgain);
+          // const abortController = new AbortController();
+          // await fetchChatrooms(abortController.signal, user._id);
+          // return () => abortController.abort();
+        }
+      }
+    };
+  }, [ws.onmessage]);
 
   useEffect(async () => {
     const abortController = new AbortController();
@@ -435,7 +501,17 @@ export const ChatroomsSettings = ({
                   </div>
 
                   <hr />
-                  <div className="chat-settings-delete">
+                  <div
+                    className="chat-settings-delete"
+                    onClick={async () => {
+                      const abortController = new AbortController();
+                      await fetchLeaveChatroom(
+                        abortController.signal,
+                        room._id
+                      );
+                      return () => abortController.abort();
+                    }}
+                  >
                     <span>X</span> Leave chatroom
                   </div>
                   <div

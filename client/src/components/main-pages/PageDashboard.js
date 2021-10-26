@@ -122,7 +122,27 @@ export const PageDashboard = ({
   //   setMessages(res.data);
   //   // setLoading(false);
   // };
+  // const fetchChatrooms = async (signal, userID) => {
+  //   let res = await get(`/protected/get-all-chatrooms`, signal);
+  //   console.log(res.data);
+  //   setAllChatrooms(res.data);
+  //   setUserChatrooms(
+  //     res.data
+  //       .filter((chat) => chat.members.includes(userID))
+  //       .sort((chatA, chatB) => {
+  //         return (
+  //           chatB.starmarked.includes(userID) -
+  //           chatA.starmarked.includes(userID)
+  //         );
+  //       })
+  //   );
+  //   setJoinableChatrooms(
+  //     res.data.filter((chat) => !chat.members.includes(userID))
+  //   );
 
+  //   console.log(fetchAgain);
+  //   setLoading(false);
+  // };
   useEffect(() => {
     if (!ws) setWs(new WebSocket("ws://localhost:5002"));
 
@@ -135,12 +155,15 @@ export const PageDashboard = ({
         console.log("WebSocket Gone");
       };
 
-      ws.onmessage = (e) => {
+      ws.onmessage = async (e) => {
         console.log(e.data);
         let theMessage = JSON.parse(e.data);
         if (theMessage.type === "roomsUpdate") {
           console.log("room update");
           setFetchAgain(!fetchAgain);
+          const abortController = new AbortController();
+          await fetchChatrooms(abortController.signal, user._id);
+          return () => abortController.abort();
         }
       };
 
@@ -285,6 +308,7 @@ export const PageDashboard = ({
           setFetchAgain={setFetchAgain}
           fetchAgain={fetchAgain}
           setActiveChatroom={setActiveChatroom}
+          ws={ws}
         />
       ) : (
         // <LastMsgContext.Provider value={activeChatroom}>
