@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
-import { get, post } from "../../../../utils/http";
 
+import { get, post } from "../../../../utils/http";
 import { If } from "../../../../utils/If";
 
 import styled from "styled-components";
-
-// import { Chatroom } from "./oneChatSettings";
-
 const StyledSection = styled("section")`
   background: linear-gradient(
     235deg,
@@ -16,37 +13,25 @@ const StyledSection = styled("section")`
 `;
 
 export const ChatroomsSettings = ({
-  // user,
-  // userChatrooms,
   searchChatrooms,
   setFetchAgain,
   fetchAgain,
-  // setActiveChatroom,
-  // activeChatroom,
   ws,
 }) => {
   const [user, setUser] = useState(null);
-
   const [activeChatroom, setActiveChatroom] = useState(null);
-
   const [loading, setLoading] = useState(true);
-
   const [userChatrooms, setUserChatrooms] = useState([]);
-
-  // const [isAdmin, setIsAdmin] = useState(null);
   const [roomName, setRoomName] = useState(null);
   const [roomMembers, setRoomMembers] = useState([]);
   const [roomAdmins, setRoomAdmins] = useState([]);
   const [roomTheme, setRoomTheme] = useState(null);
-
   const [notRoomMembers, setNotRoomMembers] = useState([]);
-
   const [searchUsersInput, setSearchUsersInput] = useState("");
 
   const fetchUser = async (signal) => {
     let res = await get(`/protected/get-user`, signal);
     setUser(res.data);
-    // setFetchAgain(!fetchAgain);
     await fetchChatrooms(signal, res.data._id);
   };
 
@@ -66,12 +51,7 @@ export const ChatroomsSettings = ({
   };
 
   const fetchAllUsers = async (signal, activeRoom) => {
-    console.log("3", activeRoom);
     let res = await get(`/protected/get-all-users`, signal);
-    console.log(
-      "4",
-      res.data.filter((u) => activeRoom.admins.includes(u._id))
-    );
     setRoomMembers(
       res.data
         .filter((u) => activeRoom.members.includes(u._id))
@@ -85,9 +65,7 @@ export const ChatroomsSettings = ({
     setNotRoomMembers(
       res.data.filter((u) => !activeRoom.members.includes(u._id))
     );
-
     setRoomAdmins(res.data.filter((u) => activeRoom.admins.includes(u._id)));
-    // setNotRoomAdmins(res.data.filter((u) => !room.admins.includes(u._id)));
   };
 
   const fetchUpdateChatroom = async (roomId) => {
@@ -95,27 +73,20 @@ export const ChatroomsSettings = ({
     roomAdmins.forEach((a) => {
       newRoomAdmins.push(a._id);
     });
-
     let newRoomMembers = [];
     roomMembers.forEach((m) => newRoomMembers.push(m._id));
-
     let newRoomTheme;
     if (roomTheme === null) {
       newRoomTheme = activeChatroom.theme;
     } else {
       newRoomTheme = roomTheme;
     }
-
     let newRoomName;
     if (roomName === null) {
       newRoomName = activeChatroom.name;
     } else {
       newRoomName = roomName;
     }
-
-    // if (roomName === null) {
-    //   setRoomName()
-    // }
 
     await post(`/protected/update-chatroom/` + roomId, {
       name: newRoomName,
@@ -124,11 +95,6 @@ export const ChatroomsSettings = ({
       theme: newRoomTheme,
     });
     setFetchAgain(!fetchAgain);
-    // ws.send(
-    //   JSON.stringify({
-    //     type: "roomsUpdate",
-    //   })
-    // );
   };
 
   const fetchDeleteChatroom = async (signal, roomId) => {
@@ -160,28 +126,14 @@ export const ChatroomsSettings = ({
 
   useEffect(async () => {
     ws.onmessage = async (e) => {
-      console.log(e.data);
       let theMessage = JSON.parse(e.data);
-      console.log(theMessage);
       if (theMessage.type === "roomsUpdate") {
         if (theMessage.detail === "roomLeave") {
-          console.log(userChatrooms);
-
-          // console.log(
-          //   userChatrooms.some((room) => {
-          //     return room._id.includes(theMessage.room);
-          //   })
-          // );
-
           if (
             userChatrooms.some((room) => {
               return room._id.includes(theMessage.room);
             })
           ) {
-            // if (activeChatroom._id === theMessage.room) {
-
-            // }
-
             if (
               activeChatroom._id === theMessage.room &&
               theMessage.user !== user._id
@@ -193,11 +145,6 @@ export const ChatroomsSettings = ({
               setFetchAgain(!fetchAgain);
             }
           }
-          // } console.log("room update");
-          // setFetchAgain(!fetchAgain);
-          // const abortController = new AbortController();
-          // await fetchChatrooms(abortController.signal, user._id);
-          // return () => abortController.abort();
         }
       }
     };
@@ -209,22 +156,12 @@ export const ChatroomsSettings = ({
     return () => abortController.abort();
   }, [fetchAgain]);
 
-  // useEffect(async () => {
-  //   const abortController = new AbortController();
-  //   if (user !== null) await fetchChatrooms(abortController.signal, user._id);
-  //   return () => abortController.abort();
-  // }, [fetchAgain]);
-
   useEffect(async () => {
     const abortController = new AbortController();
     if (activeChatroom !== null)
       await fetchAllUsers(abortController.signal, activeChatroom);
     return () => abortController.abort();
   }, [activeChatroom]);
-
-  // useEffect(() => {
-  //   setIsAdmin(room.admins.includes(user._id));
-  // }, []);
 
   if (loading) {
     return <h2 className="">Loading...</h2>;
@@ -233,14 +170,6 @@ export const ChatroomsSettings = ({
   return (
     <section className="flex dash-settings-chatrooms">
       {userChatrooms.map((room) => {
-        // const StyledSection = styled.section`
-        //   background: linear-gradient(
-        //     235deg,
-        //     ${room.theme} 25%,
-        //     rgba(255, 255, 255, 1) 25%
-        //   );
-        // `;
-
         return (
           <If condition={room.name.includes(searchChatrooms)}>
             <StyledSection
@@ -270,7 +199,6 @@ export const ChatroomsSettings = ({
                     className="chat-settings-input-text"
                     type="text"
                     placeholder={room.name}
-                    // value={roomName}
                     onChange={(e) => setRoomName(e.target.value)}
                   />
 
@@ -295,7 +223,7 @@ export const ChatroomsSettings = ({
                                   })
                                 }
                               >
-                                make admin
+                                adminize
                               </div>
                             </If>
                             <If condition={!roomAdmins.includes(m)}>
@@ -320,11 +248,11 @@ export const ChatroomsSettings = ({
                     })}
                   </div>
                   <div className="flex">
-                    <label className="chat-settings-text">add member:</label>
+                    <label className="chat-settings-text">Add member:</label>
                     <input
                       className="chat-settings-input-text"
                       type="text"
-                      placeholder="search user"
+                      placeholder="search member"
                       value={searchUsersInput}
                       onChange={(e) => setSearchUsersInput(e.target.value)}
                     />
@@ -359,36 +287,48 @@ export const ChatroomsSettings = ({
 
                   <hr />
 
-                  <div className="chat-settings-text">color:</div>
+                  <div className="chat-settings-text">Color:</div>
                   <div className="flex chat-settings-default-colors">
                     <div
-                      className="settings-con-green chosen-color"
+                      className={`settings-con-green ${
+                        roomTheme === "#A2DC68" ? "chosen-color" : ""
+                      }`}
                       onClick={() => setRoomTheme("#A2DC68")}
                     ></div>
                     <div
-                      className="settings-con-blue"
+                      className={`settings-con-blue ${
+                        roomTheme === "#68DCC4" ? "chosen-color" : ""
+                      }`}
                       onClick={() => setRoomTheme("#68DCC4")}
                     ></div>
                     <div
-                      className="settings-con-purple"
+                      className={`settings-con-purple ${
+                        roomTheme === "#DC68D0" ? "chosen-color" : ""
+                      }`}
                       onClick={() => setRoomTheme("#DC68D0")}
                     ></div>
                     <div
-                      className="settings-con-yellow"
+                      className={`settings-con-yellow ${
+                        roomTheme === "#D8DC68" ? "chosen-color" : ""
+                      }`}
                       onClick={() => setRoomTheme("#D8DC68")}
                     ></div>
                   </div>
 
                   <div className="flex chat-settings-color-pick">
-                    <div className="chat-settings-text">pick:</div>
+                    <div className="chat-settings-text">Pick your own:</div>
                     <input
                       className="chat-settings-color-picker"
                       type="color"
-                      onChange={(e) => setRoomTheme(e.target.value)}
+                      onChange={(e) => {
+                        e.target.classList.add("chosen-color");
+                        setRoomTheme(e.target.value);
+                      }}
                     />
                   </div>
 
                   <hr />
+
                   <div
                     className="chat-settings-delete"
                     onClick={async () => {
@@ -406,7 +346,7 @@ export const ChatroomsSettings = ({
                     className="chat-settings-save"
                     onClick={() => fetchUpdateChatroom(room._id)}
                   >
-                    save
+                    SAVE
                   </div>
                 </If>
 
@@ -474,19 +414,27 @@ export const ChatroomsSettings = ({
                   <div className="chat-settings-text">color:</div>
                   <div className="flex chat-settings-default-colors">
                     <div
-                      className="settings-con-green"
+                      className={`settings-con-green ${
+                        roomTheme === "#A2DC68" ? "chosen-color" : ""
+                      }`}
                       onClick={() => setRoomTheme("#A2DC68")}
                     ></div>
                     <div
-                      className="settings-con-blue"
+                      className={`settings-con-blue ${
+                        roomTheme === "#68DCC4" ? "chosen-color" : ""
+                      }`}
                       onClick={() => setRoomTheme("#68DCC4")}
                     ></div>
                     <div
-                      className="settings-con-purple"
+                      className={`settings-con-purple ${
+                        roomTheme === "#DC68D0" ? "chosen-color" : ""
+                      }`}
                       onClick={() => setRoomTheme("#DC68D0")}
                     ></div>
                     <div
-                      className="settings-con-yellow"
+                      className={`settings-con-yellow ${
+                        roomTheme === "#D8DC68" ? "chosen-color" : ""
+                      }`}
                       onClick={() => setRoomTheme("#D8DC68")}
                     ></div>
                   </div>
@@ -518,7 +466,7 @@ export const ChatroomsSettings = ({
                     className="chat-settings-save"
                     onClick={() => fetchUpdateChatroom(room._id)}
                   >
-                    save
+                    SAVE
                   </div>
                 </If>
               </If>

@@ -22,130 +22,32 @@ import { UserAvatar } from "./dashboard-comps/UserAvatar";
 import { SearchChatrooms } from "./dashboard-comps/SearchChatrooms";
 import { PageSettings } from "./dashboard-comps/PageSettings";
 
-// import styled from "styled-components";
-
-// const StyledDiv = styled("div")`
-//   background-image: url(../avatars/${(props) => props.img});
-// `;
-
 const LastMsgContext = React.createContext("");
 
 export const PageDashboard = ({
   user,
-  setUser,
   activeChatroom,
   setActiveChatroom,
-  allChatrooms,
-  setAllChatrooms,
   userChatrooms,
-  setUserChatrooms,
   joinableChatrooms,
-  setJoinableChatrooms,
   fetchAgain,
   setFetchAgain,
   fetchChatrooms,
-  // send,
-  // message,
-  // messages,
-  // setMessage,
-  // setMessages,
 }) => {
-  // const [activeChatroom, setActiveChatroom] = useState(null);
-  console.log(activeChatroom);
-  // const ws = new WebSocket("ws://localhost:5002");
-  // const [ws, setWs] = useState(
-  //   new WebSocket(
-  //     "ws://localhost:5002"
-  //     // "ws://localhost:5002" + "/get-chatroom/" + activeChatroom._id
-  //   )
-  // );
   const [message, setMessage] = useState([]);
-  // const [messages, setMessages] = useState([]);
   const [Messages, setmessages] = useState([]);
-
-  const [W, setW] = useState(window.innerWidth);
-  // const [user, setUser] = useState(null);
-
-  const [loading, setLoading] = useState(true);
-
   const [dashboardNavState, setDashboardNavState] = useState("home");
-
-  // chatrooms states
-  // const [activeChatroom, setActiveChatroom] = useState(null);
-  // const [allChatrooms, setAllChatrooms] = useState([]);
-  // const [userChatrooms, setUserChatrooms] = useState([]);
-  // const [joinableChatrooms, setJoinableChatrooms] = useState([]);
+  const [W, setW] = useState(window.innerWidth);
+  const [loading, setLoading] = useState(true);
   const [searchChatrooms, setSearchChatrooms] = useState("");
   const [searchJoinableChatroomsCheckbox, setSearchJoinableChatroomsCheckbox] =
     useState(false);
   const [createChatroom, setCreateChatroom] = useState(false);
-
-  // const [fetchAgain, setFetchAgain] = useState(false);
-
   const [fetchLastMsg, setFetchLastMsg] = useState(false);
-
   const [ws, setWs] = useState(null);
 
-  // const fetchUser = async (signal) => {
-  //   let res = await get(`/protected/get-user`, signal);
-  //   setUser(res.data);
-  //   // setFetchAgain(!fetchAgain);
-  //   return fetchChatrooms(signal, res.data._id);
-  // };
-
-  // const fetchChatrooms = async (signal, userID) => {
-  //   let res = await get(`/protected/get-all-chatrooms`, signal);
-
-  //   setAllChatrooms(res.data);
-  //   setUserChatrooms(
-  //     res.data
-  //       .filter((chat) => chat.members.includes(userID))
-  //       .sort((chatA, chatB) => {
-  //         return (
-  //           chatB.starmarked.includes(userID) -
-  //           chatA.starmarked.includes(userID)
-  //         );
-  //       })
-  //   );
-  //   setJoinableChatrooms(
-  //     res.data.filter((chat) => !chat.members.includes(userID))
-  //   );
-  //   setLoading(false);
-  // };
-
-  // const fetchMessages = async (signal) => {
-  //   let res = await get(
-  //     `/protected/get-chatroom-messages/` + activeChatroom._id,
-  //     signal
-  //   );
-  //   // setChatroomMessages(res.data);
-  //   setMessages(res.data);
-  //   // setLoading(false);
-  // };
-  // const fetchChatrooms = async (signal, userID) => {
-  //   let res = await get(`/protected/get-all-chatrooms`, signal);
-  //   console.log(res.data);
-  //   setAllChatrooms(res.data);
-  //   setUserChatrooms(
-  //     res.data
-  //       .filter((chat) => chat.members.includes(userID))
-  //       .sort((chatA, chatB) => {
-  //         return (
-  //           chatB.starmarked.includes(userID) -
-  //           chatA.starmarked.includes(userID)
-  //         );
-  //       })
-  //   );
-  //   setJoinableChatrooms(
-  //     res.data.filter((chat) => !chat.members.includes(userID))
-  //   );
-
-  //   console.log(fetchAgain);
-  //   setLoading(false);
-  // };
   useEffect(() => {
     if (!ws) setWs(new WebSocket("ws://localhost:5002"));
-
     if (ws) {
       ws.onopen = () => {
         console.log("WebSocket Connected");
@@ -156,134 +58,27 @@ export const PageDashboard = ({
       };
 
       ws.onmessage = async (e) => {
-        console.log(e.data);
         let theMessage = JSON.parse(e.data);
         if (theMessage.type === "roomsUpdate") {
-          console.log("room update");
           setFetchAgain(!fetchAgain);
           const abortController = new AbortController();
           await fetchChatrooms(abortController.signal, user._id);
           return () => abortController.abort();
         }
       };
-
-      // if (user) {
-      //   ws.onmessage = async (e) => {
-      //     console.log(JSON.parse(e.data));
-
-      //     // setMessage(JSON.parse(e.data));
-
-      //     let theMessage = JSON.parse(e.data);
-      //     console.log(theMessage);
-      //     let res;
-      //     if (user._id === theMessage.sender) {
-      //       console.log("sender");
-      //       res = await post(`/protected/create-message`, theMessage);
-      //     }
-      //     console.log(res);
-      //     console.log(res.data, "msg room");
-      //     // console.log(activeChatroom._id, "active room");
-      //     // if (activeChatroom) {
-      //     console.log(messages);
-      //     const abortController = new AbortController();
-      //     let result = await get(
-      //       `/protected/get-chatroom/` + res.data.chatroom,
-      //       abortController.signal
-      //     );
-      //     console.log("room", result.data);
-      //     if (res.data.chatroom === result.data._id) {
-      //       setMessages([...result.data.messages, res.data]);
-      //       console.log("fetching all mesgs");
-      //       // setFetchLastMsg(!fetchLastMsg);
-      //       // }
-      //     }
-      //   };
-      // }
     }
     setLoading(false);
-
     return () => {
       if (ws) ws.close();
     };
   }, [ws]);
 
-  // useEffect(() => {
-  //   if (ws) {
-  //     if (user) {
-  //       console.log(messages);
-  //       ws.onmessage = async (e) => {
-  //         console.log(JSON.parse(e.data));
-
-  //         // setMessage(JSON.parse(e.data));
-
-  //         let theMessage = JSON.parse(e.data);
-  //         console.log(theMessage);
-  //         if (user._id === theMessage.sender) {
-  //           await post(`/protected/create-message`, theMessage);
-  //         }
-
-  //         if (activeChatroom)
-  //           if (theMessage.chatroom === activeChatroom._id) {
-  //             setMessages([...messages, theMessage]);
-  //             console.log("fetching all mesgs");
-  //             // setFetchLastMsg(!fetchLastMsg);
-  //           }
-  //       };
-  //     }
-  //   }
-  //   // setLoading(false);
-  // }, [message]);
-
-  // useEffect(async () => {
-  //   const abortController = new AbortController();
-  //   await fetchUser(abortController.signal);
-  //   return () => abortController.abort();
-  // }, [fetchAgain, dashboardNavState]);
-
-  // useEffect(() => {
-  //   if (message && ws && ws.readyState === 1) {
-  //     console.log("ok");
-  //     ws.send(JSON.stringify(message));
-  //   }
-  // }, [message]);
-
-  // useEffect(() => {
-  //   ws.onopen = () => {
-  //     console.log("WebSocket Connected");
-  //   };
-
-  //   ws.onmessage = async (e) => {
-  //     const message = JSON.parse(e.data);
-
-  //     console.log(message);
-  //     if (user._id === message.sender) {
-  //       await post(`/protected/create-message`, message);
-  //     }
-
-  //     if (message.chatroom === activeChatroom._id) {
-  //       setMessages([...messages, message]);
-  //     }
-  //   };
-
-  //   ws.onclose = () => {
-  //     console.log("WebSocket Disconnected");
-  //     // setWs(new WebSocket("ws://localhost:5002"));
-  //   };
-  // }, [ws.onmessage, ws.onopen, messages, ws.onclose]);
-
   useEffect(() => {
-    // ****
     let changeW = window.addEventListener("resize", () =>
       setW(window.innerWidth)
     );
     return window.removeEventListener("resize", changeW);
   }, [W]);
-
-  // useEffect(async () => {
-  //   const abortController = new AbortController();
-  //   if (user !== null) await fetchChatrooms(abortController.signal, user._id);
-  //   return () => abortController.abort();
-  // }, [fetchAgain]);
 
   if (loading) {
     return <h2 className="">Loading...</h2>;
@@ -302,7 +97,6 @@ export const PageDashboard = ({
           setSearchChatrooms={setSearchChatrooms}
           setDashboardNavState={setDashboardNavState}
           dashboardNavState={dashboardNavState}
-          userChatrooms={userChatrooms}
           searchChatrooms={searchChatrooms}
           user={user}
           setFetchAgain={setFetchAgain}
@@ -311,7 +105,6 @@ export const PageDashboard = ({
           ws={ws}
         />
       ) : (
-        // <LastMsgContext.Provider value={activeChatroom}>
         <Row className="dashboard-con">
           <Col
             lg={{ span: 2, order: 1 }}
@@ -325,8 +118,6 @@ export const PageDashboard = ({
               dashboardNavState={dashboardNavState}
               createChatroom={createChatroom}
               setCreateChatroom={setCreateChatroom}
-              // setFetchAgain={setFetchAgain}
-              // fetchAgain={fetchAgain}
             />
           </Col>
 
@@ -345,7 +136,6 @@ export const PageDashboard = ({
               page={dashboardNavState}
             />
 
-            {/* <LastMsgContext.Provider value={""}> */}
             <ChatroomsHome
               user={user}
               userChatrooms={userChatrooms}
@@ -360,7 +150,6 @@ export const PageDashboard = ({
               setmessages={setmessages}
               ws={ws}
             />
-            {/* </LastMsgContext.Provider> */}
 
             <button
               onClick={() => {
@@ -391,16 +180,10 @@ export const PageDashboard = ({
                 fetchChatrooms={fetchChatrooms}
                 fetchLastMsg={fetchLastMsg}
                 setFetchLastMsg={setFetchLastMsg}
-                // send={send}
-                // message={message}
-                // setMessage={setMessage}
-                // messages={messages}
-                // setMessages={setMessages}
               />
             </Col>
           </If>
         </Row>
-        // </LastMsgContext.Provider>
       )}
     </Container>
   );

@@ -1,10 +1,9 @@
-import { If } from "../../../../utils/If";
 import { useState, useEffect } from "react";
 
 import { post, get } from "../../../../utils/http";
+import { If } from "../../../../utils/If";
 
 export const CreateChatroom = ({
-  fetchChatrooms,
   setCreateChatroom,
   createChatroom,
   user,
@@ -19,7 +18,6 @@ export const CreateChatroom = ({
 
   const fetchAllUsers = async (signal) => {
     let res = await get(`/protected/get-all-users`, signal);
-
     setAddableUsers(res.data);
     setLoading(false);
   };
@@ -37,9 +35,6 @@ export const CreateChatroom = ({
         type: "roomsUpdate",
       })
     );
-    // const abortController = new AbortController();
-    // fetchChatrooms(abortController.signal, user._id);
-    // return () => abortController.abort();
   };
 
   useEffect(async () => {
@@ -60,7 +55,7 @@ export const CreateChatroom = ({
           className="create-con-button-back"
           onClick={() => setCreateChatroom(false)}
         >
-          back
+          BACK
         </button>
       </div>
 
@@ -72,7 +67,6 @@ export const CreateChatroom = ({
         <input
           className="create-con-input-text"
           type="text"
-          placeholder="chatroom name"
           name="name"
           onChange={(e) => setNewRoomName(e.target.value)}
         />
@@ -80,7 +74,7 @@ export const CreateChatroom = ({
 
       <div className="flex create-con-theme-color">
         <input type="text" name="theme" value={newRoomTheme} hidden />
-        <div className="create-con-text">color:</div>
+        <div className="create-con-text">Color:</div>
         <div className="flex create-con-default-colors">
           <div
             className="create-con-green"
@@ -102,7 +96,7 @@ export const CreateChatroom = ({
       </div>
 
       <div className="flex create-con-pick-color">
-        <div className="create-con-text">pick your own:</div>
+        <div className="create-con-text">Pick your own:</div>
         <input
           className="create-con-color-picker"
           type="color"
@@ -112,7 +106,7 @@ export const CreateChatroom = ({
 
       <div className="create-con-add-user">
         <label className="create-con-text" htmlFor="">
-          add ppl:
+          Add ppl:
         </label>
         <input
           className="create-con-input-text"
@@ -127,14 +121,23 @@ export const CreateChatroom = ({
                 <If condition={m.name.includes(searchUsersInput)}>
                   <div
                     className="flex"
-                    onClick={() =>
-                      setNewRoomMembers((prev) => {
-                        return [...prev, m._id];
-                      })
-                    }
+                    onClick={() => {
+                      !newRoomMembers.includes(m._id)
+                        ? setNewRoomMembers((prev) => {
+                            return [...prev, m._id];
+                          })
+                        : setNewRoomMembers(
+                            newRoomMembers.filter((me) => me !== m._id)
+                          );
+                    }}
                   >
-                    <div className="user-add-name"> {m.name} </div>{" "}
-                    <span>+</span>
+                    <div
+                      className={`user-add-name ${
+                        newRoomMembers.includes(m._id) ? "added" : ""
+                      }`}
+                    >
+                      {m.name}
+                    </div>
                   </div>
                 </If>
               );
@@ -146,7 +149,7 @@ export const CreateChatroom = ({
         className="create-con-button-create"
         onClick={() => fetchCreateChatroom()}
       >
-        create it
+        CREATE
       </button>
     </section>
   );

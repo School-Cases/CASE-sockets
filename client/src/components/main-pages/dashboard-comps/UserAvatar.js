@@ -11,9 +11,6 @@ export const UserAvatar = ({ user }) => {
         img={user.avatar}
         className="height100 user-con-avatar"
       ></StyledDiv>
-      {/* <div className="height100 user-con-avatar">
-        <img src="../src/images/test2.jpg" alt="" />
-      </div> */}
       <div className=" flex user-con-user-name">{user.name}</div>
     </section>
   );

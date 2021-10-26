@@ -1,15 +1,9 @@
-import { api_address, get, post } from "../../../utils/http";
-import { Container, Col, Row } from "react-bootstrap";
-
-import { breakpoints } from "../../../utils/breakpoints";
-import { useEffect } from "react";
-import { useState } from "react";
+import { Col, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
 
 import { ChatroomsSettings } from "./settings/ChatroomsSettings";
 import { UserSettings } from "./settings/UserSettings";
-
 import { SearchChatrooms } from "./SearchChatrooms";
-
 import { UserAvatar } from "./UserAvatar";
 import { Nav } from "./Nav";
 
@@ -17,7 +11,6 @@ export const PageSettings = ({
   setSearchChatrooms,
   dashboardNavState,
   setDashboardNavState,
-  userChatrooms,
   searchChatrooms,
   user,
   setFetchAgain,
@@ -35,10 +28,6 @@ export const PageSettings = ({
     return window.removeEventListener("resize", changeW);
   }, [W]);
 
-  //   if (loading) {
-  //     return <h2 className="">Loading...</h2>;
-  //   }
-
   return (
     <Row className="dashboard-con">
       <Col
@@ -48,7 +37,6 @@ export const PageSettings = ({
         className="flex dashboard-con-col1"
       >
         <UserAvatar user={user} />
-
         <Nav
           setDashboardNavState={setDashboardNavState}
           dashboardNavState={dashboardNavState}
@@ -68,7 +56,6 @@ export const PageSettings = ({
         />
         <ChatroomsSettings
           ws={ws}
-          // userChatrooms={userChatrooms}
           searchChatrooms={searchChatrooms}
           setFetchAgain={setFetchAgain}
           fetchAgain={fetchAgain}

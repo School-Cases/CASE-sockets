@@ -7,147 +7,144 @@
 @import url("https://use.typekit.net/rdr3hkg.css");
 
 .page {
+  &.page-dashboard {
+    //   BOTH MOBILE AND DESKTOP
 
-    &.page-dashboard {
+    .dashboard-con {
+      min-height: 100vh;
 
-        //   BOTH MOBILE AND DESKTOP
-
-        .dashboard-con {
-            min-height: 100vh;
-
-            .dashboard-con-create-con {
-
-                .create-con-top {
-                    justify-content: space-between;
-                    width: 100%;
-                    padding-bottom: 1rem;
-                }
-
-                .create-con-name {
-                    padding-bottom: 1rem;
-                }
-
-                h3 {
-                    @include font-yellow-basic;
-                    // text-transform: uppercase;
-                    font-size: 30px;
-                    font-weight: 900;
-                }
-
-                .create-con-button-back {
-                    @include button-small-red;
-                }
-
-                .create-con-input-text {
-                    @include grey-input-field;
-                    font-style: italic;
-                }
-
-                input:focus {
-                    outline: none;
-                    color: $greyD;
-                }
-
-                ::placeholder {
-                    opacity: 0.9;
-                    color: $greyD;
-                }
-
-                .create-con-text {
-                    color: $olfred;
-                    padding-right: 0.5rem;
-                }
-
-                .create-con-theme-color {
-                    padding-bottom: 1rem;
-                }
-
-                .create-con-default-colors {
-                    gap: 0.5rem;
-                }
-
-                .create-con-yellow,
-                .create-con-purple,
-                .create-con-blue,
-                .create-con-green {
-                    @include color-default-size;
-                    cursor: pointer;
-                }
-
-                .create-con-green {
-                    background-color: $greenC;
-                }
-
-                .create-con-blue {
-                    background-color: $blueC;
-                }
-
-                .create-con-purple {
-                    background-color: $purpleC;
-                }
-
-                .create-con-yellow {
-                    background-color: $yellowC;
-                }
-
-                .create-con-pick-color {
-                    padding-bottom: 1rem;
-                }
-
-                .create-con-color-picker {
-                    border-radius: 50%;
-                    height: 3rem;
-                    width: 4rem;
-                    border: none;
-                    outline: none;
-                    -webkit-appearance: none;
-                    cursor: pointer;
-                }
-
-                .create-con-color-picker::-webkit-color-swatch-wrapper {
-                    padding: 0;
-                }
-
-                .create-con-color-picker::-webkit-color-swatch {
-                    border: none;
-                    border-radius: 10px;
-                }
-
-                .create-con-button-create {
-                    @include button-small-blue;
-                }
-
-                .create-con-add-user {
-                    margin: 0;
-                    padding-bottom: 1rem;
-                }
-
-                .user-add-name {
-                    background-color: $olfred;
-                    padding: 0.5rem 1rem;
-                    border-radius: 23px;
-                    color: $white;
-                }
-
-                .add-user-user-container {
-                    width: 30%;
-                    justify-content: space-between;
-                }
-
-            }
-
-
+      .dashboard-con-create-con {
+        .create-con-top {
+          justify-content: space-between;
+          width: 100%;
+          padding-bottom: 1rem;
         }
 
+        .create-con-name {
+          padding-bottom: 1rem;
+        }
 
-        //   ONLY ON WIDTH > MEDIUM (DESKTOP)
+        h3 {
+          @include font-yellow-basic;
+          // text-transform: uppercase;
+          font-size: 30px;
+          font-weight: 900;
+        }
 
-        &.page-dashboard-desktop {}
+        .create-con-button-back {
+          @include button-small-red;
+        }
 
+        .create-con-input-text {
+          @include grey-input-field;
+          font-style: italic;
+        }
 
-        //   ONLY ON WIDTH < MEDIUM (MOBILE)
+        input:focus {
+          outline: none;
+          color: $greyD;
+        }
 
-        &.page-dashboard-mobile {}
+        ::placeholder {
+          opacity: 0.9;
+          color: $greyD;
+        }
 
+        .create-con-text {
+          color: $olfred;
+          padding-right: 0.5rem;
+        }
+
+        .create-con-theme-color {
+          padding-bottom: 1rem;
+        }
+
+        .create-con-default-colors {
+          gap: 0.5rem;
+        }
+
+        .create-con-yellow,
+        .create-con-purple,
+        .create-con-blue,
+        .create-con-green {
+          @include color-default-size;
+          cursor: pointer;
+        }
+
+        .create-con-green {
+          background-color: $greenC;
+        }
+
+        .create-con-blue {
+          background-color: $blueC;
+        }
+
+        .create-con-purple {
+          background-color: $purpleC;
+        }
+
+        .create-con-yellow {
+          background-color: $yellowC;
+        }
+
+        .create-con-pick-color {
+          padding-bottom: 1rem;
+        }
+
+        .create-con-color-picker {
+          border-radius: 50%;
+          height: 3rem;
+          width: 4rem;
+          border: none;
+          outline: none;
+          -webkit-appearance: none;
+          cursor: pointer;
+        }
+
+        .create-con-color-picker::-webkit-color-swatch-wrapper {
+          padding: 0;
+        }
+
+        .create-con-color-picker::-webkit-color-swatch {
+          border: none;
+          border-radius: 10px;
+        }
+
+        .create-con-button-create {
+          @include button-small-blue;
+        }
+
+        .create-con-add-user {
+          margin: 0;
+          padding-bottom: 1rem;
+        }
+
+        .user-add-name {
+          background-color: $olfred;
+          padding: 0.5rem 1rem;
+          border-radius: 23px;
+          color: $white;
+
+          &.added {
+            background-color: #a2dc68;
+          }
+        }
+
+        .add-user-user-container {
+          width: 30%;
+          justify-content: space-between;
+        }
+      }
     }
+
+    //   ONLY ON WIDTH > MEDIUM (DESKTOP)
+
+    &.page-dashboard-desktop {
+    }
+
+    //   ONLY ON WIDTH < MEDIUM (MOBILE)
+
+    &.page-dashboard-mobile {
+    }
+  }
 }

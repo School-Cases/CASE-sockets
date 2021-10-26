@@ -1,29 +1,17 @@
 import { useState, useEffect } from "react";
+
 import { post, get } from "../../../../utils/http";
-
 import { If } from "../../../../utils/If";
-
 import avatars from "../../../../utils/avatars";
 
 import styled from "styled-components";
-
 const StyledDiv = styled("div")`
   background-image: url(../avatars/${(props) => props.img});
 `;
 
 export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
   const [loading, setLoading] = useState(true);
-
-  // <StyledDiv
-  //                 img={avatar[0]}
-  //                 className="chosen-avatar"
-  //               ></StyledDiv>
-  //               <button onClick={() => setAvatarSwitch(!avatarSwitch)}>
-  //                 byt
-  //               </button>
-
   const [avatarSwitch, setAvatarSwitch] = useState(false);
-
   const [user, setUser] = useState(null);
   const [avatar, setAvatar] = useState(null);
   const [theme, setTheme] = useState(null);
@@ -49,7 +37,6 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
       avatarChange: avatar[1],
       theme: theme,
     });
-    console.log(res);
     setFetchAgain(!fetchAgain);
   };
 
@@ -73,7 +60,6 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
           className="user-settings-input"
           type="text"
           name="name"
-          id=""
           placeholder={name}
           onChange={(e) => setName(e.target.value)}
         />
@@ -86,7 +72,6 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
           className="user-settings-input"
           type="password"
           name="newPassword"
-          id=""
           onChange={(e) => setNewPassword(e.target.value)}
         />
       </div>
@@ -98,7 +83,6 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
           className="user-settings-input"
           type="password"
           name="password"
-          id=""
           onChange={(e) => setCurrentPassword(e.target.value)}
         />
       </div>
@@ -118,13 +102,18 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
           ></div>
         </div>
       </div>
-    
 
       <div className="flex user-settings-input-con">
-        <label className="user-settings-text" htmlFor="avatar">Avatar:</label>
+        <label className="user-settings-text" htmlFor="avatar">
+          Avatar:
+        </label>
         <StyledDiv img={avatar[0]} className="chosen-avatar"></StyledDiv>
-        <button className="change-avatar-button" onClick={() => setAvatarSwitch(!avatarSwitch)}>change</button>
-        {console.log(avatar[0])}
+        <button
+          className="change-avatar-button"
+          onClick={() => setAvatarSwitch(!avatarSwitch)}
+        >
+          Change
+        </button>
       </div>
       <If condition={avatarSwitch}>
         <div className="flex avatars-con">
@@ -140,12 +129,12 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
         </div>
       </If>
       <div className="user-settings-save-con">
-      <button
-        className="user-settings-save-button"
-        onClick={() => fetchUpdateUser()}
-      >
-        save
-      </button>
+        <button
+          className="user-settings-save-button"
+          onClick={() => fetchUpdateUser()}
+        >
+          SAVE
+        </button>
       </div>
     </div>
   );

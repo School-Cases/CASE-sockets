@@ -1,11 +1,6 @@
 import { If } from "../../../utils/If";
 
-export const SearchChatrooms = ({
-  page,
-  checkbox,
-  setCheckbox,
-  setSearchChatrooms,
-}) => {
+export const SearchChatrooms = ({ page, setCheckbox, setSearchChatrooms }) => {
   return (
     <section className="flex search-chatroom-con">
       <input

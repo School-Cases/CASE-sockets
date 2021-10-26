@@ -202,7 +202,7 @@ export const delete_user = async (req, res) => {
 
 export const delete_all_users = async (req, res) => {
   await userModel.deleteMany({}).exec();
-  res.redirect(clientAddress);
+  // res.redirect(clientAddress);
 };
 
 export const user_login = async (req, res) => {

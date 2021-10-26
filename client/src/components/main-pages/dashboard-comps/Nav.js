@@ -6,8 +6,6 @@ export const Nav = ({
   dashboardNavState,
   createChatroom,
   setCreateChatroom,
-  // setFetchAgain,
-  // fetchAgain,
 }) => {
   const history = useHistory();
 
@@ -22,7 +20,6 @@ export const Nav = ({
         onClick={async () => {
           setDashboardNavState("home");
           if (createChatroom) setCreateChatroom(false);
-          // await setFetchAgain(!fetchAgain);
         }}
       >
         <span>
@@ -75,9 +72,7 @@ export const Nav = ({
             </g>
           </svg>
         </span>
-        <div className="nav-con-home">
-         HOME
-        </div>
+        <div className="nav-con-home">HOME</div>
       </div>
       <div
         className="flex nav-con-li"
@@ -114,9 +109,7 @@ export const Nav = ({
             </g>
           </svg>
         </span>
-        <div>
-         SETTINGS
-        </div>
+        <div>SETTINGS</div>
       </div>
       <div onClick={logout} className="flex nav-con-li">
         <span>
@@ -163,9 +156,7 @@ export const Nav = ({
             </g>
           </svg>
         </span>
-        <div>
-         LOG OUT
-        </div>
+        <div>LOG OUT</div>
       </div>
     </section>
   );

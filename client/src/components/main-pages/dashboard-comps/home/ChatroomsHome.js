@@ -1,11 +1,9 @@
-import React from "react";
-import { useEffect, useState, useContext } from "react";
-import { api_address, post, get } from "../../../../utils/http";
+import React, { useEffect, useState } from "react";
 
-import styled from "styled-components";
-
+import { post, get } from "../../../../utils/http";
 import { If } from "../../../../utils/If";
 
+import styled from "styled-components";
 const StyledSection = styled("section")`
   background: linear-gradient(
     235deg,
@@ -13,7 +11,6 @@ const StyledSection = styled("section")`
     rgba(255, 255, 255, 1) 25%
   );
 `;
-
 const StyledDiv = styled("div")`
   background-image: url(../avatars/${(props) => props.img});
 `;
@@ -25,7 +22,6 @@ export const ChatroomsHome = ({
   userChatrooms,
   joinableChatrooms,
   searchChatrooms,
-  // activeChatroom,
   setActiveChatroom,
   searchJoinableChatroomsCheckbox,
   setCreateChatroom,
@@ -35,43 +31,15 @@ export const ChatroomsHome = ({
   setmessages,
   ws,
 }) => {
-  const fetchDeleteChatrooms = async (signal) => {
-    await get(`/protected/delete-all-chatrooms`, signal);
-  };
-  const fetchDeleteMSGS = async (signal) => {
-    await get(`/protected/delete-all-messages`, signal);
-  };
-
   return (
     <section className="flex dash-home-chatrooms">
-      {/* <button
-        onClick={() => {
-          const abortController = new AbortController();
-          fetchDeleteChatrooms(abortController.signal);
-          return () => abortController.abort();
-        }}
-      >
-        delete chatrooms
-      </button>
-      <button
-        onClick={() => {
-          const abortController = new AbortController();
-          fetchDeleteMSGS(abortController.signal);
-          return () => abortController.abort();
-        }}
-      >
-        delete msgs
-      </button> */}
       <div className="flex home-chatrooms-con">
-        {/* korta ner detta */}
-
         {searchJoinableChatroomsCheckbox === false
           ? userChatrooms.map((room) => {
               return (
                 <If condition={room.name.includes(searchChatrooms)}>
                   <Chatroom
                     joinable={"notJoinable"}
-                    // activeChatroom={activeChatroom}
                     setActiveChatroom={setActiveChatroom}
                     room={room}
                     user={user}
@@ -103,24 +71,17 @@ export const ChatroomsHome = ({
   );
 };
 
-// const LastMsgContext = React.createContext();
-
 const Chatroom = ({
   joinable,
   room,
   setActiveChatroom,
   user,
   setCreateChatroom,
-  // activeChatroom,
   fetchLastMsg,
-  setFetchLastMsg,
-  Messages,
-  setmessages,
   ws,
 }) => {
   const [lastMessage, setLastMessage] = useState({});
   const [lastMessageSender, setLastMessageSender] = useState({});
-
   const [loading, setLoading] = useState(true);
 
   const fetchLastMessage = async (signal) => {
@@ -129,9 +90,7 @@ const Chatroom = ({
       `/protected/get-message/${room.messages.at(-1)}`,
       signal
     );
-
     setLastMessage(lastMessage.data);
-    // console.log("LAST ", lastMessage.data);
 
     if (lastMessage.data !== null) {
       let lastMessageSenderFetch = await get(
@@ -151,7 +110,6 @@ const Chatroom = ({
 
   const fetchJoinChatroom = async () => {
     let res = await post(`/protected/join-chatroom/${room._id}/${user._id}`);
-    console.log(res);
     ws.send(
       JSON.stringify({
         type: "roomsUpdate",
@@ -190,25 +148,6 @@ const Chatroom = ({
                   <div className="fav-con-admin-icon">A</div>
                 </If>
               </div>
-
-              {/* <div>lol</div> */}
-              {/* <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  className={`${
-                    room.starmarked.includes(user._id) ? "starmarked" : ""
-                  } title-fav-con-fav`}
-                  onClick={(e) => {
-                    e.target.classList.toggle("starmarked");
-                    fetchStarmarkChatroom();
-                  }}
-                  d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"
-                />
-              </svg> */}
             </div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -230,24 +169,10 @@ const Chatroom = ({
           </div>
           {lastMessage !== null ? (
             <div className="flex chatroom-con-mes">
-              {/* <Toolbar /> */}
               <StyledDiv
                 img={lastMessageSender.avatar}
                 className="con-mes-avatar"
               ></StyledDiv>
-              {/* <div className="con-mes-avatar">{lastMessageSender.avatar}</div> */}
-              {/* <div>
-                  <div className="con-mes-message">{lastMessage.text}</div>
-                  <div className="con-mes-message-time">{lastMessage.time}</div>
-                </div> */}
-              {/* <LastMsgContext.Provider value={lastMessage}>
-                <LastMsgContext.Consumer>
-                  {(value) => {
-                    console.log(value);
-                    return <LastMsg value={value} />;
-                  }}
-                </LastMsgContext.Consumer>
-              </LastMsgContext.Provider> */}
               <LastMsg value={lastMessage} />
             </div>
           ) : (
@@ -259,7 +184,7 @@ const Chatroom = ({
           <div className="flex chatroom-con-title-fav-con">
             <h5>{room.name}</h5>
           </div>
-          <button onClick={() => fetchJoinChatroom()}>join</button>
+          <button onClick={() => fetchJoinChatroom()}>JOIN</button>
         </StyledSection>
       )}
     </>
@@ -267,7 +192,6 @@ const Chatroom = ({
 };
 
 export const LastMsg = ({ value }) => {
-  // const msg = useContext(LastMsgContext);
   return (
     <div>
       <div className="con-mes-message">{value.text}</div>
