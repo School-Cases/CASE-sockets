@@ -11,21 +11,22 @@
     // BOTH MOBILE AND DESKTOP
     .col3-settings-con {
       // flex-direction: column;
-      background-color: grey;
+      background-color: $white;
       padding: 1.5rem 2rem 2rem 2rem;
+      border-radius: 23px;
       .user-settings-input {
       }
 
       .user-settings-text {
-        color: white;
+        color: $olfred;
         padding-right: 0.5rem;
-        font-size: 20px;
+        // font-size: 20px;
         // text-transform: uppercase;
         padding-bottom: 1rem;
       }
 
       .user-settings-input {
-        @include white-input-field;
+        @include grey-input-field;
         color: $greyD;
       }
 
@@ -39,13 +40,9 @@
         outline: none;
       }
 
-      .user-settings-save-button {
-        @include button-small-white;
-        font-weight: 900;
-      }
-
+      
       .user-settings-theme-1 {
-        background-color: $blueC;
+        background-color: $olfred;
         border-radius: 23px;
         padding: 1.3rem 0rem;
         width: 5rem;
@@ -69,14 +66,16 @@
         border-radius: 3424px;
         width: 5rem;
         height: 5rem;
-        background-color: white;
-        background-size: 65%;
+        background-color: $white;
+        background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
       }
 
       .avatars-con {
-        //   justify-content: space-around;
+        @include hidden-scroll;
+        max-height: 33vh;
+        overflow: scroll;
         flex-wrap: wrap;
         gap: 0.5rem;
         .avatars {
@@ -84,16 +83,38 @@
           border-radius: 6px;
           width: 4rem;
           height: 4rem;
-          background-color: white;
-          background-size: 60%;
+          background-color: $white;
+          background-size: contain;
           background-position: center;
           background-repeat: no-repeat;
 
           &.current-avatar {
-            border: 2px solid blue;
+            // border: 2px solid $olfred;
+            background-color: $greyL;
           }
         }
       }
+
+      .avatars-con::-webkit-scrollbar {
+        display: none;
+    }
+
+      .change-avatar-button {
+        color: $greyD;
+        background-color: transparent;
+        border: none;
+        text-decoration-line: underline;
+      }
+
+      .user-settings-save-con {
+        padding-top: 1rem;
+        
+        .user-settings-save-button {
+          @include button-small-red;
+          font-weight: 900;
+        }
+      }
+
     }
 
     //   ONLY ON WIDTH > MEDIUM (DESKTOP)

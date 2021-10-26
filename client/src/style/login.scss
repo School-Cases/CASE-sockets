@@ -78,7 +78,7 @@
 
       .login-con-theme-con {
         button {
-          color: white;
+          color: $white;
           font-size: 20px;
           font-family: lato, sans-serif;
           background-color: $olfred;
@@ -145,7 +145,7 @@
           height: 90%;
           width: 100%;
           // background-image: url(../images/avatars/avatar-prel.png);
-          background-color: white;
+          background-color: $white;
           background-size: 65%;
           background-position: center;
           background-repeat: no-repeat;
@@ -163,7 +163,7 @@
       .avatars {
         height: 5rem;
         width: 5rem;
-        background-color: white;
+        background-color: $white;
         background-size: 60%;
         background-position: center;
         background-repeat: no-repeat;
@@ -203,7 +203,7 @@
     }
 
     .login-con-noaccount {
-      color: white;
+      color: $white;
       span {
         color: $greyD;
         cursor: pointer;

@@ -7,12 +7,6 @@
 @import url("https://use.typekit.net/rdr3hkg.css");
 
 .page {
-  margin: 0;
-  padding: 0;
-  min-width: 100vw;
-  min-height: 100vh;
-  background-image: url(../../images/Olf-pattern.png),
-    linear-gradient(#f6c658, #ff997d);
 
   &.page-dashboard {
     //   BOTH MOBILE AND DESKTOP
@@ -21,7 +15,6 @@
       min-height: 100vh;
       max-width: 100%;
       max-height: 100vh;
-      padding: 3rem;
 
       .user-con-avatar {
         &:after {
@@ -38,15 +31,16 @@
 
     &.page-dashboard-desktop {
       .dashboard-con {
+        padding: 3rem;
       }
 
       .dashboard-con-col1 {
         flex-direction: column;
-        border-right: 3px solid white;
+        border-right: 3px solid $white;
 
         .user-con-avatar {
           // background-image: url(../../images/avatar-prel.png);
-          background-color: white;
+          background-color: $white;
           background-size: 65%;
           background-position: center;
           background-repeat: no-repeat;

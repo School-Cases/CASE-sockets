@@ -14,6 +14,7 @@
 
         .dash-settings-chatrooms {
             @include hidden-scroll;
+            flex-direction: column;
             height: 35rem;
             gap: 1rem;
         }
@@ -43,7 +44,7 @@
 
                 span {
                     font-size: 13px;
-                    color: white;
+                    color: $white;
                     background-color: $olfYellow;
                     border-radius: 50%;
                     padding: 0.1rem 0.4rem 0.3rem 0.4rem;
@@ -100,7 +101,7 @@
             }
 
             .chat-settings-add-member-user {
-                color: white;
+                color: $white;
                 background-color: $blueC;
                 padding: 0.2rem 0.5rem;
                 border-radius: 15px;
@@ -122,6 +123,10 @@
                 cursor: pointer;
             }
 
+            .chosen-color {
+                border: 3px solid $greyM;
+            }
+
             .settings-con-green {
                 background-color: $greenC;
             }
@@ -137,7 +142,6 @@
             .settings-con-yellow {
                 background-color: $yellowC;
             }
-
         }
 
         .chat-settings-color-pick {
@@ -171,7 +175,7 @@
             .chat-settings-save {
                 margin: auto;
                 background-color: $olfred;
-                color: white;
+                color: $white;
                 display: table;
                 padding: 1rem 2rem;
                 border-radius: 23px;
@@ -190,6 +194,8 @@
 
         //   ONLY ON WIDTH < MEDIUM (MOBILE)
 
-        &.page-dashboard-mobile {}
+        &.page-dashboard-mobile {
+            overflow: scroll;
+        }
     }
 }

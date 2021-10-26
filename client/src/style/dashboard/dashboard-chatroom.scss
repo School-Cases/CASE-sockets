@@ -27,7 +27,7 @@
       .dashboard-con-col3 {
         .col3-chat-con {
           flex-direction: column;
-          background-color: white;
+          background-color: $white;
           padding: 1.5rem 2rem 2rem 2rem;
 
           .create-chatroom-button {
@@ -70,7 +70,6 @@
           .chat-con-mid {
             @include hidden-scroll;
             height: 62vh;
-            padding: 0 2rem;
 
             .message-right,
             .message-left {
@@ -82,15 +81,15 @@
                 gap: 1rem;
 
                 .message-text {
-                  color: white;
+                  color: $white;
                   padding: 0.5rem 1rem;
                   border-radius: 23px;
                 }
 
                 .message-avatar {
-                  width: 2rem;
-                  height: 2rem;
-                  background-color: white;
+                  width: 2.5rem;
+                  height: 3rem;
+                  background-color: $white;
                   background-size: contain;
                   background-position: center;
                   background-repeat: no-repeat;

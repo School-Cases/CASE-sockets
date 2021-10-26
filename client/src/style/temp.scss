@@ -5,7 +5,6 @@
 @import "./dashboard/dashboard-nav.scss";
 @import "./dashboard/dashboard-create.scss";
 
-@import "./settings.scss";
 @import "./settings/settings-chatcards.scss";
 @import "./settings/settings-user.scss";
 
@@ -47,4 +46,17 @@
 body,
 .page {
   max-height: 100vh;
+}
+
+.page {
+  margin: 0;
+  padding: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  background-image: url(../images/Olf-pattern.png),
+    linear-gradient(#f6c658, #ff997d);
+
+    // background-image: url(../images/Group-622x.png),
+    // linear-gradient(#58C0F6, #E99D34);
+    // background-size: contain;
 }
