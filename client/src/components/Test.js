@@ -114,7 +114,7 @@ export const Test = () => {
 
   const fetchChatrooms = async (signal, userID) => {
     let res = await get(`/protected/get-all-chatrooms`, signal);
-
+    console.log(res.data);
     setAllChatrooms(res.data);
     setUserChatrooms(
       res.data

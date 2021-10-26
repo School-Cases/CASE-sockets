@@ -88,6 +88,8 @@ wss.on("connection", (ws) => {
     switch (event.type) {
       case "message":
         return emitMessage(data.toString(), isBinary);
+      case "roomsUpdate":
+        return emitMessage(data.toString(), isBinary);
     }
     // await create_message(data, );
     // emitMessage(data.toString(), isBinary);

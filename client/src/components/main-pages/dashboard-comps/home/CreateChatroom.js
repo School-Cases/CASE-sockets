@@ -8,6 +8,7 @@ export const CreateChatroom = ({
   setCreateChatroom,
   createChatroom,
   user,
+  ws,
 }) => {
   const [loading, setLoading] = useState(true);
   const [newRoomName, setNewRoomName] = useState("");
@@ -31,9 +32,14 @@ export const CreateChatroom = ({
       theme: newRoomTheme,
     });
     setCreateChatroom(false);
-    const abortController = new AbortController();
-    fetchChatrooms(abortController.signal, user._id);
-    return () => abortController.abort();
+    ws.send(
+      JSON.stringify({
+        type: "roomsUpdate",
+      })
+    );
+    // const abortController = new AbortController();
+    // fetchChatrooms(abortController.signal, user._id);
+    // return () => abortController.abort();
   };
 
   useEffect(async () => {

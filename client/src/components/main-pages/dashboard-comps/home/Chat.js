@@ -218,26 +218,28 @@ export const Chat = ({
         let theMessage = JSON.parse(e.data);
         // console.log(theMessage);
         let resMessage;
-        if (user._id === theMessage.sender) {
-          resMessage = await post(`/protected/create-message`, theMessage);
-        }
-        console.log(resMessage);
+        if (theMessage.type === "message") {
+          if (user._id === theMessage.sender) {
+            resMessage = await post(`/protected/create-message`, theMessage);
+          }
+          console.log(resMessage);
 
-        if (theMessage.chatroom === activeChatroom._id) {
-          // console.log(Messages);
-          // let msgs = Messages;
-          // msgs.push(theMessage);
-          // console.log(msgs);
-          // filterMsgsAva(msgs);
-          setmessages([...Messages, theMessage]);
-          // console.log(Messages);
-          let msgs = Messages;
-          msgs.push(theMessage);
-          console.log(msgs);
-          filterMsgsAva(msgs);
-          // filterMsgsAva(msgs);
-          console.log("fetching all mesgs");
-          // setFetchLastMsg(!fetchLastMsg);
+          if (theMessage.chatroom === activeChatroom._id) {
+            // console.log(Messages);
+            // let msgs = Messages;
+            // msgs.push(theMessage);
+            // console.log(msgs);
+            // filterMsgsAva(msgs);
+            setmessages([...Messages, theMessage]);
+            // console.log(Messages);
+            let msgs = Messages;
+            msgs.push(theMessage);
+            console.log(msgs);
+            filterMsgsAva(msgs);
+            // filterMsgsAva(msgs);
+            console.log("fetching all mesgs");
+            setFetchLastMsg(!fetchLastMsg);
+          }
         }
       };
     }
@@ -247,6 +249,11 @@ export const Chat = ({
     if (Message && ws && ws.readyState === 1) {
       console.log("ok");
       ws.send(JSON.stringify(Message));
+      ws.send(
+        JSON.stringify({
+          type: "roomsUpdate",
+        })
+      );
     }
   }, [Message]);
 
