@@ -34,14 +34,14 @@
 
       input[type="checkbox"] {
         @include checkbox-style;
-        background-color: white;
+        background-color: $white;
         transform: translateY(50%);
       }
 
       input[type="checkbox"]:checked {
         @include checkbox-style;
         background-color: $olfred;
-        border: 2px solid white;
+        border: 2px solid $white;
       }
     }
 
@@ -55,7 +55,7 @@
       button {
         background-color: transparent;
         border-style: none;
-        color: white;
+        color: $white;
         border-bottom: 2px solid white;
       }
 
@@ -98,7 +98,7 @@
 
                 .fav-con-admin-icon {
                   font-size: 13px;
-                  color: white;
+                  color: $white;
                   background-color: $olfYellow;
                   border-radius: 50%;
                   height: 75%;
@@ -110,7 +110,7 @@
               path,
               svg {
                 @include svg-scale-small;
-                fill: white;
+                fill: $white;
 
                 &.starmarked {
                   fill: $olfYellow;
@@ -131,7 +131,7 @@
                 border-radius: 50px;
                 width: 3rem;
                 height: 3rem;
-                background-color: white;
+                background-color: $white;
                 background-size: contain;
                 background-position: center;
                 background-repeat: no-repeat;

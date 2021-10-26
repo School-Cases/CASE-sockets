@@ -47,7 +47,7 @@
     border: none;
     background-color: $olfred;
     padding: 0.5rem 1rem;
-    color: white;
+    color: $white;
 }
 
 @mixin button-small-blue {
@@ -55,13 +55,13 @@
     border: none;
     background-color: $blueC;
     padding: 0.5rem 1rem;
-    color: white;
+    color: $white;
 }
 
 @mixin button-small-white {
     border-radius: 23px;
     border: none;
-    background-color: white;
+    background-color: $white;
     padding: 0.5rem 1rem;
     color: $olfred;
 }

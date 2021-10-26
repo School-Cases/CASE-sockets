@@ -362,7 +362,7 @@ export const ChatroomsSettings = ({
                   <div className="chat-settings-text">color:</div>
                   <div className="flex chat-settings-default-colors">
                     <div
-                      className="settings-con-green"
+                      className="settings-con-green chosen-color"
                       onClick={() => setRoomTheme("#A2DC68")}
                     ></div>
                     <div

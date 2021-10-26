@@ -139,12 +139,14 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
           })}
         </div>
       </If>
+      <div className="user-settings-save-con">
       <button
         className="user-settings-save-button"
         onClick={() => fetchUpdateUser()}
       >
         save
       </button>
+      </div>
     </div>
   );
 };
