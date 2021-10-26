@@ -61,6 +61,31 @@ export const get_all_users = async (req, res) => {
   }
 };
 
+export const get_chatroom_users = async (req, res) => {
+  try {
+    let chatroom = await userModel.findById(req.params.id).exec();
+    let allUsers = await userModel.find({}).exec();
+
+    // const filter = "nature";
+    let chatroomUsers = allUsers.filter((user) => {
+      return user.tags.indexOf(chatroom) >= 0;
+    });
+
+    console.log(chatroomUsers);
+    return res.json({
+      message: "find all users success",
+      success: true,
+      data: allUsers,
+    });
+  } catch (err) {
+    return res.json({
+      message: "find all users fail",
+      success: false,
+      data: null,
+    });
+  }
+};
+
 export const create_user = async (req, res) => {
   try {
     if (
@@ -137,7 +162,8 @@ export const update_user = async (req, res) => {
     await userModel.findByIdAndUpdate(id, {
       name: req.body.name,
       password: changePassword ? hashedPassword : user.password,
-      avatar: req.body.avatar,
+      avatar:
+        parseInt(req.body.avatarChange) === 1 ? req.body.avatar : user.avatar,
       theme: req.body.theme,
     });
 
@@ -149,7 +175,7 @@ export const update_user = async (req, res) => {
     });
   } catch (err) {
     return res.json({
-      message: "update user failed",
+      message: "update user failed" + err,
       success: false,
       data: null,
     });

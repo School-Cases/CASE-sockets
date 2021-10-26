@@ -81,6 +81,7 @@
 
           .nav-con-li {
             cursor: pointer;
+            gap: 1rem;
           }
 
           a {
@@ -92,13 +93,45 @@
       }
     }
 
-    //   ONLY ON WIDTH < MEDIUM (MOBILE)
+    .user-con-user-name {
+      justify-content: center;
+      padding-bottom: 3rem;
+    }
 
-    &.page-dashboard-mobile {
-      .dashboard-con-col1 {
-        height: 10vh;
-        width: 100%;
+    .col1-user-con {
+      @include font-white-basic;
+      height: 30%;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .col1-nav-con {
+      @include font-nav-basic;
+      flex-direction: column;
+      gap: 2rem;
+
+      svg {
+        padding-left: 0.3rem;
+        transform: translateY(-0.2rem);
       }
+
+      .nav-con-li {
+        cursor: pointer;
+      }
+
+      a {
+        @include font-nav-basic;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    }
+  }
+  //   ONLY ON WIDTH < MEDIUM (MOBILE)
+
+  &.page-dashboard-mobile {
+    .dashboard-con-col1 {
+      height: 10vh;
+      width: 100%;
     }
   }
 }

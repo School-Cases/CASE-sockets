@@ -8,6 +8,12 @@ import { useState, useContext } from "react";
 
 import { getDateAndTime } from "../../../../utils/getDate&Time";
 
+import styled from "styled-components";
+
+const StyledDiv = styled("div")`
+  background-image: url(../avatars/${(props) => props.img});
+`;
+
 export const Chat = ({
   activeChatroom,
   setActiveChatroom,
@@ -39,6 +45,13 @@ export const Chat = ({
   const [loading, setLoading] = useState(true);
   const [inputMessage, setInputMessage] = useState("");
 
+  const [roomMembers, setRoomMembers] = useState([]);
+  const [notRoomMembers, setNotRoomMembers] = useState([]);
+  const [roomAdmins, setRoomAdmins] = useState([]);
+  const [msgAva, setMsgAva] = useState([]);
+
+  const [fetchMsgs, setFetchMsgs] = useState(false);
+
   // const send = () => {
   //   // console.log('send');
   //   if (!message) return;
@@ -60,19 +73,11 @@ export const Chat = ({
   //   console.log(message);
   // };
 
-  const msg = () => {
-    // console.log('send');
+  const msg = async () => {
+    console.log("send");
 
     // if (ws)
-    //   ws.send(
-    //     JSON.stringify({
-    //       type: "message",
-    //       sender: user._id,
-    //       chatroom: activeChatroom._id,
-    //       text: message,
-    //       time: getDateAndTime(),
-    //     })
-    //   );
+
     // let theMessage = {
     //   type: "message",
     //   sender: user._id,
@@ -80,7 +85,9 @@ export const Chat = ({
     //   text: inputMessage,
     //   time: getDateAndTime(),
     // };
+    // await post(`/protected/create-message`, theMessage);
 
+    // ws.send(JSON.stringify(theMessage));
     setmessage({
       type: "message",
       sender: user._id,
@@ -95,33 +102,106 @@ export const Chat = ({
     // }
   };
 
+  const fetchAllUsers = async (signal, activeRoom) => {
+    let res = await get(`/protected/get-all-users`, signal);
+
+    setRoomMembers(
+      res.data
+        .filter((u) => activeRoom.members.includes(u._id))
+        .sort((a, b) => {
+          return (
+            activeRoom.admins.includes(b._id) -
+            activeRoom.admins.includes(a._id)
+          );
+        })
+    );
+    setNotRoomMembers(
+      res.data.filter((u) => !activeRoom.members.includes(u._id))
+    );
+    setRoomAdmins(res.data.filter((u) => activeRoom.admins.includes(u._id)));
+    setLoading(false);
+  };
+
+  const filterMsgsAva = (msgs) => {
+    // let arr = res.data;
+    let arr2 = [];
+
+    for (let i = 0; i < msgs.length; i++) {
+      if (msgs[i + 1]) {
+        if (msgs[i].sender !== msgs[i + 1].sender) {
+          arr2.push(msgs[i]);
+        }
+      } else {
+        arr2.push(msgs[i]);
+      }
+    }
+    // return arr2;
+    setMsgAva(arr2);
+  };
+
   const fetchMessages = async (signal) => {
     let res = await get(
       `/protected/get-chatroom-messages/` + activeChatroom._id,
       signal
     );
+
+    // let arr = res.data;
+    // let arr2 = [];
+
+    // for (let i = 0; i < arr.length; i++) {
+    //   if (arr[i + 1]) {
+    //     if (arr[i].sender !== arr[i + 1].sender) {
+    //       arr2.push(arr[i]);
+    //     }
+    //   } else {
+    //     arr2.push(arr[i]);
+    //   }
+    // }
+
+    await fetchAllUsers(signal, activeChatroom);
+    filterMsgsAva(res.data);
     setmessages(res.data);
-    setLoading(false);
   };
 
-  useEffect(async () => {
-    const abortController = new AbortController();
-    if (activeChatroom !== null) await fetchMessages(abortController.signal);
-    return () => abortController.abort();
-  }, [activeChatroom, setmessages]);
+  // useEffect(() => {
+  //   if (ws) {
+  //     ws.onmessage = async (e) => {
+  //       // console.log("feasdasdasd");
+  //       // setMessage(JSON.parse(e.data));
+  //       console.log(e.data);
+
+  //       let theMessage = JSON.parse(e.data);
+  //       console.log(theMessage);
+  //       let resMessage;
+  //       if (theMessage.type === "message") {
+  //         if (user._id === theMessage.sender) {
+  //           console.log("posting");
+  //           resMessage = await post(`/protected/create-message`, theMessage);
+  //           console.log(resMessage.data);
+  //         }
+
+  //         if (theMessage.chatroom === activeChatroom._id) {
+  //           console.log("ta emot");
+  //           // const abortController = new AbortController();
+  //           // let resMessage = await get(
+  //           //   `/protected/get-message/` + ,
+  //           //   abortController.signal
+  //           // );
+  //           console.log(resMessage.data);
+  //           // console.log(Messages);
+  //           setmessages([...Messages, resMessage.data]);
+  //           // console.log("fetching all mesgs");
+  //           // setFetchMsgs(!fetchMsgs);
+  //           // setFetchLastMsg(!fetchLastMsg);
+  //         }
+  //       }
+  //     };
+  //   }
+  // }, [ws.onmessage]);
 
   // useEffect(() => {
-  //   ws.onmessage = (e) => {
-  //     const message = JSON.parse(e.data);
-  //     if (message.chatroom === activeChatroom._id) {
-  //       setMessages([...messages, message]);
-  //     }
-  //   };
-  // }, [ws]);
-
-  if (loading) {
-    <h4>loading ...</h4>;
-  }
+  //   filterMsgsAva(Messages);
+  // }, [Messages]);
 
   useEffect(() => {
     // ws.onopen = () => {
@@ -133,6 +213,7 @@ export const Chat = ({
       ws.onmessage = async (e) => {
         // console.log("feasdasdasd");
         // setMessage(JSON.parse(e.data));
+        console.log(e.data);
 
         let theMessage = JSON.parse(e.data);
         // console.log(theMessage);
@@ -143,8 +224,18 @@ export const Chat = ({
         console.log(resMessage);
 
         if (theMessage.chatroom === activeChatroom._id) {
-          console.log(Messages);
+          // console.log(Messages);
+          // let msgs = Messages;
+          // msgs.push(theMessage);
+          // console.log(msgs);
+          // filterMsgsAva(msgs);
           setmessages([...Messages, theMessage]);
+          // console.log(Messages);
+          let msgs = Messages;
+          msgs.push(theMessage);
+          console.log(msgs);
+          filterMsgsAva(msgs);
+          // filterMsgsAva(msgs);
           console.log("fetching all mesgs");
           // setFetchLastMsg(!fetchLastMsg);
         }
@@ -158,14 +249,21 @@ export const Chat = ({
       ws.send(JSON.stringify(Message));
     }
   }, [Message]);
-  console.log(Messages);
-  // console.log(activeChatroom);
+
+  useEffect(async () => {
+    const abortController = new AbortController();
+    if (activeChatroom !== null) await fetchMessages(abortController.signal);
+    return () => abortController.abort();
+  }, [activeChatroom, fetchMsgs]);
+
+  if (loading) {
+    <h4>loading ...</h4>;
+  }
   return (
     <>
       <section className="flex chat-con-top">
         <div className="flex top-userinfo">
           <div className="userinfo-avatar">ava</div>
-          {/* <div className="userinfo-name">{user.name}</div> */}
           <div className="top-userinfo-chatroom-name">
             {activeChatroom.name}
           </div>
@@ -178,15 +276,34 @@ export const Chat = ({
 
       <section className="height100 chat-con-mid">
         <If condition={Messages && Messages.length !== 0}>
-          {Messages.reverse().map((m) => {
+          {Messages.map((m, i) => {
             return (
               <div
-                className={
+                className={`${
                   m.sender === user._id ? "message-right" : "message-left"
-                }
-                contenteditable
-                >
-                {m.text}
+                }`}
+              >
+                <div className="flex message-wrapper">
+                  <If condition={m.sender !== user._id && msgAva.includes(m)}>
+                    <StyledDiv
+                      img={
+                        roomMembers.filter((me) => me._id === m.sender)[0]
+                          .avatar
+                      }
+                      className="message-avatar"
+                    ></StyledDiv>
+                  </If>
+                  <div className="message-text">{m.text}</div>
+                  <If condition={m.sender === user._id && msgAva.includes(m)}>
+                    <StyledDiv
+                      img={
+                        roomMembers.filter((me) => me._id === m.sender)[0]
+                          .avatar
+                      }
+                      className="message-avatar"
+                    ></StyledDiv>
+                  </If>
+                </div>
               </div>
             );
           })}

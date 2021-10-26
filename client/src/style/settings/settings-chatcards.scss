@@ -1,0 +1,195 @@
+@import "/src/style/login.scss";
+
+@import "/src/style/components/colours.scss";
+@import "/src/style/components/fonts.scss";
+@import "/src/style/components/buttons.scss";
+@import "../components/mixins.scss";
+@import url("https://use.typekit.net/rdr3hkg.css");
+
+
+.page {
+    &.page-dashboard {
+
+        // BOTH MOBILE AND DESKTOP
+
+        .dash-settings-chatrooms {
+            @include hidden-scroll;
+            height: 35rem;
+            gap: 1rem;
+        }
+
+        .dash-settings-chatrooms::-webkit-scrollbar {
+            display: none;
+        }
+
+        .dash-settings-chatrooms {
+
+            hr {
+                color: $olfred;
+                margin-bottom: 0.5rem;
+            }
+
+            .col2-chatroom-con {
+                border-radius: 23px;
+                box-shadow: 0px 3px 6px #00000029;
+                padding: 1rem;
+                cursor: pointer;
+            }
+
+            h5 {
+                @include olf-header-2;
+                margin: 0;
+                gap: 0.5rem;
+
+                span {
+                    font-size: 13px;
+                    color: white;
+                    background-color: $olfYellow;
+                    border-radius: 50%;
+                    padding: 0.1rem 0.4rem 0.3rem 0.4rem;
+                }
+            }
+
+            .chat-settings-members {
+                color: $greyM;
+            }
+
+            .chat-settings-members-container {
+                gap: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+
+            .chat-settings-current-members {
+                color: $white;
+                background-color: $olfred;
+                border-radius: 23px;
+                padding: 0 0 0.2rem 0.5rem;
+
+                .current-members {
+                    padding-right: 0.5rem;
+                }
+
+                span {
+                    font-size: 13px;
+                    color: $olfYellow;
+                    background-color: white;
+                    border-radius: 23px;
+                    padding: 0.1rem 0.5rem 0.3rem 0.5rem;
+                    transform: translate(-2px, 1.5px);
+                }
+            }
+
+            .chat-settings-make-admin,
+            .chat-settings-kick {
+                color: $greyD;
+                font-style: italic;
+            }
+
+            .chat-settings-kick {
+                padding-bottom: 0.5rem;
+            }
+
+            .chat-settings-text {
+                @include font-red-basic;
+                padding-right: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+
+            .chat-settings-input-text {
+                @include grey-input-field;
+            }
+
+            .chat-settings-add-member-user {
+                color: white;
+                background-color: $blueC;
+                padding: 0.2rem 0.5rem;
+                border-radius: 15px;
+
+                &:hover {
+                    background-color: $olfred;
+                }
+            }
+
+            .chat-settings-default-colors {
+                gap: 0.5rem;
+                padding-bottom: 1rem;
+            
+            .settings-con-yellow,
+            .settings-con-purple,
+            .settings-con-blue,
+            .settings-con-green {
+                @include color-default-size;
+                cursor: pointer;
+            }
+
+            .settings-con-green {
+                background-color: $greenC;
+            }
+
+            .settings-con-blue {
+                background-color: $blueC;
+            }
+
+            .settings-con-purple {
+                background-color: $purpleC;
+            }
+
+            .settings-con-yellow {
+                background-color: $yellowC;
+            }
+
+        }
+
+        .chat-settings-color-pick {
+
+            .chat-settings-color-picker {
+                border-radius: 50%;
+                height: 3rem;
+                width: 4rem;
+                border: none;
+                outline: none;
+                -webkit-appearance: none;
+                cursor: pointer;
+            }
+
+            .chat-settings-color-picker::-webkit-color-swatch-wrapper {
+                padding: 0;
+            }
+
+            .chat-settings-color-picker::-webkit-color-swatch {
+                border: none;
+                border-radius: 10px;
+            }
+            }
+
+            .chat-settings-delete {
+                color: $greyD;
+                font-style: italic;
+                cursor: pointer;
+            }
+
+            .chat-settings-save {
+                margin: auto;
+                background-color: $olfred;
+                color: white;
+                display: table;
+                padding: 1rem 2rem;
+                border-radius: 23px;
+                cursor: pointer;
+            }
+        }
+
+
+        s //   ONLY ON WIDTH > MEDIUM (DESKTOP)
+
+        &.page-dashboard-desktop {}
+
+
+
+
+
+        //   ONLY ON WIDTH < MEDIUM (MOBILE)
+
+        &.page-dashboard-mobile {}
+    }
+}

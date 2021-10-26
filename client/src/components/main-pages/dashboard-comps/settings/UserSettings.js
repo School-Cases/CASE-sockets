@@ -41,13 +41,15 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const fetchUpdateUser = async () => {
-    await post(`/protected/update-user/${user._id}`, {
+    let res = await post(`/protected/update-user/${user._id}`, {
       name: name,
       newPassword: newPassword,
       currentPassword: currentPassword,
-      avatar: avatar,
+      avatar: avatar[0],
+      avatarChange: avatar[1],
       theme: theme,
     });
+    console.log(res);
     setFetchAgain(!fetchAgain);
   };
 
@@ -62,10 +64,13 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
   }
 
   return (
-    <div>
+    <div className="col3-settings-con">
       <div className="user-settings-input-con">
-        <label htmlFor="name">Name:</label>
+        <label className="user-settings-text" htmlFor="name">
+          Name:
+        </label>
         <input
+          className="user-settings-input"
           type="text"
           name="name"
           id=""
@@ -74,8 +79,11 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
         />
       </div>
       <div className="user-settings-input-con">
-        <label htmlFor="newPassword">New password:</label>
+        <label className="user-settings-text" htmlFor="newPassword">
+          New password:
+        </label>
         <input
+          className="user-settings-input"
           type="password"
           name="newPassword"
           id=""
@@ -83,8 +91,11 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
         />
       </div>
       <div className="user-settings-input-con">
-        <label htmlFor="password">Current password:</label>
+        <label className="user-settings-text" htmlFor="password">
+          Current password:
+        </label>
         <input
+          className="user-settings-input"
           type="password"
           name="password"
           id=""
@@ -97,27 +108,41 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
         <StyledDiv img={avatar[0]} className="chosen-avatar"></StyledDiv>
         <button onClick={() => setAvatarSwitch(!avatarSwitch)}>byt</button>
         {console.log(avatar[0])}
-        {/* <div>avatarImg</div>
-        <div>avatarImg2</div>
-        <div>avatarImg3</div> */}
-        <If condition={avatarSwitch}>
+      </div>
+      <If condition={avatarSwitch}>
+        <div className="flex avatars-con">
           {avatars.map((a) => {
             return (
               <StyledDiv
                 img={a}
-                className="avatars"
+                className={`avatars ${a === avatar[0] ? "current-avatar" : ""}`}
                 onClick={() => setAvatar([a, 1])}
               ></StyledDiv>
             );
           })}
-        </If>
-      </div>
+        </div>
+      </If>
       <div className="flex user-settings-input-con">
-        <label htmlFor="theme">Theme:</label>
-        <div onClick={() => setTheme(0)}>theme img1</div>
-        <div onClick={() => setTheme(1)}>theme img2</div>
+        <label className="user-settings-text" htmlFor="theme">
+          Theme:
+        </label>
+        <div className="flex user-settings-themes">
+          <div
+            className="user-settings-theme-1"
+            onClick={() => setTheme(0)}
+          ></div>
+          <div
+            className="user-settings-theme-2"
+            onClick={() => setTheme(1)}
+          ></div>
+        </div>
       </div>
-      <button onClick={() => fetchUpdateUser()}>save</button>
+      <button
+        className="user-settings-save-button"
+        onClick={() => fetchUpdateUser()}
+      >
+        save
+      </button>
     </div>
   );
 };

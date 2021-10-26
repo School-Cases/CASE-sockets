@@ -92,6 +92,19 @@ wss.on("connection", (ws) => {
     // await create_message(data, );
     // emitMessage(data.toString(), isBinary);
   });
+  // ws.on("message", async (data, isBinary) => {
+  //   // console.log(data.toString(), isBinary);
+  //   console.log(JSON.parse(data), isBinary);
+  //   const event = JSON.parse(data);
+  //   // await create_message(event, res);
+
+  //   switch (event.type) {
+  //     case "message":
+  //       return emitMessage(event.toString(), isBinary);
+  //   }
+
+  //   // emitMessage(data.toString(), isBinary);
+  // });
 });
 
 server.listen(process.env.PORT, () => {

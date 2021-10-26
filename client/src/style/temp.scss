@@ -6,6 +6,8 @@
 @import "./dashboard/dashboard-create.scss";
 
 @import "./settings.scss";
+@import "./settings/settings-chatcards.scss";
+@import "./settings/settings-user.scss";
 
 @import "/src/style/components/colours.scss";
 @import "/src/style/components/fonts.scss";
@@ -13,7 +15,7 @@
 @import url("https://use.typekit.net/rdr3hkg.css");
 
 * {
-  border: 1px solid black;
+  // border: 1px solid black;
   box-sizing: border-box;
   padding: 0;
   margin: 0;

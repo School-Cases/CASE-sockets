@@ -14,6 +14,10 @@ const StyledSection = styled("section")`
   );
 `;
 
+const StyledDiv = styled("div")`
+  background-image: url(../avatars/${(props) => props.img});
+`;
+
 const LastMsgContext = React.createContext("");
 
 export const ChatroomsHome = ({
@@ -210,8 +214,11 @@ const Chatroom = ({
           {lastMessage !== null ? (
             <div className="flex chatroom-con-mes">
               {/* <Toolbar /> */}
-
-              <div className="con-mes-avatar">{lastMessageSender.avatar}</div>
+              <StyledDiv
+                img={lastMessageSender.avatar}
+                className="con-mes-avatar"
+              ></StyledDiv>
+              {/* <div className="con-mes-avatar">{lastMessageSender.avatar}</div> */}
               {/* <div>
                   <div className="con-mes-message">{lastMessage.text}</div>
                   <div className="con-mes-message-time">{lastMessage.time}</div>
