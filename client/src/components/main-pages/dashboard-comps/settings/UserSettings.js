@@ -104,9 +104,26 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
       </div>
 
       <div className="flex user-settings-input-con">
-        <label htmlFor="avatar">Avatar:</label>
+        <label className="user-settings-text" htmlFor="theme">
+          Theme:
+        </label>
+        <div className="flex user-settings-themes">
+          <div
+            className="user-settings-theme-1"
+            onClick={() => setTheme(0)}
+          ></div>
+          <div
+            className="user-settings-theme-2"
+            onClick={() => setTheme(1)}
+          ></div>
+        </div>
+      </div>
+    
+
+      <div className="flex user-settings-input-con">
+        <label className="user-settings-text" htmlFor="avatar">Avatar:</label>
         <StyledDiv img={avatar[0]} className="chosen-avatar"></StyledDiv>
-        <button onClick={() => setAvatarSwitch(!avatarSwitch)}>byt</button>
+        <button className="change-avatar-button" onClick={() => setAvatarSwitch(!avatarSwitch)}>change</button>
         {console.log(avatar[0])}
       </div>
       <If condition={avatarSwitch}>
@@ -122,21 +139,6 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
           })}
         </div>
       </If>
-      <div className="flex user-settings-input-con">
-        <label className="user-settings-text" htmlFor="theme">
-          Theme:
-        </label>
-        <div className="flex user-settings-themes">
-          <div
-            className="user-settings-theme-1"
-            onClick={() => setTheme(0)}
-          ></div>
-          <div
-            className="user-settings-theme-2"
-            onClick={() => setTheme(1)}
-          ></div>
-        </div>
-      </div>
       <button
         className="user-settings-save-button"
         onClick={() => fetchUpdateUser()}

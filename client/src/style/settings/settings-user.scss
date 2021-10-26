@@ -11,21 +11,22 @@
     // BOTH MOBILE AND DESKTOP
     .col3-settings-con {
       // flex-direction: column;
-      background-color: grey;
+      background-color: white;
       padding: 1.5rem 2rem 2rem 2rem;
+      border-radius: 23px;
       .user-settings-input {
       }
 
       .user-settings-text {
-        color: white;
+        color: $olfred;
         padding-right: 0.5rem;
-        font-size: 20px;
+        // font-size: 20px;
         // text-transform: uppercase;
         padding-bottom: 1rem;
       }
 
       .user-settings-input {
-        @include white-input-field;
+        @include grey-input-field;
         color: $greyD;
       }
 
@@ -40,7 +41,7 @@
       }
 
       .user-settings-save-button {
-        @include button-small-white;
+        @include button-small-red;
         font-weight: 900;
       }
 
@@ -76,7 +77,9 @@
       }
 
       .avatars-con {
-        //   justify-content: space-around;
+        @include hidden-scroll;
+        max-height: 35vh;
+        overflow: scroll;
         flex-wrap: wrap;
         gap: 0.5rem;
         .avatars {
@@ -93,6 +96,17 @@
             border: 2px solid blue;
           }
         }
+      }
+
+      .avatars-con::-webkit-scrollbar {
+        display: none;
+    }
+
+      .change-avatar-button {
+        color: $greyD;
+        background-color: transparent;
+        border: none;
+        text-decoration-line: underline;
       }
     }
 
