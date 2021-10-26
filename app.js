@@ -115,7 +115,7 @@ wss.on("connection", (ws) => {
 // });
 app.get("*", (req, res) =>
   res.sendFile("index.html", {
-    root: "./client/build/public",
+    root: "./client/build",
   })
 );
 
