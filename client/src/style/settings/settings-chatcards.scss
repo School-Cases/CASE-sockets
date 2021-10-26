@@ -190,6 +190,8 @@
 
         //   ONLY ON WIDTH < MEDIUM (MOBILE)
 
-        &.page-dashboard-mobile {}
+        &.page-dashboard-mobile {
+            overflow: scroll;
+        }
     }
 }

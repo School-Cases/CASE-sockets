@@ -11,8 +11,7 @@
     //   BOTH MOBILE AND DESKTOP
 
     .create-chatroom-con,
-    .search-chatroom-con,
-    .chatroom-con-title-fav-con {
+    .search-chatroom-con {
       justify-content: space-between;
     }
 
@@ -90,6 +89,7 @@
             padding: 1rem;
 
             .chatroom-con-title-fav-con {
+              justify-content: space-between;
               .fav-con-name-admin {
                 h5 {
                   @include olf-header-2;
@@ -105,19 +105,15 @@
                   padding: 0 0.4rem;
                   // transform: translateY(-5px)
                 }
+              }
 
-                path,
-                svg {
-                  @include svg-scale-small;
-                  fill: white;
-                }
+              path,
+              svg {
+                @include svg-scale-small;
+                fill: white;
 
-                .starmarked {
-                  path,
-                  svg {
-                    @include svg-scale-small;
-                    fill: $olfred;
-                  }
+                &.starmarked {
+                  fill: $olfred;
                 }
               }
             }
@@ -175,7 +171,7 @@
 
         .dash-home-chatrooms {
           @include hidden-scroll;
-          height: 29rem;
+          height: 35rem;
         }
 
         .dash-home-chatrooms::-webkit-scrollbar {

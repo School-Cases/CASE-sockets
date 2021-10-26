@@ -22,6 +22,12 @@ import { UserAvatar } from "./dashboard-comps/UserAvatar";
 import { SearchChatrooms } from "./dashboard-comps/SearchChatrooms";
 import { PageSettings } from "./dashboard-comps/PageSettings";
 
+// import styled from "styled-components";
+
+// const StyledDiv = styled("div")`
+//   background-image: url(../avatars/${(props) => props.img});
+// `;
+
 const LastMsgContext = React.createContext("");
 
 export const PageDashboard = ({

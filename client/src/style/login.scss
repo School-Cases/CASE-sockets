@@ -4,200 +4,221 @@
 @import url("https://use.typekit.net/rdr3hkg.css");
 
 .page {
-  
-    &.page-home {
-      //   BOTH MOBILE AND DESKTOP
-  
-      .login-con {
-        padding: 2rem;
-        height: 70vh;
-        flex-direction: column;
-        justify-content: space-between;
-        background-color: $white;
+  &.page-home {
+    //   BOTH MOBILE AND DESKTOP
+
+    .login-con {
+      padding: 2rem;
+      height: 70vh;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: $white;
+      border-radius: 23px;
+
+      h3 {
+        text-align: center;
+        margin-bottom: 2rem;
+        @include olf-header-1;
+      }
+
+      input,
+      input[type="text"],
+      input[type="password"] {
+        color: $greyD;
+        border-style: none;
+        background-color: $greyL;
         border-radius: 23px;
-  
-        h3 {
-          text-align: center;
-          margin-bottom: 2rem;
-          @include olf-header-1;
-        }
-  
-        input,
-        input[type=text],
-        input[type="password"] {
-          color: $greyD;
-          border-style: none;
-          background-color: $greyL;
-          border-radius: 23px;
-          padding: 0.5rem 0.5rem 0.6rem 1rem;
-          margin-top: 0.2rem;
-  
-        }
-  
-        input:focus,
-        textarea:focus,
-        password:focus {
-          outline: none;
-          color: $greyD;
-        }
-  
-        ::placeholder {
-          color: $greyM;
-          font-size: 18px;
-        }
-  
-  
-        .login-con-form-userpass {
-          @include font-yellow-basic;
-          width: 100%;
+        padding: 0.5rem 0.5rem 0.6rem 1rem;
+        margin-top: 0.2rem;
+      }
+
+      input:focus,
+      textarea:focus,
+      password:focus {
+        outline: none;
+        color: $greyD;
+      }
+
+      ::placeholder {
+        color: $greyM;
+        font-size: 18px;
+      }
+
+      .login-con-form-userpass {
+        @include font-yellow-basic;
+        width: 100%;
+        flex-direction: column;
+        align-self: center;
+
+        .login-con-input-con {
           flex-direction: column;
-          align-self: center;
-  
-          .login-con-input-con {
-            flex-direction: column;
-          }
-  
-          label {
-            margin-top: 1rem;
-            margin-left: 1rem;
-            padding-bottom: 0.2rem;
-          }
         }
-  
-        .login-con-logsign-con {
-          flex-direction: column;
-          align-items: center;
-  
-          .login-con-noaccount {
-            @include grey-text;
-  
-            span {
-              :hover {
-                cursor: pointer;
-              }
-            }
-          }
-        }
-  
-        .login-con-theme-con {
-          button {
-            color: white;
-            font-size: 20px;
-            font-family: lato, sans-serif;
-            background-color: $olfred;
-            border-radius: 23px;
-            border-style: none;
-            padding: 1.3rem 0rem;
-            width: 100%;
-            margin-bottom: 0.5rem;
-          }
+
+        label {
+          margin-top: 1rem;
+          margin-left: 1rem;
+          padding-bottom: 0.2rem;
         }
       }
-    }
-  
-    //   ONLY ON WIDTH > MEDIUM (DESKTOP)
-    &.page-home-desktop {
-      padding: 4rem 0;
-  
-      .login-con {
-        max-width: 45%;
-  
-        .home-con-col1 {
-          padding-right: 1rem;
-  
-          .login-con-form-btn {
-            flex-direction: column;
-            justify-content: space-between;
-  
-            button {
-              @include button-large-red;
-            }
-          }
-  
-          .login-con-logsign-con {
-            gap: 0.4rem;
-            margin-top: 3rem;
-  
-            .login-btn {
-              width: 8rem;
-            }
-  
-            .login-con-noaccount {
-              span {
-                color: $blueC;
-                cursor: pointer;
-              }
-            }
-          }
-        }
-      }
-  
-      .home-con-col2 {
-        border-left: 3px solid $olfRedL;
-        padding-left: 1rem;
-  
-        .login-con-avatar-con {
-          height: 50%;
-        }
-  
-        .login-con-theme-con {
-          height: 50%;
-        }
-      }
-    }
-  
-    //   ONLY ON WIDTH < MEDIUM (MOBILE)
-    &.page-home-mobile {
-      padding: 4rem 0;
-  
-      .login-con {
-        width: 90%;
-  
-        h3 {
-          margin: 0;
-        }
-  
-        input {
-          width: 100%;
-        }
-      }
-  
+
       .login-con-logsign-con {
         flex-direction: column;
         align-items: center;
-        margin-top: 3rem;
-        gap: 1rem;
-  
-        .login-btn {
-          width: 7rem;
-  
-        }
-  
-        button {
-          @include button-large-white;
-        }
-  
-      }
 
-      .login-con-noaccount {
-        color: white;
-        span {
-          color: $greyD;
-          cursor: pointer;
+        .login-con-noaccount {
+          @include grey-text;
+
+          span {
+            :hover {
+              cursor: pointer;
+            }
+          }
         }
       }
 
       .login-con-theme-con {
-        padding-top: 1rem;
-        padding-bottom: 1rem;
         button {
+          color: white;
+          font-size: 20px;
+          font-family: lato, sans-serif;
+          background-color: $olfred;
+          border-radius: 23px;
+          border-style: none;
+          padding: 1.3rem 0rem;
+          width: 100%;
+          margin-bottom: 0.5rem;
+        }
+      }
+    }
+  }
+
+  //   ONLY ON WIDTH > MEDIUM (DESKTOP)
+  &.page-home-desktop {
+    padding: 4rem 0;
+
+    .login-con {
+      max-width: 55%;
+
+      .home-con-col1 {
+        padding-right: 1rem;
+
+        .login-con-form-btn {
+          flex-direction: column;
+          justify-content: space-between;
+
+          button {
+            @include button-large-red;
+          }
+        }
+
+        .login-con-logsign-con {
+          gap: 0.4rem;
+          margin-top: 3rem;
+
+          .login-btn {
+            width: 8rem;
+          }
+
+          .login-con-noaccount {
+            span {
+              color: $blueC;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+
+    .home-con-col2 {
+      border-left: 3px solid $olfRedL;
+      padding-left: 1rem;
+
+      .login-con-avatar-con {
+        height: 50%;
+        // background-image: url(../images/avatars/avatar-prel.png);
+        // background-color: white;
+        // background-size: 65%;
+        // background-position: center;
+        // background-repeat: no-repeat;
+
+        .chosen-avatar {
+          height: 90%;
+          width: 100%;
+          // background-image: url(../images/avatars/avatar-prel.png);
+          background-color: white;
+          background-size: 65%;
+          background-position: center;
+          background-repeat: no-repeat;
         }
       }
 
-      .login-con-avatar-con {
-        padding-top: 1rem;
+      .login-con-theme-con {
+        height: 50%;
       }
-  
     }
-  
+
+    .home-con-col3 {
+      flex-wrap: wrap;
+      justify-content: space-around;
+      .avatars {
+        height: 5rem;
+        width: 5rem;
+        background-color: white;
+        background-size: 60%;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+    }
+  }
+
+  //   ONLY ON WIDTH < MEDIUM (MOBILE)
+  &.page-home-mobile {
+    padding: 4rem 0;
+
+    .login-con {
+      width: 90%;
+
+      h3 {
+        margin: 0;
+      }
+
+      input {
+        width: 100%;
+      }
+    }
+
+    .login-con-logsign-con {
+      flex-direction: column;
+      align-items: center;
+      margin-top: 3rem;
+      gap: 1rem;
+
+      .login-btn {
+        width: 7rem;
+      }
+
+      button {
+        @include button-large-white;
+      }
+    }
+
+    .login-con-noaccount {
+      color: white;
+      span {
+        color: $greyD;
+        cursor: pointer;
+      }
+    }
+
+    .login-con-theme-con {
+      padding-top: 1rem;
+      padding-bottom: 1rem;
+      button {
+      }
+    }
+
+    .login-con-avatar-con {
+      padding-top: 1rem;
+    }
+  }
 }
