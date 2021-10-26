@@ -24,6 +24,7 @@ export const PageSettings = ({
   fetchAgain,
   setActiveChatroom,
   activeChatroom,
+  ws,
 }) => {
   const [W, setW] = useState(window.innerWidth);
 
@@ -66,7 +67,7 @@ export const PageSettings = ({
           page={dashboardNavState}
         />
         <ChatroomsSettings
-          // user={user}
+          ws={ws}
           // userChatrooms={userChatrooms}
           searchChatrooms={searchChatrooms}
           setFetchAgain={setFetchAgain}
