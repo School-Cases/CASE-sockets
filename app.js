@@ -110,14 +110,14 @@ wss.on("connection", (ws) => {
   //   // emitMessage(data.toString(), isBinary);
   // });
 });
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join("/client/build/index.html"));
-// });
-app.get("*", (req, res) =>
-  res.sendFile("index.html", {
-    root: "./client/build",
-  })
-);
+app.get("*", (req, res) => {
+  res.sendFile(path.join("/client/build/index.html"));
+});
+// app.get("*", (req, res) =>
+//   res.sendFile("index.html", {
+//     root: "./client/build",
+//   })
+// );
 
 server.listen(process.env.PORT, () => {
   console.log("Server lyssnar på port", process.env.PORT);
