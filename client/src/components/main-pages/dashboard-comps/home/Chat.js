@@ -46,6 +46,7 @@ export const Chat = ({
   };
 
   const fetchMessages = async (signal) => {
+    setLoading(true);
     let res = await get(
       `/protected/get-chatroom-messages/` + activeChatroom._id,
       signal
