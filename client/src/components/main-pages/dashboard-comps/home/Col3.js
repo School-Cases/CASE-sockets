@@ -9,13 +9,13 @@ export const Col3 = ({
   createChatroom,
   setCreateChatroom,
   fetchChatrooms,
-  fetchLastMsg,
-  setFetchLastMsg,
+  // fetchLastMsg,
+  // setFetchLastMsg,
   send,
-  message,
-  messages,
-  setMessage,
-  setMessages,
+  // message,
+  // messages,
+  // setMessage,
+  // setMessages,
 }) => {
   return (
     <section className="flex height100 col3-chat-con">
@@ -34,13 +34,13 @@ export const Col3 = ({
               activeChatroom={activeChatroom}
               setActiveChatroom={setActiveChatroom}
               user={user}
-              fetchLastMsg={fetchLastMsg}
-              setFetchLastMsg={setFetchLastMsg}
-              send={send}
-              message={message}
-              setMessage={setMessage}
-              messages={messages}
-              setMessages={setMessages}
+              // fetchLastMsg={fetchLastMsg}
+              // setFetchLastMsg={setFetchLastMsg}
+              // send={send}
+              // message={message}
+              // setMessage={setMessage}
+              // messages={messages}
+              // setMessages={setMessages}
               ws={ws}
             />
           ) : (

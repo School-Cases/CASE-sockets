@@ -12,8 +12,8 @@ const StyledDiv = styled("div")`
 export const Chat = ({
   activeChatroom,
   user,
-  fetchLastMsg,
-  setFetchLastMsg,
+  // fetchLastMsg,
+  // setFetchLastMsg,
   ws,
 }) => {
   const [Message, setmessage] = useState(null);
@@ -93,7 +93,7 @@ export const Chat = ({
             let msgs = Messages;
             msgs.push(theMessage);
             filterMsgsAva(msgs);
-            setFetchLastMsg(!fetchLastMsg);
+            // setFetchLastMsg(!fetchLastMsg);
             document.querySelector(`.chat-con-mid`).scrollTop =
               document.querySelector(`.chat-con-mid`).scrollHeight;
           }
@@ -105,11 +105,11 @@ export const Chat = ({
   useEffect(() => {
     if (Message && ws && ws.readyState === 1) {
       ws.send(JSON.stringify(Message));
-      ws.send(
-        JSON.stringify({
-          type: "roomsUpdate",
-        })
-      );
+      // ws.send(
+      //   JSON.stringify({
+      //     type: "roomsUpdate",
+      //   })
+      // );
     }
   }, [Message]);
 
@@ -117,7 +117,7 @@ export const Chat = ({
     const abortController = new AbortController();
     if (activeChatroom !== null) await fetchMessages(abortController.signal);
     return () => abortController.abort();
-  }, [activeChatroom, fetchMsgs]);
+  }, [activeChatroom]);
 
   if (loading) {
     <h4>loading ...</h4>;

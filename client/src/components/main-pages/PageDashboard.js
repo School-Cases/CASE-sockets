@@ -34,8 +34,8 @@ export const PageDashboard = ({
   setFetchAgain,
   fetchChatrooms,
 }) => {
-  const [message, setMessage] = useState([]);
-  const [Messages, setmessages] = useState([]);
+  // const [message, setMessage] = useState([]);
+  // const [Messages, setmessages] = useState([]);
   const [dashboardNavState, setDashboardNavState] = useState("home");
   const [W, setW] = useState(window.innerWidth);
   const [loading, setLoading] = useState(true);
@@ -43,7 +43,7 @@ export const PageDashboard = ({
   const [searchJoinableChatroomsCheckbox, setSearchJoinableChatroomsCheckbox] =
     useState(false);
   const [createChatroom, setCreateChatroom] = useState(false);
-  const [fetchLastMsg, setFetchLastMsg] = useState(false);
+  // const [fetchLastMsg, setFetchLastMsg] = useState(false);
   const [ws, setWs] = useState(null);
   const [activeChatroom, setActiveChatroom] = useState(null);
 
@@ -148,13 +148,13 @@ export const PageDashboard = ({
               userChatrooms={userChatrooms}
               joinableChatrooms={joinableChatrooms}
               searchChatrooms={searchChatrooms}
-              fetchLastMsg={fetchLastMsg}
-              setFetchLastMsg={setFetchLastMsg}
+              // fetchLastMsg={fetchLastMsg}
+              // setFetchLastMsg={setFetchLastMsg}
               setActiveChatroom={setActiveChatroom}
               searchJoinableChatroomsCheckbox={searchJoinableChatroomsCheckbox}
               setCreateChatroom={setCreateChatroom}
-              Messages={Messages}
-              setmessages={setmessages}
+              // Messages={Messages}
+              // setmessages={setmessages}
               ws={ws}
             />
 
@@ -178,15 +178,15 @@ export const PageDashboard = ({
                 activeChatroom={activeChatroom}
                 setActiveChatroom={setActiveChatroom}
                 ws={ws}
-                message={message}
-                setMessage={setMessage}
-                Messages={Messages}
-                setmessages={setmessages}
+                // message={message}
+                // setMessage={setMessage}
+                // Messages={Messages}
+                // setmessages={setmessages}
                 createChatroom={createChatroom}
                 setCreateChatroom={setCreateChatroom}
                 fetchChatrooms={fetchChatrooms}
-                fetchLastMsg={fetchLastMsg}
-                setFetchLastMsg={setFetchLastMsg}
+                // fetchLastMsg={fetchLastMsg}
+                // setFetchLastMsg={setFetchLastMsg}
               />
             </Col>
           </If>

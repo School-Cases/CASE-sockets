@@ -25,10 +25,10 @@ export const ChatroomsHome = ({
   setActiveChatroom,
   searchJoinableChatroomsCheckbox,
   setCreateChatroom,
-  fetchLastMsg,
-  setFetchLastMsg,
-  Messages,
-  setmessages,
+  // fetchLastMsg,
+  // setFetchLastMsg,
+  // Messages,
+  // setmessages,
   ws,
 }) => {
   return (
@@ -44,10 +44,10 @@ export const ChatroomsHome = ({
                     room={room}
                     user={user}
                     setCreateChatroom={setCreateChatroom}
-                    fetchLastMsg={fetchLastMsg}
-                    setFetchLastMsg={setFetchLastMsg}
-                    Messages={Messages}
-                    setmessages={setmessages}
+                    // fetchLastMsg={fetchLastMsg}
+                    // setFetchLastMsg={setFetchLastMsg}
+                    // Messages={Messages}
+                    // setmessages={setmessages}
                     ws={ws}
                   />
                 </If>
@@ -77,7 +77,7 @@ const Chatroom = ({
   setActiveChatroom,
   user,
   setCreateChatroom,
-  fetchLastMsg,
+  // fetchLastMsg,
   ws,
 }) => {
   const [lastMessage, setLastMessage] = useState({});
@@ -123,7 +123,7 @@ const Chatroom = ({
       await fetchLastMessage(abortController.signal);
       return () => abortController.abort();
     }
-  }, [fetchLastMsg]);
+  }, []);
 
   if (loading) {
     <h4>loading ...</h4>;
