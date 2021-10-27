@@ -79,7 +79,7 @@ export const Chat = ({
     setMsgAva(arr2);
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     if (ws) {
       ws.onmessage = async (e) => {
         let theMessage = JSON.parse(e.data);
@@ -97,6 +97,10 @@ export const Chat = ({
             document.querySelector(`.chat-con-mid`).scrollTop =
               document.querySelector(`.chat-con-mid`).scrollHeight;
           }
+        } else if (theMessage.type === "roomsUpdate") {
+          const abortController = new AbortController();
+          await fetchAllUsers(abortController.signal, activeChatroom);
+          return () => abortController.abort();
         }
       };
     }
