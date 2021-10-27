@@ -5,7 +5,7 @@ export const Test = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [dashboardNavState, setDashboardNavState] = useState("home");
-  const [activeChatroom, setActiveChatroom] = useState(null);
+  // const [activeChatroom, setActiveChatroom] = useState(null);
   const [allChatrooms, setAllChatrooms] = useState([]);
   const [userChatrooms, setUserChatrooms] = useState([]);
   const [joinableChatrooms, setJoinableChatrooms] = useState([]);
@@ -51,8 +51,8 @@ export const Test = () => {
     <PageDashboard
       user={user}
       setUser={setUser}
-      activeChatroom={activeChatroom}
-      setActiveChatroom={setActiveChatroom}
+      // activeChatroom={activeChatroom}
+      // setActiveChatroom={setActiveChatroom}
       allChatrooms={allChatrooms}
       setAllChatrooms={setAllChatrooms}
       userChatrooms={userChatrooms}

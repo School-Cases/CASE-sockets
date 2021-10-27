@@ -26,8 +26,8 @@ const LastMsgContext = React.createContext("");
 
 export const PageDashboard = ({
   user,
-  activeChatroom,
-  setActiveChatroom,
+  // activeChatroom,
+  // setActiveChatroom,
   userChatrooms,
   joinableChatrooms,
   fetchAgain,
@@ -45,6 +45,7 @@ export const PageDashboard = ({
   const [createChatroom, setCreateChatroom] = useState(false);
   const [fetchLastMsg, setFetchLastMsg] = useState(false);
   const [ws, setWs] = useState(null);
+  [activeChatroom, setActiveChatroom] = useState(null);
 
   useEffect(() => {
     // if (!ws) setWs(new WebSocket("ws://localhost:5002"));
