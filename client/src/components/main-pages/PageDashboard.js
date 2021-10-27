@@ -58,10 +58,9 @@ export const PageDashboard = ({
         console.log("WebSocket Gone");
       };
 
-      let theMessage = JSON.parse(e.data);
-      console.log(theMessage);
-
       ws.onmessage = async (e) => {
+        let theMessage = JSON.parse(e.data);
+        console.log(theMessage);
         if (theMessage === "ah ah ah stay alive!") {
           return;
         }
