@@ -44,9 +44,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions)); // Use this after the variable declaration
 app.use(express.json());
-app.use("/", express.static("./client/build"));
-app.use("/static", express.static("./client/build/static"));
-// app.use(express.static(path.join("client/build")));
+// app.use("https://chatwskul.herokuapp.com", express.static("./client/build"));
+// app.use("/static", express.static("./client/build/static"));
+// app.use("/", express.static("./client/build"));
+// app.use("/static", express.static("./client/build/static"));
+app.use(express.static(path.join(__dirname, "/client/build")));
+// app.use(express.static("client/build"));
 app.use(
   session({
     secret: "keyboard cat",
@@ -113,18 +116,18 @@ wss.on("connection", (ws) => {
   //   // emitMessage(data.toString(), isBinary);
   // });
 });
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join("/client/build/index.html"));
-// });
-app.get("*", (req, res) =>
-  res.sendFile("index.html", {
-    root: "./client/build",
-  })
-);
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+});
+// app.get("*", (req, res) =>
+//   res.sendFile("index.html", {
+//     root: "./client/build",
+//   })
+// );
 
 // server.listen(process.env.PORT, () => {
 //   console.log("Server lyssnar på port", process.env.PORT);
 // });
-server.listen(80, () => {
+server.listen(process.env.PORT || 80, () => {
   console.log("Server lyssnar på port", 80);
 });
