@@ -81,6 +81,11 @@ function emitMessage(data, isBinary) {
 }
 
 wss.on("connection", (ws) => {
+  setInterval(() => {
+    wss.clients.forEach((client) => {
+      client.send(JSON.stringify("ah ah ah stay alive!"));
+    });
+  }, 28000);
   // console.log(ws);
   console.log("Client connected from IP: ", ws._socket.remoteAddress);
   console.log("Number of connected clients: ", wss.clients.size);

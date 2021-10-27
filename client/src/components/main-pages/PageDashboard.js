@@ -58,8 +58,14 @@ export const PageDashboard = ({
         console.log("WebSocket Gone");
       };
 
+      let theMessage = JSON.parse(e.data);
+      console.log(theMessage);
+
       ws.onmessage = async (e) => {
-        let theMessage = JSON.parse(e.data);
+        if (theMessage === "ah ah ah stay alive!") {
+          return;
+        }
+
         if (theMessage.type === "roomsUpdate") {
           setFetchAgain(!fetchAgain);
           const abortController = new AbortController();
