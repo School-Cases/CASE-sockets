@@ -24,7 +24,10 @@ app.use(express.urlencoded({ extended: false }));
 
 (async () => {
   try {
-    await mongoose.connect(process.env.DB_URI);
+    // await mongoose.connect(process.env.DB_URI);
+    await mongoose.connect(
+      "mongodb+srv://Olof:desperados@cluster0.nmgfg.mongodb.net/caseChat?retryWrites=true&w=majority"
+    );
 
     console.log("MongoDB has connected");
   } catch (err) {
@@ -119,6 +122,9 @@ app.get("*", (req, res) =>
   })
 );
 
-server.listen(process.env.PORT, () => {
-  console.log("Server lyssnar på port", process.env.PORT);
+// server.listen(process.env.PORT, () => {
+//   console.log("Server lyssnar på port", process.env.PORT);
+// });
+server.listen(80, () => {
+  console.log("Server lyssnar på port", 80);
 });
