@@ -63,19 +63,16 @@ export const get_all_users = async (req, res) => {
 
 export const get_chatroom_users = async (req, res) => {
   try {
-    let chatroom = await userModel.findById(req.params.id).exec();
+    let chatroom = await chatroomModel.findById(req.params.roomId).exec();
     let allUsers = await userModel.find({}).exec();
 
-    // const filter = "nature";
-    let chatroomUsers = allUsers.filter((user) => {
-      return user.tags.indexOf(chatroom) >= 0;
-    });
-
-    console.log(chatroomUsers);
+    let chatroomUsers = allUsers.filter((user) =>
+      chatroom.members.includes(user._id)
+    );
     return res.json({
-      message: "find all users success",
+      message: "find chatroom users success",
       success: true,
-      data: allUsers,
+      data: chatroomUsers,
     });
   } catch (err) {
     return res.json({

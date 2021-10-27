@@ -97,10 +97,6 @@ export const Chat = ({
             document.querySelector(`.chat-con-mid`).scrollTop =
               document.querySelector(`.chat-con-mid`).scrollHeight;
           }
-        } else if (theMessage.type === "roomsUpdate") {
-          const abortController = new AbortController();
-          await fetchAllUsers(abortController.signal, activeChatroom);
-          return () => abortController.abort();
         }
       };
     }
