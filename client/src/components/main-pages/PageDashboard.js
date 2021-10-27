@@ -45,7 +45,7 @@ export const PageDashboard = ({
   const [createChatroom, setCreateChatroom] = useState(false);
   const [fetchLastMsg, setFetchLastMsg] = useState(false);
   const [ws, setWs] = useState(null);
-  [activeChatroom, setActiveChatroom] = useState(null);
+  const [activeChatroom, setActiveChatroom] = useState(null);
 
   useEffect(() => {
     // if (!ws) setWs(new WebSocket("ws://localhost:5002"));
