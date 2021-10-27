@@ -47,7 +47,8 @@ export const PageDashboard = ({
   const [ws, setWs] = useState(null);
 
   useEffect(() => {
-    if (!ws) setWs(new WebSocket("ws://localhost:5002"));
+    // if (!ws) setWs(new WebSocket("ws://localhost:5002"));
+    if (!ws) setWs(new WebSocket("wss://chatwskul.herokuapp.com"));
     if (ws) {
       ws.onopen = () => {
         console.log("WebSocket Connected");
