@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import session from "express-session";
 import jwt from "jsonwebtoken";
 import { userModel } from "../Models/user-model";
+import { chatroomModel } from "../Models/chatroom-model";
 
 import { clientAddress } from "../utils/address";
 import { encode } from "../utils/jwt";
@@ -156,19 +157,21 @@ export const update_user = async (req, res) => {
     }
   }
   try {
-    await userModel.findByIdAndUpdate(id, {
+    let updatedUser = await userModel.findByIdAndUpdate(id, {
       name: req.body.name,
       password: changePassword ? hashedPassword : user.password,
       avatar:
         parseInt(req.body.avatarChange) === 1 ? req.body.avatar : user.avatar,
       theme: req.body.theme,
+
+      chatrooms: user.chatrooms,
     });
 
     // return res.redirect("/dashboard/" + user._id);
     return res.json({
       message: "update user success",
       success: true,
-      data: null,
+      data: updatedUser,
     });
   } catch (err) {
     return res.json({

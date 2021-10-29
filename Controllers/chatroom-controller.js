@@ -22,6 +22,25 @@ export const get_chatroom = async (req, res) => {
   }
 };
 
+export const get_user_chatrooms = async (req, res) => {
+  try {
+    const userId = req.params.roomId;
+    let allChatrooms = await chatroomModel.find({}).exec();
+    let userChatrooms = allChatrooms.filter((room) => room.includes(userId));
+    return res.json({
+      message: "find user chatrooms success",
+      success: true,
+      data: userChatrooms,
+    });
+  } catch (err) {
+    return res.json({
+      message: "find user chatrooms fail",
+      success: false,
+      data: null,
+    });
+  }
+};
+
 export const leave_chatroom = async (req, res) => {
   const chatroomId = req.params.chatroomId;
   const userId = req.params.userId;
@@ -62,26 +81,23 @@ export const join_chatroom = async (req, res) => {
   const chatroomId = req.params.chatroomId;
   const userId = req.params.userId;
   try {
-    let chatroom = await chatroomModel.findByIdAndUpdate(
-      req.params.chatroomId,
-      {
-        $push: {
-          members: await userModel.findById(req.params.userId),
-        },
-      }
-    );
-    let user = await userModel.findByIdAndUpdate(req.params.userId, {
+    await chatroomModel.findByIdAndUpdate(req.params.chatroomId, {
+      $push: {
+        members: await userModel.findById(req.params.userId),
+      },
+    });
+    await userModel.findByIdAndUpdate(req.params.userId, {
       $push: {
         chatrooms: await chatroomModel.findById(req.params.chatroomId),
       },
     });
-    chatroom.save();
-    user.save();
+    // chatroom.save();
+    // user.save();
 
     return res.json({
       message: "find chatroom success",
       success: true,
-      data: chatroom,
+      data: null,
     });
   } catch (err) {
     return res.json({

@@ -16,6 +16,7 @@ import { loggedIn } from "../Controllers/logged-in";
 // } from "../Controllers/user-controller";
 import {
   get_chatroom,
+  get_user_chatrooms,
   get_all_chatrooms,
   create_chatroom,
   update_chatroom,
@@ -29,6 +30,7 @@ import {
   get_message,
   get_all_messages,
   get_chatroom_messages,
+  get_chatroom_last_message,
   create_message,
   create_reaction,
   delete_reaction,
@@ -75,6 +77,7 @@ router.post("/user-join-chatroom", user_join_chatroom);
 router.get("/user-dashboard/:id", user_dashboard);
 
 router.get("/get-chatroom/:id", get_chatroom);
+router.get("/get-user-chatrooms/:userId", get_user_chatrooms);
 router.get("/get-all-chatrooms", get_all_chatrooms);
 router.post("/create-chatroom", create_chatroom);
 router.post("/update-chatroom/:id", update_chatroom);
@@ -86,6 +89,7 @@ router.post("/leave-chatroom/:chatroomId/:userId", leave_chatroom);
 
 router.get("/get-message/:id", get_message);
 router.get("/get-chatroom-messages/:id", get_chatroom_messages);
+router.get("/get-chatroom-last-message/:roomId", get_chatroom_last_message);
 router.get("/get-all-messages", get_all_messages);
 router.post("/create-message", create_message);
 router.post("/create-reaction/:id", create_reaction);

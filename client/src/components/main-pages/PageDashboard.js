@@ -1,55 +1,81 @@
-import React from "react";
+// style: active chatroom home col2
 
-import { api_address, get, post } from "../../utils/http";
+import React from "react";
+import { useEffect, useState } from "react";
+
 import { Container, Col, Row } from "react-bootstrap";
 
-import { useParams } from "react-router";
-
+import { ws_address, get } from "../../utils/http";
 import { breakpoints } from "../../utils/breakpoints";
-import { parse } from "../../utils/parse";
-import { useEffect } from "react";
-import { useState } from "react";
-
 import { If } from "../../utils/If";
 
-import { WS } from "../../js/ws";
-import { ChatroomsHome } from "./dashboard-comps/home/ChatroomsHome";
-import { Col3 } from "./dashboard-comps/home/Col3";
-import { ChatroomsSettings } from "./dashboard-comps/settings/ChatroomsSettings";
-import { UserSettings } from "./dashboard-comps/settings/UserSettings";
 import { Nav } from "./dashboard-comps/Nav";
 import { UserAvatar } from "./dashboard-comps/UserAvatar";
-import { SearchChatrooms } from "./dashboard-comps/SearchChatrooms";
-import { PageSettings } from "./dashboard-comps/PageSettings";
+import { NavSettings } from "./dashboard-comps/NavSettings";
+import { NavHome } from "./dashboard-comps/NavHome";
 
 const LastMsgContext = React.createContext("");
 
-export const PageDashboard = ({
-  user,
-  // activeChatroom,
-  // setActiveChatroom,
-  userChatrooms,
-  joinableChatrooms,
-  fetchAgain,
-  setFetchAgain,
-  fetchChatrooms,
-}) => {
-  // const [message, setMessage] = useState([]);
-  // const [Messages, setmessages] = useState([]);
-  const [dashboardNavState, setDashboardNavState] = useState("home");
-  const [W, setW] = useState(window.innerWidth);
+export const PageDashboard = () => {
+  // states
   const [loading, setLoading] = useState(true);
-  const [searchChatrooms, setSearchChatrooms] = useState("");
-  const [searchJoinableChatroomsCheckbox, setSearchJoinableChatroomsCheckbox] =
-    useState(false);
-  const [createChatroom, setCreateChatroom] = useState(false);
-  // const [fetchLastMsg, setFetchLastMsg] = useState(false);
+  const [W, setW] = useState(window.innerWidth);
   const [ws, setWs] = useState(null);
-  const [activeChatroom, setActiveChatroom] = useState(null);
+
+  const [user, setUser] = useState(null);
+  const [userChatrooms, setUserChatrooms] = useState(null);
+  const [notUserChatrooms, setNotUserChatrooms] = useState(null);
+  const [navState, setNavState] = useState("home");
+
+  // fetches
+  const fetchUserAndChatrooms = async (signal) => {
+    let res = await get(`/protected/get-user`, signal);
+    setUser(res.data);
+    // await fetchUser(signal);
+    return fetchChatrooms(signal, res.data._id);
+  };
+
+  const fetchUser = async (signal) => {
+    let res = await get(`/protected/get-user`, signal);
+    setUser(res.data);
+  };
+
+  const fetchChatrooms = async (signal, userID) => {
+    let res = await get(`/protected/get-all-chatrooms`, signal);
+    setUserChatrooms(
+      res.data
+        .filter((chat) => chat.members.includes(userID))
+        .sort((chatA, chatB) => {
+          return (
+            chatB.starmarked.includes(userID) -
+            chatA.starmarked.includes(userID)
+          );
+        })
+    );
+    setNotUserChatrooms(
+      res.data.filter((chat) => !chat.members.includes(userID))
+    );
+    setLoading(false);
+  };
+
+  // useEffects
+  useEffect(async () => {
+    const abortController = new AbortController();
+    await fetchUserAndChatrooms(abortController.signal);
+    return () => abortController.abort();
+  }, []);
+
+  useEffect(() => {
+    let changeW = window.addEventListener("resize", () =>
+      setW(window.innerWidth)
+    );
+    return window.removeEventListener("resize", changeW);
+  }, [W]);
 
   useEffect(() => {
     // if (!ws) setWs(new WebSocket("ws://localhost:5002"));
-    if (!ws) setWs(new WebSocket("wss://chatwskul.herokuapp.com"));
+    // if (!ws) setWs(new WebSocket("wss://chatwskul.herokuapp.com"));
+    if (!ws) setWs(new WebSocket(ws_address));
     if (ws) {
       ws.onopen = () => {
         console.log("WebSocket Connected");
@@ -66,26 +92,19 @@ export const PageDashboard = ({
           return;
         }
 
-        if (theMessage.type === "roomsUpdate") {
-          setFetchAgain(!fetchAgain);
-          const abortController = new AbortController();
-          await fetchChatrooms(abortController.signal, user._id);
-          return () => abortController.abort();
-        }
+        // if (theMessage.type === "roomsUpdate") {
+        //   setFetchAgain(!fetchAgain);
+        //   const abortController = new AbortController();
+        //   await fetchChatrooms(abortController.signal, user._id);
+        //   return () => abortController.abort();
+        // }
       };
     }
-    setLoading(false);
+    // setLoading(false);
     return () => {
       if (ws) ws.close();
     };
   }, [ws]);
-
-  useEffect(() => {
-    let changeW = window.addEventListener("resize", () =>
-      setW(window.innerWidth)
-    );
-    return window.removeEventListener("resize", changeW);
-  }, [W]);
 
   if (loading) {
     return <h2 className="">Loading...</h2>;
@@ -99,99 +118,28 @@ export const PageDashboard = ({
           : "page-dashboard-desktop"
       }`}
     >
-      {dashboardNavState === "settings" ? (
-        <PageSettings
-          setSearchChatrooms={setSearchChatrooms}
-          setDashboardNavState={setDashboardNavState}
-          dashboardNavState={dashboardNavState}
-          searchChatrooms={searchChatrooms}
-          user={user}
-          setFetchAgain={setFetchAgain}
-          fetchAgain={fetchAgain}
-          setActiveChatroom={setActiveChatroom}
-          ws={ws}
-        />
-      ) : (
-        <Row className="dashboard-con">
-          <Col
-            lg={{ span: 2, order: 1 }}
-            md={{ span: 2, order: 1 }}
-            xs={{ span: 12, order: 1 }}
-            className="flex dashboard-con-col1"
-          >
-            <UserAvatar user={user} />
-            <Nav
-              setDashboardNavState={setDashboardNavState}
-              dashboardNavState={dashboardNavState}
-              createChatroom={createChatroom}
-              setCreateChatroom={setCreateChatroom}
-            />
-          </Col>
-
-          <Col
-            lg={{ span: 5, order: 2 }}
-            md={{ span: 5, order: 2 }}
-            xs={{ span: 12, order: 2 }}
-            className="dashboard-con-col2"
-          >
-            <h4>Chatrooms</h4>
-
-            <SearchChatrooms
-              setSearchChatrooms={setSearchChatrooms}
-              setCheckbox={setSearchJoinableChatroomsCheckbox}
-              checkbox={searchJoinableChatroomsCheckbox}
-              page={dashboardNavState}
-            />
-
-            <ChatroomsHome
-              user={user}
-              userChatrooms={userChatrooms}
-              joinableChatrooms={joinableChatrooms}
-              searchChatrooms={searchChatrooms}
-              // fetchLastMsg={fetchLastMsg}
-              // setFetchLastMsg={setFetchLastMsg}
-              setActiveChatroom={setActiveChatroom}
-              searchJoinableChatroomsCheckbox={searchJoinableChatroomsCheckbox}
-              setCreateChatroom={setCreateChatroom}
-              // Messages={Messages}
-              // setmessages={setmessages}
-              ws={ws}
-            />
-
-            <button
-              onClick={() => {
-                setCreateChatroom(true);
-              }}
-            >
-              create
-            </button>
-          </Col>
-          <If condition={W > breakpoints.medium}>
-            <Col
-              lg={{ span: 5, order: 3 }}
-              md={{ span: 5, order: 3 }}
-              xs={{ span: 12, order: 3 }}
-              className="dashboard-con-col3"
-            >
-              <Col3
-                user={user}
-                activeChatroom={activeChatroom}
-                setActiveChatroom={setActiveChatroom}
-                ws={ws}
-                // message={message}
-                // setMessage={setMessage}
-                // Messages={Messages}
-                // setmessages={setmessages}
-                createChatroom={createChatroom}
-                setCreateChatroom={setCreateChatroom}
-                fetchChatrooms={fetchChatrooms}
-                // fetchLastMsg={fetchLastMsg}
-                // setFetchLastMsg={setFetchLastMsg}
-              />
-            </Col>
-          </If>
-        </Row>
-      )}
+      <Row className="dashboard-con">
+        <Col
+          lg={{ span: 2, order: 1 }}
+          md={{ span: 2, order: 1 }}
+          xs={{ span: 12, order: 1 }}
+          className="flex dashboard-con-col1"
+        >
+          <UserAvatar user={user} />
+          <Nav navState={navState} setNavState={setNavState} />
+        </Col>
+        <If condition={navState === "home"}>
+          <NavHome
+            ws={ws}
+            user={user}
+            userChatrooms={userChatrooms}
+            notUserChatrooms={notUserChatrooms}
+          />
+        </If>
+        <If condition={navState === "settings"}>
+          <NavSettings ws={ws} user={user} userChatrooms={userChatrooms} />
+        </If>
+      </Row>
     </Container>
   );
 };

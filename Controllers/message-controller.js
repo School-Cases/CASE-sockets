@@ -2,6 +2,7 @@
 
 import { messageModel } from "../Models/message-model";
 import { chatroomModel } from "../Models/chatroom-model";
+import { userModel } from "../Models/user-model";
 
 import { clientAddress } from "../utils/address";
 
@@ -41,6 +42,33 @@ export const get_chatroom_messages = async (req, res) => {
   }
 };
 
+export const get_chatroom_last_message = async (req, res) => {
+  try {
+    const roomId = req.params.roomId;
+    let chatroomMessages = await messageModel.find({ chatroom: roomId }).exec();
+    let message = chatroomMessages[-1];
+    let user = await userModel.findById(message.sender).exec();
+
+    console.log("usereeeee", user, "message", message);
+    // if (user && message) {
+    return res.json({
+      message: "find message success",
+      success: true,
+      data: {
+        message,
+        user,
+      },
+    });
+    // }
+  } catch (err) {
+    return res.json({
+      message: "find message fail",
+      success: false,
+      data: null,
+    });
+  }
+};
+
 export const get_all_messages = async (req, res) => {
   try {
     let allMessages = await messageModel.find().exec();
@@ -63,12 +91,8 @@ export const create_message = async (req, res) => {
     let message = await new messageModel({
       chatroom: req.body.chatroom,
       sender: req.body.sender,
-      //   time: req.body.time,
-      //   chatroom: "chatroom1",
-      //   sender: "haakon",
       time: req.body.time,
       text: req.body.text,
-      // reactions: [],
     });
     let MaM = message;
 

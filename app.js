@@ -14,13 +14,15 @@ import protectedRouter from "./routers/protected";
 import index from "./routers/index";
 import path from "path";
 
+import { messageModel } from "./Models/message-model";
+import { chatroomModel } from "./Models/chatroom-model";
+
+import { create_message } from "./Controllers/message-controller";
+
 import { URL } from "url"; // in Browser, the URL in native accessible on window
 
 const __filename = new URL("", import.meta.url).pathname;
-// Will contain trailing slash
 const __dirname = new URL(".", import.meta.url).pathname;
-
-import { create_message } from "./Controllers/message-controller";
 
 dotenv.config();
 const app = express();
@@ -30,10 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 
 (async () => {
   try {
-    // await mongoose.connect(process.env.DB_URI);
-    await mongoose.connect(
-      "mongodb+srv://Olof:desperados@cluster0.nmgfg.mongodb.net/caseChat?retryWrites=true&w=majority"
-    );
+    await mongoose.connect(process.env.DB_URI);
 
     console.log("MongoDB has connected");
   } catch (err) {
@@ -50,12 +49,12 @@ const corsOptions = {
 
 app.use(cors(corsOptions)); // Use this after the variable declaration
 app.use(express.json());
-// app.use("https://chatwskul.herokuapp.com", express.static("./client/build"));
-// app.use("/static", express.static("./client/build/static"));
-// app.use("/", express.static("./client/build"));
-// app.use("/static", express.static("./client/build/static"));
-app.use(express.static(path.join(__dirname, "/client/build")));
-// app.use(express.static("client/build"));
+// dev
+app.use("/", express.static("./client/public"));
+app.use("/static", express.static("./public/static"));
+// heroku
+// app.use(express.static(path.join(__dirname, "/client/build")));
+
 app.use(
   session({
     secret: "keyboard cat",
@@ -81,11 +80,11 @@ function emitMessage(data, isBinary) {
 }
 
 wss.on("connection", (ws) => {
-  setInterval(() => {
-    wss.clients.forEach((client) => {
-      client.send(JSON.stringify("ah ah ah stay alive!"));
-    });
-  }, 28000);
+  // setInterval(() => {
+  //   wss.clients.forEach((client) => {
+  //     client.send(JSON.stringify("ah ah ah stay alive!"));
+  //   });
+  // }, 28000);
   // console.log(ws);
   console.log("Client connected from IP: ", ws._socket.remoteAddress);
   console.log("Number of connected clients: ", wss.clients.size);
@@ -106,7 +105,36 @@ wss.on("connection", (ws) => {
 
     switch (event.type) {
       case "message":
-        return emitMessage(data.toString(), isBinary);
+        try {
+          let message = await new messageModel({
+            chatroom: event.chatroom,
+            sender: event.sender,
+            time: event.time,
+            text: event.text,
+          });
+          let MaM = message;
+          message = message.save();
+
+          await chatroomModel.findByIdAndUpdate(event.chatroom, {
+            $push: {
+              messages: message._id,
+            },
+          });
+
+          return emitMessage(data.toString(), isBinary);
+          // return res.json({
+          //   message: "create message success",
+          //   success: true,
+          //   data: MaM,
+          // });
+        } catch (err) {
+          return res.json({
+            message: "create message fail",
+            success: false,
+            data: null,
+          });
+        }
+
       case "roomsUpdate":
         return emitMessage(data.toString(), isBinary);
     }
@@ -127,18 +155,18 @@ wss.on("connection", (ws) => {
   //   // emitMessage(data.toString(), isBinary);
   // });
 });
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname + "/client/build/index.html"));
-});
-// app.get("*", (req, res) =>
-//   res.sendFile("index.html", {
-//     root: "./client/build",
-//   })
-// );
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname + "/client/build/index.html"));
+// });
+app.get("*", (req, res) =>
+  res.sendFile("index.html", {
+    root: "./client/public",
+  })
+);
 
 // server.listen(process.env.PORT, () => {
 //   console.log("Server lyssnar på port", process.env.PORT);
 // });
-server.listen(process.env.PORT || 80, () => {
-  console.log("Server lyssnar på port", 80);
+server.listen(process.env.PORT || 5002, () => {
+  console.log("Server lyssnar på port", process.env.PORT);
 });

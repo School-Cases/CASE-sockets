@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import { post, get } from "../../../../utils/http";
 import { If } from "../../../../utils/If";
 
-export const CreateChatroom = ({
-  setCreateChatroom,
-  createChatroom,
+export const HomeCol3CreateChatroom = ({
+  homeCol3State,
+  setHomeCol3State,
   user,
   ws,
 }) => {
@@ -19,6 +19,7 @@ export const CreateChatroom = ({
   const fetchAllUsers = async (signal) => {
     let res = await get(`/protected/get-all-users`, signal);
     setAddableUsers(res.data);
+    console.log(res.data);
     setLoading(false);
   };
 
@@ -29,7 +30,7 @@ export const CreateChatroom = ({
       members: newRoomMembers,
       theme: newRoomTheme,
     });
-    setCreateChatroom(false);
+    // setCreateChatroom(false);
     ws.send(
       JSON.stringify({
         type: "roomsUpdate",
@@ -39,9 +40,9 @@ export const CreateChatroom = ({
 
   useEffect(async () => {
     const abortController = new AbortController();
-    if (createChatroom) await fetchAllUsers(abortController.signal);
+    if (homeCol3State) await fetchAllUsers(abortController.signal);
     return () => abortController.abort();
-  }, [createChatroom]);
+  }, []);
 
   if (loading) {
     <h4>loading ...</h4>;
@@ -51,12 +52,12 @@ export const CreateChatroom = ({
     <section className="dashboard-con-create-con">
       <div className="flex create-con-top">
         <h3>Create chatroom</h3>
-        <button
+        {/* <button
           className="create-con-button-back"
-          onClick={() => setCreateChatroom(false)}
+          onClick={() => setHomeCol3State(false)}
         >
           BACK
-        </button>
+        </button> */}
       </div>
 
       <div className="create-con-name">

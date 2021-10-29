@@ -1,12 +1,6 @@
-import { api_address, get } from "../../../utils/http";
 import { useHistory } from "react-router";
 
-export const Nav = ({
-  setDashboardNavState,
-  dashboardNavState,
-  createChatroom,
-  setCreateChatroom,
-}) => {
+export const Nav = ({ setNavState }) => {
   const history = useHistory();
 
   const logout = () => {
@@ -18,8 +12,7 @@ export const Nav = ({
       <div
         className="flex nav-con-li"
         onClick={async () => {
-          setDashboardNavState("home");
-          if (createChatroom) setCreateChatroom(false);
+          setNavState("home");
         }}
       >
         <span>
@@ -77,8 +70,7 @@ export const Nav = ({
       <div
         className="flex nav-con-li"
         onClick={() => {
-          setDashboardNavState("settings");
-          if (createChatroom) setCreateChatroom(false);
+          setNavState("settings");
         }}
       >
         <span>

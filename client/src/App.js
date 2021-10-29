@@ -6,17 +6,11 @@ import { PageDashboard } from "./components/main-pages/PageDashboard";
 import { Test } from "./components/Test";
 import { get } from "./utils/http";
 
-import { useEffect } from "react";
-
-// import { ws } from "./utils/ws";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./style/temp.scss";
 
 const requireLogin = async (to, from, next) => {
   const res = await get("/logged-in");
-
-  console.log(res);
 
   if (to.meta.auth === undefined) return next();
   if (to.meta.auth && !res.data) return next.redirect("/");
@@ -34,7 +28,6 @@ const NotFound = () => {
 };
 
 function App() {
-  console.log("hehe");
   return (
     <div className="App">
       <BrowserRouter>

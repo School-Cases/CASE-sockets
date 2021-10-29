@@ -9,25 +9,18 @@ const StyledDiv = styled("div")`
   background-image: url(../avatars/${(props) => props.img});
 `;
 
-export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
-  const [loading, setLoading] = useState(true);
+export const SettingsCol3 = ({ user }) => {
+  // const [loading, setLoading] = useState(true);
+
+  // states
+  const [avatar, setAvatar] = useState([user.avatar, 0]);
   const [avatarSwitch, setAvatarSwitch] = useState(false);
-  const [user, setUser] = useState(null);
-  const [avatar, setAvatar] = useState(null);
-  const [theme, setTheme] = useState(null);
-  const [name, setName] = useState(null);
+  const [theme, setTheme] = useState(user.theme);
+  const [name, setName] = useState(user.name);
   const [newPassword, setNewPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
 
-  const fetchUser = async (signal) => {
-    let res = await get(`/protected/get-user`, signal);
-    setUser(res.data);
-    setName(res.data.name);
-    setAvatar([res.data.avatar, 0]);
-    setTheme(res.data.theme);
-    setLoading(false);
-  };
-
+  // fetches
   const fetchUpdateUser = async () => {
     let res = await post(`/protected/update-user/${user._id}`, {
       name: name,
@@ -37,18 +30,25 @@ export const UserSettings = ({ fetchAgain, setFetchAgain }) => {
       avatarChange: avatar[1],
       theme: theme,
     });
-    setFetchAgain(!fetchAgain);
+    console.log(res);
+    // setFetchAgain(!fetchAgain);
   };
 
-  useEffect(async () => {
-    const abortController = new AbortController();
-    await fetchUser(abortController.signal);
-    return () => abortController.abort();
-  }, [fetchAgain]);
+  // const fetchUser = async (signal) => {
+  //   let res = await get(`/protected/get-user`, signal);
+  // };
 
-  if (loading) {
-    return <h2 className="">Loading...</h2>;
-  }
+  // useEffects
+
+  // useEffect(async () => {
+  //   const abortController = new AbortController();
+  //   await fetchUser(abortController.signal);
+  //   return () => abortController.abort();
+  // }, [fetchAgain]);
+
+  // if (loading) {
+  //   return <h2 className="">Loading...</h2>;
+  // }
 
   return (
     <div className="col3-settings-con">
