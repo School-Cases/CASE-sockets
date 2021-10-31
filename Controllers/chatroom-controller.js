@@ -137,13 +137,25 @@ export const create_chatroom = async (req, res) => {
 
     let chatroomId = Chatroom._id;
 
-    await userModel.findByIdAndUpdate(req.body.admins, {
-      $push: {
-        chatrooms: {
-          chatroom: chatroomId,
+    console.log(req.body.members.length);
+
+    req.body.members.forEach(async (m) => {
+      await userModel.findByIdAndUpdate(m, {
+        $push: {
+          chatrooms: {
+            chatroom: chatroomId,
+          },
         },
-      },
+      });
     });
+
+    // await userModel.findByIdAndUpdate(req.body.admins, {
+    //   $push: {
+    //     chatrooms: {
+    //       chatroom: chatroomId,
+    //     },
+    //   },
+    // });
 
     Chatroom = Chatroom.save();
 

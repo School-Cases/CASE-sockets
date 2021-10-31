@@ -183,27 +183,6 @@ const Chatroom = ({
     }
   }, [chatroomLastMessage]);
 
-  // useEffect(async () => {
-  //   if (ws) {
-  //     ws.onmessage = async (e) => {
-  //       let data = JSON.parse(e.data);
-  //       console.log(data);
-  //       if (!joinable) {
-  //         if (
-  //           data.type === "message" &&
-  //           data.chatroom === room._id
-  //           // && data.detail === "updateLastMessage"
-  //         ) {
-  //           setLoading(true);
-  //           const abortController = new AbortController();
-  //           await fetchLastMessage(abortController.signal);
-  //           return () => abortController.abort();
-  //         }
-  //       }
-  //     };
-  //   }
-  // }, [ws.onmessage]);
-
   if (loading) {
     <h4>loading ...</h4>;
   }
@@ -228,6 +207,7 @@ const Chatroom = ({
                 <If condition={room.admins.includes(user._id)}>
                   <div className="fav-con-admin-icon">A</div>
                 </If>
+                <div>0 new msgs</div>
               </div>
             </div>
             <svg
