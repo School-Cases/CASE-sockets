@@ -1,5 +1,6 @@
 // ws: 1. new message. update if userChatrooms includes user.
 // ws: 2. member leaves room. update if activechatroom === leaved room.
+// ws: 3. user joins room. update if activechatroom === joined room.
 
 import { useEffect, useState } from "react";
 import { Col } from "react-bootstrap";
@@ -16,23 +17,19 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
   const [W, setW] = useState(window.innerWidth);
   const [activeChatroom, setActiveChatroom] = useState(false);
   const [homeCol3State, setHomeCol3State] = useState("createChatroom");
-  //   const [chatroomLastMessage, setChatroomLastMessage] = useState(null);
+  const [chatroomLastMessage, setChatroomLastMessage] = useState(null);
 
   //   useEffects
   useEffect(async () => {
     if (ws) {
       ws.onmessage = async (e) => {
         let data = JSON.parse(e.data);
+
         if (
           data.type === "message" &&
-          userChatrooms.filter((room) => room._id === data.chatroom).length < 0
+          userChatrooms.filter((room) => room._id === data.chatroom).length > 0
         ) {
-          ws.send(
-            JSON.stringify({
-              type: "message",
-              detail: "updateLastMessage",
-            })
-          );
+          setChatroomLastMessage({ chatroom: data.chatroom });
         }
       };
     }
@@ -62,6 +59,8 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
           setActiveChatroom={setActiveChatroom}
           homeCol3State={homeCol3State}
           setHomeCol3State={setHomeCol3State}
+          chatroomLastMessage={chatroomLastMessage}
+          setChatroomLastMessage={setChatroomLastMessage}
         />
       </Col>
       <If condition={W > breakpoints.medium}>
@@ -76,8 +75,11 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
               ws={ws}
               user={user}
               activeChatroom={activeChatroom}
+              userChatrooms={userChatrooms}
               homeCol3State={homeCol3State}
               setHomeCol3State={setHomeCol3State}
+              chatroomLastMessage={chatroomLastMessage}
+              setChatroomLastMessage={setChatroomLastMessage}
             />
           </If>
           <If condition={homeCol3State === "createChatroom"}>

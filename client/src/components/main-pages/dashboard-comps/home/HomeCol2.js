@@ -12,10 +12,34 @@ export const HomeCol2 = ({
   activeChatroom,
   setActiveChatroom,
   setHomeCol3State,
+  chatroomLastMessage,
+  setChatroomLastMessage,
 }) => {
   // states
   const [searchChatrooms, setSearchChatrooms] = useState("");
   const [showOtherChatrooms, setShowOtherChatrooms] = useState(false);
+
+  // useEffects
+  // useEffect(async () => {
+  //   if (ws) {
+  //     ws.onmessage = async (e) => {
+  //       let data = JSON.parse(e.data);
+  //       console.log(data);
+  //       // if (!joinable) {
+  //       //   if (
+  //       //     data.type === "message" &&
+  //       //     data.chatroom === room._id
+  //       //     // && data.detail === "updateLastMessage"
+  //       //   ) {
+  //       //     setLoading(true);
+  //       //     const abortController = new AbortController();
+  //       //     await fetchLastMessage(abortController.signal);
+  //       //     return () => abortController.abort();
+  //       //   }
+  //       // }
+  //     };
+  //   }
+  // }, [ws.onmessage]);
   return (
     <>
       <section className="flex search-chatroom-con">
@@ -47,6 +71,8 @@ export const HomeCol2 = ({
                     activeChatroom={activeChatroom}
                     setActiveChatroom={setActiveChatroom}
                     setHomeCol3State={setHomeCol3State}
+                    chatroomLastMessage={chatroomLastMessage}
+                    setChatroomLastMessage={setChatroomLastMessage}
                     // fetchLastMsg={fetchLastMsg}
                     // setFetchLastMsg={setFetchLastMsg}
                     // Messages={Messages}
@@ -99,6 +125,8 @@ const Chatroom = ({
   setActiveChatroom,
   user,
   setHomeCol3State,
+  chatroomLastMessage,
+  setChatroomLastMessage,
   // fetchLastMsg,
   ws,
 }) => {
@@ -143,20 +171,35 @@ const Chatroom = ({
   }, []);
 
   useEffect(async () => {
-    if (ws) {
-      ws.onmessage = async (e) => {
-        let data = JSON.parse(e.data);
-        if (data.type === "message" && data.detail === "updateLastMessage") {
-          if (joinable) {
-            setLoading(true);
-            const abortController = new AbortController();
-            await fetchLastMessage(abortController.signal);
-            return () => abortController.abort();
-          }
-        }
-      };
+    if (chatroomLastMessage) {
+      if (!joinable && chatroomLastMessage.chatroom === room._id) {
+        const abortController = new AbortController();
+        await fetchLastMessage(abortController.signal);
+        return () => abortController.abort();
+      }
     }
-  }, [ws.onmessage]);
+  }, [chatroomLastMessage]);
+
+  // useEffect(async () => {
+  //   if (ws) {
+  //     ws.onmessage = async (e) => {
+  //       let data = JSON.parse(e.data);
+  //       console.log(data);
+  //       if (!joinable) {
+  //         if (
+  //           data.type === "message" &&
+  //           data.chatroom === room._id
+  //           // && data.detail === "updateLastMessage"
+  //         ) {
+  //           setLoading(true);
+  //           const abortController = new AbortController();
+  //           await fetchLastMessage(abortController.signal);
+  //           return () => abortController.abort();
+  //         }
+  //       }
+  //     };
+  //   }
+  // }, [ws.onmessage]);
 
   if (loading) {
     <h4>loading ...</h4>;

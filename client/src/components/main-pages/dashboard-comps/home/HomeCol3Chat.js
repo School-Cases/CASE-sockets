@@ -12,6 +12,9 @@ export const HomeCol3Chat = ({
   ws,
   user,
   activeChatroom,
+  userChatrooms,
+  chatroomLastMessage,
+  setChatroomLastMessage,
   // createChatroom,
   // setCreateChatroom,
   // fetchLastMsg,
@@ -99,13 +102,22 @@ export const HomeCol3Chat = ({
     if (ws) {
       ws.onmessage = async (e) => {
         let data = JSON.parse(e.data);
-        if (data.type === "message" && data.chatroom === activeChatroom._id) {
-          setChatroomMessages([...chatroomMessages, data]);
-          let msgs = chatroomMessages;
-          msgs.push(data);
-          filterMsgsAva(msgs);
-          document.querySelector(`.chat-con-mid`).scrollTop =
-            document.querySelector(`.chat-con-mid`).scrollHeight;
+        if (data.type === "message") {
+          if (data.chatroom === activeChatroom._id) {
+            setChatroomMessages([...chatroomMessages, data]);
+            let msgs = chatroomMessages;
+            msgs.push(data);
+            filterMsgsAva(msgs);
+            document.querySelector(`.chat-con-mid`).scrollTop =
+              document.querySelector(`.chat-con-mid`).scrollHeight;
+          }
+          if (
+            userChatrooms.filter((room) => room._id === data.chatroom).length >
+            0
+          ) {
+            console.log("chat, setLast");
+            setChatroomLastMessage({ chatroom: data.chatroom });
+          }
         }
       };
     }

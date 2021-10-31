@@ -122,6 +122,7 @@ wss.on("connection", (ws) => {
           });
 
           return emitMessage(data.toString(), isBinary);
+          // return emitMessage(data.toString(), isBinary);
           // return res.json({
           //   message: "create message success",
           //   success: true,
