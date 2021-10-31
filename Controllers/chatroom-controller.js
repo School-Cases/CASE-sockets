@@ -78,17 +78,17 @@ export const leave_chatroom = async (req, res) => {
 };
 
 export const join_chatroom = async (req, res) => {
-  const chatroomId = req.params.chatroomId;
-  const userId = req.params.userId;
+  const chatroomId = req.body.chatroomId;
+  const userId = req.body.userId;
   try {
-    await chatroomModel.findByIdAndUpdate(req.params.chatroomId, {
+    await chatroomModel.findByIdAndUpdate(chatroomId, {
       $push: {
-        members: await userModel.findById(req.params.userId),
+        members: await userModel.findById(userId),
       },
     });
-    await userModel.findByIdAndUpdate(req.params.userId, {
+    await userModel.findByIdAndUpdate(userId, {
       $push: {
-        chatrooms: await chatroomModel.findById(req.params.chatroomId),
+        chatrooms: await chatroomModel.findById(chatroomId),
       },
     });
     // chatroom.save();

@@ -1,4 +1,4 @@
-// style: active chatroom home col2
+// style: active chatroom home col2. gobot and byt butn
 
 import React from "react";
 import { useEffect, useState } from "react";

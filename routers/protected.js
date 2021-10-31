@@ -84,7 +84,7 @@ router.post("/update-chatroom/:id", update_chatroom);
 router.get("/delete-chatroom/:id", delete_chatroom);
 router.get("/delete-all-chatrooms", delete_all_chatrooms);
 router.post("/starmark-chatroom/:chatroomId/:userId", starmark_chatroom);
-router.post("/join-chatroom/:chatroomId/:userId", join_chatroom);
+router.post("/join-chatroom", join_chatroom);
 router.post("/leave-chatroom/:chatroomId/:userId", leave_chatroom);
 
 router.get("/get-message/:id", get_message);

@@ -1,3 +1,6 @@
+// ws: 1. new message. update if userChatrooms includes user.
+// ws: 2. member leaves room. update if activechatroom === leaved room.
+
 import { useEffect, useState } from "react";
 import { Col } from "react-bootstrap";
 

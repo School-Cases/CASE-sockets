@@ -111,7 +111,6 @@ const Chatroom = ({
       `/protected/get-chatroom-last-message/${room._id}`,
       signal
     );
-    console.log(res);
     setLastMessage(res.data);
     setLoading(false);
   };
@@ -123,7 +122,11 @@ const Chatroom = ({
   };
 
   const fetchJoinChatroom = async () => {
-    await post(`/protected/join-chatroom/${room._id}/${user._id}`);
+    let res = await post(`/protected/join-chatroom`, {
+      chatroomId: room._id,
+      userId: user._id,
+    });
+    console.log(res);
     // ws.send(
     //   JSON.stringify({
     //     type: "roomsUpdate",

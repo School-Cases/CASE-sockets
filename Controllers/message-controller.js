@@ -46,7 +46,7 @@ export const get_chatroom_last_message = async (req, res) => {
   try {
     const roomId = req.params.roomId;
     let chatroomMessages = await messageModel.find({ chatroom: roomId }).exec();
-    let message = chatroomMessages[-1];
+    let message = chatroomMessages[chatroomMessages.length - 1];
     let user = await userModel.findById(message.sender).exec();
 
     console.log("usereeeee", user, "message", message);
@@ -62,7 +62,7 @@ export const get_chatroom_last_message = async (req, res) => {
     // }
   } catch (err) {
     return res.json({
-      message: "find message fail",
+      message: "find message fail" + err,
       success: false,
       data: null,
     });

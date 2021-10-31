@@ -17,7 +17,6 @@ export const HomeCol3Chat = ({
   // fetchLastMsg,
   // setFetchLastMsg,
 }) => {
-  console.log(activeChatroom);
   //   const [Message, setmessage] = useState(null);
 
   //   const [roomMembers, setRoomMembers] = useState([]);
@@ -31,22 +30,26 @@ export const HomeCol3Chat = ({
   const [chatroomMessages, setChatroomMessages] = useState([]);
   const [msgAva, setMsgAva] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
+
   // fetches
   const fetchChatroomUsersAndMessages = async (signal) => {
+    setLoading(true);
     let res = await get(
       `/protected/get-chatroom-users/${activeChatroom._id}`,
       signal
     );
     setChatroomUsers(res.data);
+
     return fetchChatroomMessages(signal);
   };
+
   const fetchChatroomMessages = async (signal) => {
-    let res = await get(
+    let res2 = await get(
       `/protected/get-chatroom-messages/${activeChatroom._id}`,
       signal
     );
-    filterMsgsAva(res.data);
-    setChatroomMessages(res.data);
+    filterMsgsAva(res2.data);
+    setChatroomMessages(res2.data);
     setLoading(false);
   };
 
@@ -178,7 +181,7 @@ export const HomeCol3Chat = ({
   //   }, [activeChatroom]);
 
   if (loading) {
-    <h4>loading ...</h4>;
+    return <h4>loading ...</h4>;
   }
 
   return (
