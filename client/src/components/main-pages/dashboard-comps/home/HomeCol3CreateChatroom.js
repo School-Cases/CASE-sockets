@@ -24,18 +24,19 @@ export const HomeCol3CreateChatroom = ({
   };
 
   const fetchCreateChatroom = async () => {
-    await post(`/protected/create-chatroom`, {
+    let res = await post(`/protected/create-chatroom`, {
       name: newRoomName,
       admins: [user._id],
       members: newRoomMembers,
       theme: newRoomTheme,
     });
+    console.log(res);
     // setCreateChatroom(false);
-    ws.send(
-      JSON.stringify({
-        type: "roomsUpdate",
-      })
-    );
+    // ws.send(
+    //   JSON.stringify({
+    //     type: "roomsUpdate",
+    //   })
+    // );
   };
 
   useEffect(async () => {

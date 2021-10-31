@@ -25,8 +25,15 @@ const userSchema = new Schema({
   },
   chatrooms: [
     {
-      type: Types.ObjectId,
-      ref: "Chatroom",
+      chatroom: {
+        type: Types.ObjectId,
+        ref: "Chatroom",
+      },
+      unread: {
+        type: Number,
+        // ref: "Chatroom",
+        default: 0,
+      },
     },
   ],
 });

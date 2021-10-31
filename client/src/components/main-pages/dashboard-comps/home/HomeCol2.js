@@ -19,27 +19,12 @@ export const HomeCol2 = ({
   const [searchChatrooms, setSearchChatrooms] = useState("");
   const [showOtherChatrooms, setShowOtherChatrooms] = useState(false);
 
-  // useEffects
-  // useEffect(async () => {
-  //   if (ws) {
-  //     ws.onmessage = async (e) => {
-  //       let data = JSON.parse(e.data);
-  //       console.log(data);
-  //       // if (!joinable) {
-  //       //   if (
-  //       //     data.type === "message" &&
-  //       //     data.chatroom === room._id
-  //       //     // && data.detail === "updateLastMessage"
-  //       //   ) {
-  //       //     setLoading(true);
-  //       //     const abortController = new AbortController();
-  //       //     await fetchLastMessage(abortController.signal);
-  //       //     return () => abortController.abort();
-  //       //   }
-  //       // }
-  //     };
-  //   }
-  // }, [ws.onmessage]);
+  const fetchDeleteChatrooms = async (signal) => {
+    await get(`/protected/delete-all-chatrooms`, signal);
+  };
+  const fetchDeleteMSGS = async (signal) => {
+    await get(`/protected/delete-all-messages`, signal);
+  };
   return (
     <>
       <section className="flex search-chatroom-con">
@@ -59,6 +44,24 @@ export const HomeCol2 = ({
       </section>
 
       <section className="flex dash-home-chatrooms">
+        <button
+          onClick={() => {
+            const abortController = new AbortController();
+            fetchDeleteChatrooms(abortController.signal);
+            return () => abortController.abort();
+          }}
+        >
+          delete chatrooms
+        </button>
+        <button
+          onClick={() => {
+            const abortController = new AbortController();
+            fetchDeleteMSGS(abortController.signal);
+            return () => abortController.abort();
+          }}
+        >
+          delete msgs
+        </button>
         <div className="flex home-chatrooms-con">
           <If condition={!showOtherChatrooms}>
             {userChatrooms.map((room) => {

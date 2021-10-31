@@ -128,20 +128,24 @@ export const get_all_chatrooms = async (req, res) => {
 export const create_chatroom = async (req, res) => {
   console.log(req.body);
   try {
-    let chatroom = await new chatroomModel({
+    let Chatroom = await new chatroomModel({
       name: req.body.name,
       admins: req.body.admins,
       members: req.body.members,
       theme: req.body.theme,
     });
 
+    let chatroomId = Chatroom._id;
+
     await userModel.findByIdAndUpdate(req.body.admins, {
       $push: {
-        chatrooms: chatroom._id,
+        chatrooms: {
+          chatroom: chatroomId,
+        },
       },
     });
 
-    chatroom = chatroom.save();
+    Chatroom = Chatroom.save();
 
     return res.json({
       message: "create chatroom success",
@@ -150,7 +154,7 @@ export const create_chatroom = async (req, res) => {
     });
   } catch (err) {
     return res.json({
-      message: "create chatroom fail",
+      message: "create chatroom fail " + err,
       success: false,
       data: null,
     });
@@ -158,7 +162,6 @@ export const create_chatroom = async (req, res) => {
 };
 
 export const update_chatroom = async (req, res) => {
-  console.log(req.body, "reqbody");
   try {
     let chatroom = await chatroomModel.findById(req.params.id).exec();
 
@@ -260,13 +263,39 @@ export const delete_chatroom = async (req, res) => {
 
     await chatroomModel.findByIdAndDelete({ _id: id }).exec();
 
-    await userModel.find({ chatrooms: id }, (error, users) => {
-      users.forEach((user) => {
-        let index = user.chatrooms.findIndex((ch) => ch._id === id);
-        user.chatrooms.splice(index, 1);
-        user.save();
-      });
+    let arr = [];
+    let allUsers = await userModel.find({}).exec();
+    let filterredUsers = allUsers.filter((u) =>
+      u.chatrooms.map((ch) => ch.chatroom === id)
+    );
+    // console.log(u.chatrooms.filter((ch) => ch.chatroom === id))
+    //   console.log(
+    //     u.chatrooms.map((ch) =>
+    //       console.log(
+    //         ch,
+    //         ch.chatroom.toString(),
+    //         "o",
+    //         id,
+    //         ch.chatroom.toString() === id
+    //       )
+    //     )
+    //   )
+    // );
+    console.log(filterredUsers, "users");
+
+    filterredUsers.forEach((user) => {
+      let index = user.chatrooms.findIndex((ch) => ch.chatroom === id);
+      user.chatrooms.splice(index, 1);
+      user.save();
     });
+
+    // await userModel.find({}, (error, users) => {
+    // users.forEach((user) => {
+    //   let index = user.chatrooms.findIndex((ch) => ch._id === id);
+    //   user.chatrooms.splice(index, 1);
+    //   user.save();
+    // });
+    // });
 
     return res.json({
       message: "delete chatroom success",
