@@ -50,6 +50,8 @@ import {
   delete_all_users,
   user_join_chatroom,
   user_login,
+  update_chatroom_unread,
+  get_chatroom_unread,
   // not used
   user_dashboard,
 } from "../Controllers/user-controller";
@@ -70,6 +72,8 @@ router.get("/delete-user/:id", delete_user);
 router.get("/delete-all-users", delete_all_users);
 
 router.post("/user-join-chatroom", user_join_chatroom);
+router.get("/get-chatroom-unread/:userId/:chatroomId", get_chatroom_unread);
+router.post("/update-chatroom-unread", update_chatroom_unread);
 
 // router.post("/user-login", user_login);
 

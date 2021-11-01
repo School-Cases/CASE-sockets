@@ -18,6 +18,9 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
   const [activeChatroom, setActiveChatroom] = useState(false);
   const [homeCol3State, setHomeCol3State] = useState("createChatroom");
   const [chatroomLastMessage, setChatroomLastMessage] = useState(null);
+  const [chatroomUnreadMsgs, setChatroomUnreadMsgs] = useState(null);
+
+  const [chatroomMessages, setChatroomMessages] = useState([]);
 
   //   useEffects
   useEffect(async () => {
@@ -25,11 +28,22 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
       ws.onmessage = async (e) => {
         let data = JSON.parse(e.data);
 
-        if (
-          data.type === "message" &&
-          userChatrooms.filter((room) => room._id === data.chatroom).length > 0
-        ) {
-          setChatroomLastMessage({ chatroom: data.chatroom });
+        if (data.type === "message") {
+          if (data.chatroom === activeChatroom._id) {
+            setChatroomMessages([...chatroomMessages, data]);
+            document.querySelector(`.chat-con-mid`).scrollTop =
+              document.querySelector(`.chat-con-mid`).scrollHeight;
+          }
+          if (
+            data.type === "message" &&
+            userChatrooms.filter((room) => room._id === data.chatroom).length >
+              0
+          ) {
+            if (data.chatroom !== activeChatroom._id) {
+              setChatroomUnreadMsgs({ chatroom: data.chatroom });
+            }
+            setChatroomLastMessage({ chatroom: data.chatroom });
+          }
         }
       };
     }
@@ -61,6 +75,8 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
           setHomeCol3State={setHomeCol3State}
           chatroomLastMessage={chatroomLastMessage}
           setChatroomLastMessage={setChatroomLastMessage}
+          chatroomUnreadMsgs={chatroomUnreadMsgs}
+          setChatroomUnreadMsgs={setChatroomUnreadMsgs}
         />
       </Col>
       <If condition={W > breakpoints.medium}>
@@ -75,11 +91,8 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
               ws={ws}
               user={user}
               activeChatroom={activeChatroom}
-              userChatrooms={userChatrooms}
-              homeCol3State={homeCol3State}
-              setHomeCol3State={setHomeCol3State}
-              chatroomLastMessage={chatroomLastMessage}
-              setChatroomLastMessage={setChatroomLastMessage}
+              chatroomMessages={chatroomMessages}
+              setChatroomMessages={setChatroomMessages}
             />
           </If>
           <If condition={homeCol3State === "createChatroom"}>

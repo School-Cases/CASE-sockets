@@ -14,6 +14,8 @@ export const HomeCol2 = ({
   setHomeCol3State,
   chatroomLastMessage,
   setChatroomLastMessage,
+  chatroomUnreadMsgs,
+  setChatroomUnreadMsgs,
 }) => {
   // states
   const [searchChatrooms, setSearchChatrooms] = useState("");
@@ -75,11 +77,7 @@ export const HomeCol2 = ({
                     setActiveChatroom={setActiveChatroom}
                     setHomeCol3State={setHomeCol3State}
                     chatroomLastMessage={chatroomLastMessage}
-                    setChatroomLastMessage={setChatroomLastMessage}
-                    // fetchLastMsg={fetchLastMsg}
-                    // setFetchLastMsg={setFetchLastMsg}
-                    // Messages={Messages}
-                    // setmessages={setmessages}
+                    chatroomUnreadMsgs={chatroomUnreadMsgs}
                     ws={ws}
                   />
                 </If>
@@ -129,27 +127,53 @@ const Chatroom = ({
   user,
   setHomeCol3State,
   chatroomLastMessage,
-  setChatroomLastMessage,
-  // fetchLastMsg,
+  chatroomUnreadMsgs,
   ws,
 }) => {
   const [lastMessage, setLastMessage] = useState(null);
-  //   const [lastMessageSender, setLastMessageSender] = useState({});
+
   const [loading, setLoading] = useState(true);
+  const [roomUnreadMsgs, setRoomUnreadMsgs] = useState(0);
+  const [nollifyUnreadMsgs, setNollifyUnreadMsgs] = useState(false);
 
   const fetchLastMessage = async (signal) => {
     let res = await get(
       `/protected/get-chatroom-last-message/${room._id}`,
       signal
     );
+    console.log("fetchlastmsgs");
+
     setLastMessage(res.data);
-    setLoading(false);
+    if (room !== activeChatroom) return fetchGetChatroomUnread(signal);
+    else setLoading(false);
   };
 
   const fetchStarmarkChatroom = async () => {
     console.log("fetch starmark");
 
     await post(`/protected/starmark-chatroom/${room._id}/${user._id}`);
+  };
+
+  const fetchUpdateChatroomUnread = async () => {
+    console.log(nollifyUnreadMsgs);
+    let res = await post(`/protected/update-chatroom-unread`, {
+      chatroomId: room._id,
+      userId: user._id,
+      nollify: nollifyUnreadMsgs,
+    });
+    console.log(res);
+    setRoomUnreadMsgs(res.data);
+  };
+
+  const fetchGetChatroomUnread = async (signal) => {
+    console.log("get unread");
+    let res = await get(
+      `/protected/get-chatroom-unread/${user._id}/${room._id}`,
+      signal
+    );
+    console.log(res);
+    setRoomUnreadMsgs(res.data.unread);
+    setLoading(false);
   };
 
   const fetchJoinChatroom = async () => {
@@ -183,6 +207,27 @@ const Chatroom = ({
     }
   }, [chatroomLastMessage]);
 
+  useEffect(async () => {
+    if (chatroomUnreadMsgs || nollifyUnreadMsgs) {
+      if (
+        (!joinable && nollifyUnreadMsgs) ||
+        (!joinable && chatroomUnreadMsgs.chatroom === room._id)
+      ) {
+        const abortController = new AbortController();
+        await fetchUpdateChatroomUnread(abortController.signal);
+        return () => abortController.abort();
+      }
+    }
+  }, [chatroomUnreadMsgs, nollifyUnreadMsgs]);
+
+  // useEffect(async () => {
+  //   if (!joinable) {
+  //     const abortController = new AbortController();
+  //     await fetchGetChatroomUnread(abortController.signal);
+  //     return () => abortController.abort();
+  //   }
+  // }, []);
+
   if (loading) {
     <h4>loading ...</h4>;
   }
@@ -195,9 +240,12 @@ const Chatroom = ({
           className={`col2-chatroom-con ${
             activeChatroom === room ? "active" : ""
           }`}
-          onClick={() => {
+          onClick={async () => {
             setActiveChatroom(room);
             setHomeCol3State("chat");
+            if (roomUnreadMsgs > 0) {
+              setNollifyUnreadMsgs(true);
+            }
           }}
         >
           <div className="flex chatroom-con-title-fav-con">
@@ -207,7 +255,7 @@ const Chatroom = ({
                 <If condition={room.admins.includes(user._id)}>
                   <div className="fav-con-admin-icon">A</div>
                 </If>
-                <div>0 new msgs</div>
+                <div>{roomUnreadMsgs} new msgs</div>
               </div>
             </div>
             <svg

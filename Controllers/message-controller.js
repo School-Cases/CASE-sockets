@@ -49,7 +49,6 @@ export const get_chatroom_last_message = async (req, res) => {
     let message = chatroomMessages[chatroomMessages.length - 1];
     let user = await userModel.findById(message.sender).exec();
 
-    console.log("usereeeee", user, "message", message);
     // if (user && message) {
     return res.json({
       message: "find message success",

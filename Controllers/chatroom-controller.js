@@ -143,7 +143,8 @@ export const create_chatroom = async (req, res) => {
       await userModel.findByIdAndUpdate(m, {
         $push: {
           chatrooms: {
-            chatroom: chatroomId,
+            _id: chatroomId,
+            unread: 0,
           },
         },
       });

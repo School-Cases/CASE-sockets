@@ -128,11 +128,66 @@ export const create_user = async (req, res) => {
   }
 };
 
+export const get_chatroom_unread = async (req, res) => {
+  try {
+    let user = await userModel.findById(req.params.userId).exec();
+    let chatroom = await chatroomModel.findById(req.params.chatroomId).exec();
+
+    user.chatrooms.forEach((room) => {
+      if (room._id.toString() === chatroom._id.toString()) {
+        return res.json({
+          message: "find unread success",
+          success: true,
+          data: room,
+        });
+      }
+    });
+  } catch (err) {
+    return res.json({
+      message: "find user fail" + err,
+      success: false,
+      data: null,
+    });
+  }
+};
+
+export const update_chatroom_unread = async (req, res) => {
+  try {
+    let user = await userModel.findById(req.body.userId).exec();
+
+    let lastunread;
+    user.chatrooms.forEach(async (room, i) => {
+      if (room._id.toString() === req.body.chatroomId) {
+        lastunread = room.unread;
+      }
+    });
+
+    let query = { name: user.name, "chatrooms._id": req.body.chatroomId };
+
+    const updateDocument = {
+      $set: {
+        "chatrooms.$.unread": req.body.nollify ? 0 : lastunread + 1,
+      },
+    };
+
+    await userModel.updateOne(query, updateDocument);
+    return res.json({
+      message: "update user success",
+      success: true,
+      data: req.body.nollify ? 0 : lastunread + 1,
+    });
+  } catch (err) {
+    return res.json({
+      message: "update user failed" + err,
+      success: false,
+      data: null,
+    });
+  }
+};
+
 export const update_user = async (req, res) => {
-  console.log(req.body);
   const id = req.params.id;
   let user = await userModel.findById(id).exec();
-  console.log(user);
 
   let changePassword = false;
   let hashedPassword;
@@ -206,8 +261,6 @@ export const delete_all_users = async (req, res) => {
 };
 
 export const user_login = async (req, res) => {
-  console.log(req.body);
-
   try {
     const user = await userModel.findOne({
       name: req.body.name,
@@ -218,9 +271,6 @@ export const user_login = async (req, res) => {
         success: false,
         data: null,
       });
-
-    console.log(user, "user");
-    console.log(user._id, "userid");
 
     const correctPassword = await bcrypt.compare(
       req.body.password,
@@ -271,8 +321,25 @@ export const user_login = async (req, res) => {
 
 export const user_join_chatroom = async (req, res) => {
   try {
+    let user = await userModel.findById(req.body.userId).exec();
+    let chatroom = await chatroomModel.findById(req.body.chatroomId).exec();
+
+    await chatroomModel.findByIdAndUpdate(chatroom._id, {
+      $push: {
+        members: user._id,
+      },
+    });
+    await userModel.findByIdAndUpdate(user._id, {
+      $push: {
+        chatrooms: {
+          chatroom: chatroom._id,
+          unread: chatroom.messages.length,
+        },
+      },
+    });
+
     return res.json({
-      message: "login user success",
+      message: "user join success",
       success: true,
       data: null,
     });

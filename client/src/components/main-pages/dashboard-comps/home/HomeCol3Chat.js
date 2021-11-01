@@ -12,25 +12,13 @@ export const HomeCol3Chat = ({
   ws,
   user,
   activeChatroom,
-  userChatrooms,
-  chatroomLastMessage,
-  setChatroomLastMessage,
-  // createChatroom,
-  // setCreateChatroom,
-  // fetchLastMsg,
-  // setFetchLastMsg,
+  chatroomMessages,
+  setChatroomMessages,
 }) => {
-  //   const [Message, setmessage] = useState(null);
-
-  //   const [roomMembers, setRoomMembers] = useState([]);
-  //   const [notRoomMembers, setNotRoomMembers] = useState([]);
-  //   const [roomAdmins, setRoomAdmins] = useState([]);
-  //   const [fetchMsgs, setFetchMsgs] = useState(false);
-
   // states
   const [loading, setLoading] = useState(true);
   const [chatroomUsers, setChatroomUsers] = useState([]);
-  const [chatroomMessages, setChatroomMessages] = useState([]);
+  // const [chatroomMessages, setChatroomMessages] = useState([]);
   const [msgAva, setMsgAva] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
 
@@ -91,6 +79,11 @@ export const HomeCol3Chat = ({
     setMsgAva(arr);
   };
   // useEffects
+
+  useEffect(async () => {
+    filterMsgsAva(chatroomMessages);
+  }, [chatroomMessages]);
+
   useEffect(async () => {
     const abortController = new AbortController();
     if (activeChatroom)
@@ -98,99 +91,31 @@ export const HomeCol3Chat = ({
     return () => abortController.abort();
   }, [activeChatroom]);
 
-  useEffect(async () => {
-    if (ws) {
-      ws.onmessage = async (e) => {
-        let data = JSON.parse(e.data);
-        if (data.type === "message") {
-          if (data.chatroom === activeChatroom._id) {
-            setChatroomMessages([...chatroomMessages, data]);
-            let msgs = chatroomMessages;
-            msgs.push(data);
-            filterMsgsAva(msgs);
-            document.querySelector(`.chat-con-mid`).scrollTop =
-              document.querySelector(`.chat-con-mid`).scrollHeight;
-          }
-          if (
-            userChatrooms.filter((room) => room._id === data.chatroom).length >
-            0
-          ) {
-            console.log("chat, setLast");
-            setChatroomLastMessage({ chatroom: data.chatroom });
-          }
-        }
-      };
-    }
-  }, [ws.onmessage]);
-
-  //   const fetchAllUsers = async (signal, activeRoom) => {
-  //     let res = await get(`/protected/get-all-users`, signal);
-  //     setRoomMembers(
-  //       res.data
-  //         .filter((u) => activeRoom.members.includes(u._id))
-  //         .sort((a, b) => {
-  //           return (
-  //             activeRoom.admins.includes(b._id) -
-  //             activeRoom.admins.includes(a._id)
-  //           );
-  //         })
-  //     );
-  //     setNotRoomMembers(
-  //       res.data.filter((u) => !activeRoom.members.includes(u._id))
-  //     );
-  //     setRoomAdmins(res.data.filter((u) => activeRoom.admins.includes(u._id)));
-  //     setLoading(false);
-  //   };
-
-  //   const msg = () => {
-  //     setmessage({
-  //       type: "message",
-  //       sender: user._id,
-  //       chatroom: activeChatroom._id,
-  //       text: inputMessage,
-  //       time: getDateAndTime(),
-  //     });
-  //   };
-
-  //   useEffect(async () => {
-  //     if (ws) {
-  //       ws.onmessage = async (e) => {
-  //         let theMessage = JSON.parse(e.data);
-  //         let resMessage;
-  //         if (theMessage.type === "message") {
-  //           if (user._id === theMessage.sender) {
-  //             resMessage = await post(`/protected/create-message`, theMessage);
-  //           }
-  //           if (theMessage.chatroom === activeChatroom._id) {
-  //             setmessages([...Messages, theMessage]);
-  //             let msgs = Messages;
-  //             msgs.push(theMessage);
-  //             filterMsgsAva(msgs);
-  //             // setFetchLastMsg(!fetchLastMsg);
-  //             document.querySelector(`.chat-con-mid`).scrollTop =
-  //               document.querySelector(`.chat-con-mid`).scrollHeight;
-  //           }
+  // useEffect(async () => {
+  //   if (ws) {
+  //     ws.onmessage = async (e) => {
+  //       let data = JSON.parse(e.data);
+  //       console.log(data);
+  //       if (data.type === "message") {
+  //         if (data.chatroom === activeChatroom._id) {
+  //           setChatroomMessages([...chatroomMessages, data]);
+  //           let msgs = chatroomMessages;
+  //           msgs.push(data);
+  //           filterMsgsAva(msgs);
+  //           document.querySelector(`.chat-con-mid`).scrollTop =
+  //             document.querySelector(`.chat-con-mid`).scrollHeight;
   //         }
-  //       };
-  //     }
-  //   }, [ws.onmessage]);
-
-  //   useEffect(() => {
-  //     if (Message && ws && ws.readyState === 1) {
-  //       ws.send(JSON.stringify(Message));
-  //       // ws.send(
-  //       //   JSON.stringify({
-  //       //     type: "roomsUpdate",
-  //       //   })
-  //       // );
-  //     }
-  //   }, [Message]);
-
-  //   useEffect(async () => {
-  //     const abortController = new AbortController();
-  //     if (activeChatroom !== null) await fetchMessages(abortController.signal);
-  //     return () => abortController.abort();
-  //   }, [activeChatroom]);
+  //         if (
+  //           userChatrooms.filter((room) => room._id === data.chatroom).length >
+  //           0
+  //         ) {
+  //           console.log("chat, setLast");
+  //           setChatroomLastMessage({ chatroom: data.chatroom });
+  //         }
+  //       }
+  //     };
+  //   }
+  // }, [ws.onmessage]);
 
   if (loading) {
     return <h4>loading ...</h4>;
