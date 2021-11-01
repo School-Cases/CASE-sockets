@@ -73,9 +73,10 @@
 
             .message-right,
             .message-left {
-              display: table;
+              // display: table;
+              flex-direction: column;
               margin-bottom: 1rem;
-              max-width: 40%;
+              max-width: 70%;
 
               .message-wrapper {
                 gap: 1rem;
@@ -99,6 +100,8 @@
 
             .message-right {
               margin-left: auto;
+              align-items: flex-end;
+
               .message-text {
                 background-color: $olfred;
               }
@@ -106,6 +109,7 @@
 
             .message-left {
               margin-right: auto;
+              align-items: flex-start;
               .message-text {
                 background-color: $greenC;
               }

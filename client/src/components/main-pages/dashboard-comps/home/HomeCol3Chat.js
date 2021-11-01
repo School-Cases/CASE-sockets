@@ -21,6 +21,7 @@ export const HomeCol3Chat = ({
   // const [chatroomMessages, setChatroomMessages] = useState([]);
   const [msgAva, setMsgAva] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
+  const [showMessageDetails, setShowMessageDetails] = useState(null);
 
   // fetches
   const fetchChatroomUsersAndMessages = async (signal) => {
@@ -150,11 +151,20 @@ export const HomeCol3Chat = ({
               {chatroomMessages.map((m, i) => {
                 return (
                   <div
-                    className={`${
+                    className={`flex ${
                       m.sender === user._id ? "message-right" : "message-left"
                     }`}
                   >
-                    <div className="flex message-wrapper">
+                    <div
+                      className="flex message-wrapper"
+                      onClick={() =>
+                        showMessageDetails
+                          ? showMessageDetails === m
+                            ? setShowMessageDetails(null)
+                            : setShowMessageDetails(m)
+                          : setShowMessageDetails(m)
+                      }
+                    >
                       <If
                         condition={m.sender !== user._id && msgAva.includes(m)}
                       >
@@ -179,6 +189,16 @@ export const HomeCol3Chat = ({
                         ></StyledDiv>
                       </If>
                     </div>
+                    <If condition={showMessageDetails === m}>
+                      <div>
+                        Sent by:{" "}
+                        {
+                          chatroomUsers.filter((u) => u._id === m.sender)[0]
+                            .name
+                        }
+                      </div>
+                      <div>{m.time}</div>
+                    </If>
                   </div>
                 );
               })}

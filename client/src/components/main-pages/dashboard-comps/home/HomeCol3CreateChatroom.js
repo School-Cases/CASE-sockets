@@ -50,109 +50,111 @@ export const HomeCol3CreateChatroom = ({
   }
 
   return (
-    <section className="dashboard-con-create-con">
-      <div className="flex create-con-top">
-        <h3>Create chatroom</h3>
-        {/* <button
+    <section className="flex height100 col3-chat-con">
+      <section className="dashboard-con-create-con">
+        <div className="flex create-con-top">
+          <h3>Create chatroom</h3>
+          {/* <button
           className="create-con-button-back"
           onClick={() => setHomeCol3State(false)}
         >
           BACK
         </button> */}
-      </div>
-
-      <div className="create-con-name">
-        <label htmlFor="" className="create-con-text">
-          Name:
-        </label>
-
-        <input
-          className="create-con-input-text"
-          type="text"
-          name="name"
-          onChange={(e) => setNewRoomName(e.target.value)}
-        />
-      </div>
-
-      <div className="flex create-con-theme-color">
-        <input type="text" name="theme" value={newRoomTheme} hidden />
-        <div className="create-con-text">Color:</div>
-        <div className="flex create-con-default-colors">
-          <div
-            className="create-con-green"
-            onClick={() => setNewRoomTheme("#A2DC68")}
-          ></div>
-          <div
-            className="create-con-blue"
-            onClick={() => setNewRoomTheme("#68DCC4")}
-          ></div>
-          <div
-            className="create-con-purple"
-            onClick={() => setNewRoomTheme("#DC68D0")}
-          ></div>
-          <div
-            className="create-con-yellow"
-            onClick={() => setNewRoomTheme("#D8DC68")}
-          ></div>
         </div>
-      </div>
 
-      <div className="flex create-con-pick-color">
-        <div className="create-con-text">Pick your own:</div>
-        <input
-          className="create-con-color-picker"
-          type="color"
-          onChange={(e) => setNewRoomTheme(e.target.value)}
-        />
-      </div>
+        <div className="create-con-name">
+          <label htmlFor="" className="create-con-text">
+            Name:
+          </label>
 
-      <div className="create-con-add-user">
-        <label className="create-con-text" htmlFor="">
-          Add ppl:
-        </label>
-        <input
-          className="create-con-input-text"
-          type="text"
-          placeholder="search user"
-          onChange={(e) => setSearchUsersInput(e.target.value)}
-        />
-        <div className="flex add-user-user-container">
-          <If condition={searchUsersInput !== ""}>
-            {addableUsers.map((m) => {
-              return (
-                <If condition={m.name.includes(searchUsersInput)}>
-                  <div
-                    className="flex"
-                    onClick={() => {
-                      !newRoomMembers.includes(m._id)
-                        ? setNewRoomMembers((prev) => {
-                            return [...prev, m._id];
-                          })
-                        : setNewRoomMembers(
-                            newRoomMembers.filter((me) => me !== m._id)
-                          );
-                    }}
-                  >
+          <input
+            className="create-con-input-text"
+            type="text"
+            name="name"
+            onChange={(e) => setNewRoomName(e.target.value)}
+          />
+        </div>
+
+        <div className="flex create-con-theme-color">
+          <input type="text" name="theme" value={newRoomTheme} hidden />
+          <div className="create-con-text">Color:</div>
+          <div className="flex create-con-default-colors">
+            <div
+              className="create-con-green"
+              onClick={() => setNewRoomTheme("#A2DC68")}
+            ></div>
+            <div
+              className="create-con-blue"
+              onClick={() => setNewRoomTheme("#68DCC4")}
+            ></div>
+            <div
+              className="create-con-purple"
+              onClick={() => setNewRoomTheme("#DC68D0")}
+            ></div>
+            <div
+              className="create-con-yellow"
+              onClick={() => setNewRoomTheme("#D8DC68")}
+            ></div>
+          </div>
+        </div>
+
+        <div className="flex create-con-pick-color">
+          <div className="create-con-text">Pick your own:</div>
+          <input
+            className="create-con-color-picker"
+            type="color"
+            onChange={(e) => setNewRoomTheme(e.target.value)}
+          />
+        </div>
+
+        <div className="create-con-add-user">
+          <label className="create-con-text" htmlFor="">
+            Add ppl:
+          </label>
+          <input
+            className="create-con-input-text"
+            type="text"
+            placeholder="search user"
+            onChange={(e) => setSearchUsersInput(e.target.value)}
+          />
+          <div className="flex add-user-user-container">
+            <If condition={searchUsersInput !== ""}>
+              {addableUsers.map((m) => {
+                return (
+                  <If condition={m.name.includes(searchUsersInput)}>
                     <div
-                      className={`user-add-name ${
-                        newRoomMembers.includes(m._id) ? "added" : ""
-                      }`}
+                      className="flex"
+                      onClick={() => {
+                        !newRoomMembers.includes(m._id)
+                          ? setNewRoomMembers((prev) => {
+                              return [...prev, m._id];
+                            })
+                          : setNewRoomMembers(
+                              newRoomMembers.filter((me) => me !== m._id)
+                            );
+                      }}
                     >
-                      {m.name}
+                      <div
+                        className={`user-add-name ${
+                          newRoomMembers.includes(m._id) ? "added" : ""
+                        }`}
+                      >
+                        {m.name}
+                      </div>
                     </div>
-                  </div>
-                </If>
-              );
-            })}
-          </If>
+                  </If>
+                );
+              })}
+            </If>
+          </div>
         </div>
-      </div>
-      <button
-        className="create-con-button-create"
-        onClick={() => fetchCreateChatroom()}
-      >
-        CREATE
-      </button>
+        <button
+          className="create-con-button-create"
+          onClick={() => fetchCreateChatroom()}
+        >
+          CREATE
+        </button>
+      </section>
     </section>
   );
 };
