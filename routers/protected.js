@@ -99,7 +99,7 @@ router.get("/get-chatroom-last-message/:roomId", get_chatroom_last_message);
 router.get("/get-all-messages", get_all_messages);
 router.post("/create-message", create_message);
 router.post("/post-messagereaction", create_reaction);
-router.get("/delete-reaction/:id", delete_reaction);
+router.get("/delete-messagereaction/:messageId/:reactionId", delete_reaction);
 router.post("/update-message/:id", update_message);
 router.get("/delete-message/:id", delete_message);
 router.get("/delete-all-messages", delete_all_messages);

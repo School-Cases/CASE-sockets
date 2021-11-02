@@ -138,9 +138,11 @@ wss.on("connection", (ws) => {
                 data: null,
               });
             }
-          case "reaction":
-            return emitMessage(data.toString(), isBinary);
         }
+
+      case "reaction":
+        console.log(data.toString());
+        return emitMessage(data.toString(), isBinary);
 
       case "roomsUpdate":
         return emitMessage(data.toString(), isBinary);

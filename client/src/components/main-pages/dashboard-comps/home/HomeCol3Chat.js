@@ -14,8 +14,10 @@ export const HomeCol3Chat = ({
   activeChatroom,
   chatroomMessages,
   setChatroomMessages,
-  messageReaction,
-  setMessageReaction,
+  newReaction,
+  setNewReaction,
+  // mesReactions,
+  // setMesReactions,
 }) => {
   // states
   const [loading, setLoading] = useState(true);
@@ -226,8 +228,10 @@ export const HomeCol3Chat = ({
                     chatroomUsers={chatroomUsers}
                     msgAva={msgAva}
                     ws={ws}
-                    messageReaction={messageReaction}
-                    setMessageReaction={setMessageReaction}
+                    newReaction={newReaction}
+                    setNewReaction={setNewReaction}
+                    // mesReactions={mesReactions}
+                    // setMesReactions={setMesReactions}
                   />
                 );
               })}
@@ -259,13 +263,16 @@ const Message = ({
   user,
   chatroomUsers,
   msgAva,
-  messageReaction,
-  setMessageReaction,
+  newReaction,
+  setNewReaction,
+  // mesReactions,
+  // setMesReactions,
 }) => {
   console.log(m);
-  console.log(messageReaction);
+  console.log(newReaction);
   const [showMessageDetails, setShowMessageDetails] = useState(null);
   const [mesReactions, setMesReactions] = useState([]);
+  // const [loading, setLoading] = useState(true);
 
   const fetchPostMsgReaction = async (payload) => {
     let res = await post(`/protected/post-messagereaction`, payload);
@@ -274,8 +281,8 @@ const Message = ({
     if (ws && ws.readyState === 1)
       ws.send(
         JSON.stringify({
-          type: "message",
-          detail: "reaction",
+          type: "reaction",
+          detail: "create",
           reacter: payload.userId,
           reaction: payload.reaction,
           chatroom: payload.message.chatroom,
@@ -284,19 +291,47 @@ const Message = ({
       );
   };
 
+  const fetchDeleteMsgReaction = async (payload) => {
+    const abortController = new AbortController();
+    let res = await get(
+      `/protected/delete-messagereaction/${payload.message._id}/${payload.reactionId}`,
+      abortController.signal
+    );
+    console.log(res);
+
+    if (ws && ws.readyState === 1)
+      ws.send(
+        JSON.stringify({
+          type: "reaction",
+          detail: "delete",
+          // reacter: payload.userId,
+          reactionId: payload.reactionId,
+          chatroom: payload.message.chatroom,
+          message: payload.message,
+        })
+      );
+    return () => abortController.abort();
+  };
+
   useEffect(async () => {
-    if (!messageReaction) {
+    if (!newReaction) {
       setMesReactions(m.reactions);
-    } else if (messageReaction.message._id === m._id) {
-      setMesReactions([
-        ...m.reactions,
-        {
-          reacter: messageReaction.reacter,
-          reaction: messageReaction.reaction,
-        },
-      ]);
+    } else if (newReaction.message._id === m._id) {
+      if (newReaction.detail === "create") {
+        setMesReactions([
+          ...mesReactions,
+          {
+            reacter: newReaction.reacter,
+            reaction: newReaction.reaction,
+          },
+        ]);
+      } else if (newReaction.detail === "delete") {
+        setMesReactions(
+          mesReactions.filter((r) => r._id !== newReaction.reactionId)
+        );
+      }
     }
-  }, [messageReaction]);
+  }, [newReaction]);
 
   return (
     <div
@@ -317,7 +352,23 @@ const Message = ({
         <div>
           {console.log(mesReactions)}
           {mesReactions.map((r) => {
-            return <div>{r.reaction}</div>;
+            return (
+              <div>
+                {r.reaction}
+                <If condition={r.reacter === user._id}>
+                  <span
+                    onClick={() => {
+                      fetchDeleteMsgReaction({
+                        message: m,
+                        reactionId: r._id,
+                      });
+                    }}
+                  >
+                    X
+                  </span>
+                </If>
+              </div>
+            );
           })}
         </div>
         <If condition={m.sender !== user._id && msgAva.includes(m)}>

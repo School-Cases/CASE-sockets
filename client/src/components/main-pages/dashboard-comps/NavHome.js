@@ -22,22 +22,25 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
 
   const [chatroomMessages, setChatroomMessages] = useState([]);
 
-  const [messageReaction, setMessageReaction] = useState(null);
+  const [newReaction, setNewReaction] = useState(null);
+
+  // const [mesReactions, setMesReactions] = useState([]);
 
   //   useEffects
   useEffect(async () => {
     if (ws) {
       ws.onmessage = async (e) => {
         let data = JSON.parse(e.data);
+        console.log(data);
+
+        if (data.type === "reaction" && data.chatroom === activeChatroom._id) {
+          console.log(data, "inside");
+          // if (data.detail === "create")
+          // setMessageReaction(data);
+          setNewReaction(data);
+        }
 
         if (data.type === "message") {
-          if (
-            data.detail === "reaction" &&
-            data.chatroom === activeChatroom._id
-          ) {
-            setMessageReaction(data);
-          }
-
           if (data.detail === "message") {
             if (data.chatroom === activeChatroom._id) {
               setChatroomMessages([...chatroomMessages, data]);
@@ -104,8 +107,10 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
               activeChatroom={activeChatroom}
               chatroomMessages={chatroomMessages}
               setChatroomMessages={setChatroomMessages}
-              messageReaction={messageReaction}
-              setMessageReaction={setMessageReaction}
+              newReaction={newReaction}
+              setNewReaction={setNewReaction}
+              // mesReactions={mesReactions}
+              // setMesReactions={setMesReactions}
             />
           </If>
           <If condition={homeCol3State === "createChatroom"}>

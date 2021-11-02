@@ -127,23 +127,7 @@ export const create_reaction = async (req, res) => {
     const reaction = req.body.reaction;
     const userId = req.body.userId;
 
-    // let query = { _id: messageId };
-
-    // const updateDocument = {
-    //   $push: {
-    //     reactions: {
-    //       reacter: userId,
-    //       reaction: reaction,
-    //       message: messageId,
-    //     },
-    //   },
-    // };
-
     let mes = await messageModel.findByIdAndUpdate(message._id, {
-      // chatroom: message.chatroom,
-      // sender: message.sender,
-      // time: message.time,
-      // text: message.text,
       $push: {
         reactions: {
           reacter: userId,
@@ -151,17 +135,6 @@ export const create_reaction = async (req, res) => {
         },
       },
     });
-
-    console.log(mes);
-    // await messageModel.findByIdAndUpdate(messageId, {
-    //   $push: {
-    //     reactions: {
-    //       reacter: userId,
-    //       reaction: reaction,
-    //       message: messageId,
-    //     },
-    //   },
-    // });
 
     return res.json({
       message: "create reaction success",
@@ -178,30 +151,57 @@ export const create_reaction = async (req, res) => {
 };
 
 export const delete_reaction = async (req, res) => {
-  const messageId = req.params.id;
   try {
-    // let message = await messageModel.findById(id);
-    await messageModel.findByIdAndUpdate(messageId, {
+    const reactionId = req.params.reactionId;
+    const messageId = req.params.messageId;
+
+    // let query = { reactions: reactionId };
+
+    let mes = await messageModel.findByIdAndUpdate(messageId, {
       $pull: {
-        reactions: {
-          _id: "615c18f71e8961ba9ad69e97",
-        },
+        reactions: { _id: reactionId },
       },
     });
 
     return res.json({
-      message: "create reaction success",
+      message: "delete reaction success",
       success: true,
       data: null,
     });
   } catch (err) {
     return res.json({
-      message: "create reaction fail",
+      message: "delete reaction fail",
       success: false,
       data: null,
     });
   }
 };
+
+// export const delete_reaction = async (req, res) => {
+//   const messageId = req.params.id;
+//   try {
+//     // let message = await messageModel.findById(id);
+//     await messageModel.findByIdAndUpdate(messageId, {
+//       $pull: {
+//         reactions: {
+//           _id: "615c18f71e8961ba9ad69e97",
+//         },
+//       },
+//     });
+
+//     return res.json({
+//       message: "create reaction success",
+//       success: true,
+//       data: null,
+//     });
+//   } catch (err) {
+//     return res.json({
+//       message: "create reaction fail",
+//       success: false,
+//       data: null,
+//     });
+//   }
+// };
 
 export const update_message = async (req, res) => {
   const id = req.params.id;
