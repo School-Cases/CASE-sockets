@@ -56,6 +56,8 @@ import {
   user_dashboard,
 } from "../Controllers/user-controller";
 
+// import { create_reaction } from "../Controllers/reaction-controller";
+
 const router = express.Router();
 
 router.get("/get-user", get_user);
@@ -96,7 +98,7 @@ router.get("/get-chatroom-messages/:id", get_chatroom_messages);
 router.get("/get-chatroom-last-message/:roomId", get_chatroom_last_message);
 router.get("/get-all-messages", get_all_messages);
 router.post("/create-message", create_message);
-router.post("/create-reaction/:id", create_reaction);
+router.post("/post-messagereaction", create_reaction);
 router.get("/delete-reaction/:id", delete_reaction);
 router.post("/update-message/:id", update_message);
 router.get("/delete-message/:id", delete_message);

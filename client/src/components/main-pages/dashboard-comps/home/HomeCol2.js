@@ -130,7 +130,7 @@ const Chatroom = ({
   chatroomUnreadMsgs,
   ws,
 }) => {
-  const [lastMessage, setLastMessage] = useState(null);
+  const [lastMessage, setLastMessage] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [roomUnreadMsgs, setRoomUnreadMsgs] = useState(0);
@@ -141,7 +141,7 @@ const Chatroom = ({
       `/protected/get-chatroom-last-message/${room._id}`,
       signal
     );
-    console.log("fetchlastmsgs");
+    console.log("fetchlastmsgs", res);
 
     setLastMessage(res.data);
     if (room !== activeChatroom) return fetchGetChatroomUnread(signal);

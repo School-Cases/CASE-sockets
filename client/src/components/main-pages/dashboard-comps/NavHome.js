@@ -22,6 +22,8 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
 
   const [chatroomMessages, setChatroomMessages] = useState([]);
 
+  const [messageReaction, setMessageReaction] = useState(null);
+
   //   useEffects
   useEffect(async () => {
     if (ws) {
@@ -29,20 +31,29 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
         let data = JSON.parse(e.data);
 
         if (data.type === "message") {
-          if (data.chatroom === activeChatroom._id) {
-            setChatroomMessages([...chatroomMessages, data]);
-            document.querySelector(`.chat-con-mid`).scrollTop =
-              document.querySelector(`.chat-con-mid`).scrollHeight;
-          }
           if (
-            data.type === "message" &&
-            userChatrooms.filter((room) => room._id === data.chatroom).length >
-              0
+            data.detail === "reaction" &&
+            data.chatroom === activeChatroom._id
           ) {
-            if (data.chatroom !== activeChatroom._id) {
-              setChatroomUnreadMsgs({ chatroom: data.chatroom });
+            setMessageReaction(data);
+          }
+
+          if (data.detail === "message") {
+            if (data.chatroom === activeChatroom._id) {
+              setChatroomMessages([...chatroomMessages, data]);
+              document.querySelector(`.chat-con-mid`).scrollTop =
+                document.querySelector(`.chat-con-mid`).scrollHeight;
             }
-            setChatroomLastMessage({ chatroom: data.chatroom });
+            if (
+              data.type === "message" &&
+              userChatrooms.filter((room) => room._id === data.chatroom)
+                .length > 0
+            ) {
+              if (data.chatroom !== activeChatroom._id) {
+                setChatroomUnreadMsgs({ chatroom: data.chatroom });
+              }
+              setChatroomLastMessage({ chatroom: data.chatroom });
+            }
           }
         }
       };
@@ -93,6 +104,8 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
               activeChatroom={activeChatroom}
               chatroomMessages={chatroomMessages}
               setChatroomMessages={setChatroomMessages}
+              messageReaction={messageReaction}
+              setMessageReaction={setMessageReaction}
             />
           </If>
           <If condition={homeCol3State === "createChatroom"}>

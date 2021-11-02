@@ -12,7 +12,7 @@ const messageSchema = new Schema({
   sender: {
     type: Types.ObjectId,
     ref: "User",
-    required: true,
+    // required: true,
   },
   time: {
     type: String,
@@ -21,7 +21,7 @@ const messageSchema = new Schema({
   },
   text: {
     type: String,
-    required: true,
+    // required: true,
   },
   reactions: [
     {

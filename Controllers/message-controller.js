@@ -46,6 +46,7 @@ export const get_chatroom_last_message = async (req, res) => {
   try {
     const roomId = req.params.roomId;
     let chatroomMessages = await messageModel.find({ chatroom: roomId }).exec();
+
     let message = chatroomMessages[chatroomMessages.length - 1];
     let user = await userModel.findById(message.sender).exec();
 
@@ -92,6 +93,7 @@ export const create_message = async (req, res) => {
       sender: req.body.sender,
       time: req.body.time,
       text: req.body.text,
+      reactions: [],
     });
     let MaM = message;
 
@@ -102,6 +104,8 @@ export const create_message = async (req, res) => {
     });
 
     message = message.save();
+
+    console.log(MaM);
 
     return res.json({
       message: "create message success",
@@ -118,17 +122,46 @@ export const create_message = async (req, res) => {
 };
 
 export const create_reaction = async (req, res) => {
-  const messageId = req.params.id;
   try {
-    await messageModel.findByIdAndUpdate(messageId, {
+    const message = req.body.message;
+    const reaction = req.body.reaction;
+    const userId = req.body.userId;
+
+    // let query = { _id: messageId };
+
+    // const updateDocument = {
+    //   $push: {
+    //     reactions: {
+    //       reacter: userId,
+    //       reaction: reaction,
+    //       message: messageId,
+    //     },
+    //   },
+    // };
+
+    let mes = await messageModel.findByIdAndUpdate(message._id, {
+      // chatroom: message.chatroom,
+      // sender: message.sender,
+      // time: message.time,
+      // text: message.text,
       $push: {
         reactions: {
-          reacter: req.body.reacter,
-          reaction: req.body.reaction,
-          message: messageId,
+          reacter: userId,
+          reaction: reaction,
         },
       },
     });
+
+    console.log(mes);
+    // await messageModel.findByIdAndUpdate(messageId, {
+    //   $push: {
+    //     reactions: {
+    //       reacter: userId,
+    //       reaction: reaction,
+    //       message: messageId,
+    //     },
+    //   },
+    // });
 
     return res.json({
       message: "create reaction success",

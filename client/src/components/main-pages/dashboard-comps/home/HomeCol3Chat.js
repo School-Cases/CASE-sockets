@@ -14,6 +14,8 @@ export const HomeCol3Chat = ({
   activeChatroom,
   chatroomMessages,
   setChatroomMessages,
+  messageReaction,
+  setMessageReaction,
 }) => {
   // states
   const [loading, setLoading] = useState(true);
@@ -21,7 +23,7 @@ export const HomeCol3Chat = ({
   // const [chatroomMessages, setChatroomMessages] = useState([]);
   const [msgAva, setMsgAva] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
-  const [showMessageDetails, setShowMessageDetails] = useState(null);
+  // const [showMessageDetails, setShowMessageDetails] = useState(null);
 
   // fetches
   const fetchChatroomUsersAndMessages = async (signal) => {
@@ -59,8 +61,10 @@ export const HomeCol3Chat = ({
       ws.send(
         JSON.stringify({
           type: "message",
+          detail: "message",
           sender: user._id,
           chatroom: activeChatroom._id,
+          reactions: [],
           text: inputMessage,
           time: getDateAndTime(),
         })
@@ -150,56 +154,81 @@ export const HomeCol3Chat = ({
             <If condition={chatroomMessages && chatroomMessages.length > 0}>
               {chatroomMessages.map((m, i) => {
                 return (
-                  <div
-                    className={`flex ${
-                      m.sender === user._id ? "message-right" : "message-left"
-                    }`}
-                  >
-                    <div
-                      className="flex message-wrapper"
-                      onClick={() =>
-                        showMessageDetails
-                          ? showMessageDetails === m
-                            ? setShowMessageDetails(null)
-                            : setShowMessageDetails(m)
-                          : setShowMessageDetails(m)
-                      }
-                    >
-                      <If
-                        condition={m.sender !== user._id && msgAva.includes(m)}
-                      >
-                        <StyledDiv
-                          img={
-                            chatroomUsers.filter((u) => u._id === m.sender)[0]
-                              .avatar
-                          }
-                          className="message-avatar"
-                        ></StyledDiv>
-                      </If>
-                      <div className="message-text">{m.text}</div>
-                      <If
-                        condition={m.sender === user._id && msgAva.includes(m)}
-                      >
-                        <StyledDiv
-                          img={
-                            chatroomUsers.filter((u) => u._id === m.sender)[0]
-                              .avatar
-                          }
-                          className="message-avatar"
-                        ></StyledDiv>
-                      </If>
-                    </div>
-                    <If condition={showMessageDetails === m}>
-                      <div>
-                        Sent by:{" "}
-                        {
-                          chatroomUsers.filter((u) => u._id === m.sender)[0]
-                            .name
-                        }
-                      </div>
-                      <div>{m.time}</div>
-                    </If>
-                  </div>
+                  // <div
+                  //   className={`flex ${
+                  //     m.sender === user._id ? "message-right" : "message-left"
+                  //   }`}
+                  // >
+                  //   <div
+                  //     className="flex message-wrapper"
+                  //     onClick={() =>
+                  //       showMessageDetails
+                  //         ? showMessageDetails === m
+                  //           ? setShowMessageDetails(null)
+                  //           : setShowMessageDetails(m)
+                  //         : setShowMessageDetails(m)
+                  //     }
+                  //   >
+                  //     <If
+                  //       condition={m.sender !== user._id && msgAva.includes(m)}
+                  //     >
+                  //       <StyledDiv
+                  //         img={
+                  //           chatroomUsers.filter((u) => u._id === m.sender)[0]
+                  //             .avatar
+                  //         }
+                  //         className="message-avatar"
+                  //       ></StyledDiv>
+                  //     </If>
+                  //     <div className="message-text">{m.text}</div>
+                  //     <If
+                  //       condition={m.sender === user._id && msgAva.includes(m)}
+                  //     >
+                  //       <StyledDiv
+                  //         img={
+                  //           chatroomUsers.filter((u) => u._id === m.sender)[0]
+                  //             .avatar
+                  //         }
+                  //         className="message-avatar"
+                  //       ></StyledDiv>
+                  //     </If>
+                  //   </div>
+                  //   <If condition={showMessageDetails === m}>
+                  //     <div className="flex">
+                  //       <div
+                  //         onClick={(e) => {
+                  //           fetchPostMsgReaction({
+                  //             reaction: e.target.value,
+                  //             messageId: m._id,
+                  //             userId: user._id,
+                  //           });
+                  //         }}
+                  //       >
+                  //         0
+                  //       </div>
+                  //       <div>1</div>
+                  //       <div>2</div>
+                  //       <div>3</div>
+                  //     </div>
+                  //     <div>
+                  //       Sent by:{" "}
+                  //       {
+                  //         chatroomUsers.filter((u) => u._id === m.sender)[0]
+                  //           .name
+                  //       }
+                  //     </div>
+                  //     <div>{m.time}</div>
+                  //   </If>
+                  // </div>
+                  <Message
+                    m={m}
+                    user={user}
+                    chatroomUsers={chatroomUsers}
+                    msgAva={msgAva}
+                    ws={ws}
+                    messageReaction={messageReaction}
+                    setMessageReaction={setMessageReaction}
+                  />
                 );
               })}
             </If>
@@ -221,5 +250,142 @@ export const HomeCol3Chat = ({
         <h2>no active</h2>
       )}
     </>
+  );
+};
+
+const Message = ({
+  ws,
+  m,
+  user,
+  chatroomUsers,
+  msgAva,
+  messageReaction,
+  setMessageReaction,
+}) => {
+  console.log(m);
+  console.log(messageReaction);
+  const [showMessageDetails, setShowMessageDetails] = useState(null);
+  const [mesReactions, setMesReactions] = useState([]);
+
+  const fetchPostMsgReaction = async (payload) => {
+    let res = await post(`/protected/post-messagereaction`, payload);
+    console.log(res);
+
+    if (ws && ws.readyState === 1)
+      ws.send(
+        JSON.stringify({
+          type: "message",
+          detail: "reaction",
+          reacter: payload.userId,
+          reaction: payload.reaction,
+          chatroom: payload.message.chatroom,
+          message: payload.message,
+        })
+      );
+  };
+
+  useEffect(async () => {
+    if (!messageReaction) {
+      setMesReactions(m.reactions);
+    } else if (messageReaction.message._id === m._id) {
+      setMesReactions([
+        ...m.reactions,
+        {
+          reacter: messageReaction.reacter,
+          reaction: messageReaction.reaction,
+        },
+      ]);
+    }
+  }, [messageReaction]);
+
+  return (
+    <div
+      className={`flex ${
+        m.sender === user._id ? "message-right" : "message-left"
+      }`}
+    >
+      <div
+        className="flex message-wrapper"
+        onClick={() =>
+          showMessageDetails
+            ? showMessageDetails === m
+              ? setShowMessageDetails(null)
+              : setShowMessageDetails(m)
+            : setShowMessageDetails(m)
+        }
+      >
+        <div>
+          {console.log(mesReactions)}
+          {mesReactions.map((r) => {
+            return <div>{r.reaction}</div>;
+          })}
+        </div>
+        <If condition={m.sender !== user._id && msgAva.includes(m)}>
+          <StyledDiv
+            img={chatroomUsers.filter((u) => u._id === m.sender)[0].avatar}
+            className="message-avatar"
+          ></StyledDiv>
+        </If>
+        <div className="message-text">{m.text}</div>
+        <If condition={m.sender === user._id && msgAva.includes(m)}>
+          <StyledDiv
+            img={chatroomUsers.filter((u) => u._id === m.sender)[0].avatar}
+            className="message-avatar"
+          ></StyledDiv>
+        </If>
+      </div>
+      <If condition={showMessageDetails === m}>
+        <div className="flex">
+          <div
+            onClick={(e) => {
+              fetchPostMsgReaction({
+                reaction: 0,
+                message: m,
+                userId: user._id,
+              });
+            }}
+          >
+            0
+          </div>
+          <div
+            onClick={(e) => {
+              fetchPostMsgReaction({
+                reaction: 1,
+                message: m,
+                userId: user._id,
+              });
+            }}
+          >
+            1
+          </div>
+          <div
+            onClick={(e) => {
+              fetchPostMsgReaction({
+                reaction: 2,
+                message: m,
+                userId: user._id,
+              });
+            }}
+          >
+            2
+          </div>
+          <div
+            onClick={(e) => {
+              fetchPostMsgReaction({
+                reaction: 3,
+                message: m,
+                userId: user._id,
+              });
+            }}
+          >
+            3
+          </div>
+        </div>
+        <div>
+          Sent by: {chatroomUsers.filter((u) => u._id === m.sender)[0].name}
+        </div>
+        <div>{m.time}</div>
+      </If>
+    </div>
   );
 };

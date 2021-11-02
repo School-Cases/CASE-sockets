@@ -105,35 +105,41 @@ wss.on("connection", (ws) => {
 
     switch (event.type) {
       case "message":
-        try {
-          let message = await new messageModel({
-            chatroom: event.chatroom,
-            sender: event.sender,
-            time: event.time,
-            text: event.text,
-          });
-          let MaM = message;
-          message = message.save();
+        switch (event.detail) {
+          case "message":
+            try {
+              let message = await new messageModel({
+                chatroom: event.chatroom,
+                sender: event.sender,
+                time: event.time,
+                text: event.text,
+                reactions: [],
+              });
+              let MaM = message;
+              message = message.save();
 
-          await chatroomModel.findByIdAndUpdate(event.chatroom, {
-            $push: {
-              messages: message._id,
-            },
-          });
+              await chatroomModel.findByIdAndUpdate(event.chatroom, {
+                $push: {
+                  messages: message._id,
+                },
+              });
 
-          return emitMessage(data.toString(), isBinary);
-          // return emitMessage(data.toString(), isBinary);
-          // return res.json({
-          //   message: "create message success",
-          //   success: true,
-          //   data: MaM,
-          // });
-        } catch (err) {
-          return res.json({
-            message: "create message fail",
-            success: false,
-            data: null,
-          });
+              return emitMessage(data.toString(), isBinary);
+              // return emitMessage(data.toString(), isBinary);
+              // return res.json({
+              //   message: "create message success",
+              //   success: true,
+              //   data: MaM,
+              // });
+            } catch (err) {
+              return res.json({
+                message: "create message fail",
+                success: false,
+                data: null,
+              });
+            }
+          case "reaction":
+            return emitMessage(data.toString(), isBinary);
         }
 
       case "roomsUpdate":
