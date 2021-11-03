@@ -126,7 +126,7 @@ export const PageDashboard = () => {
           className="flex dashboard-con-col1"
         >
           <UserAvatar user={user} />
-          <Nav navState={navState} setNavState={setNavState} />
+          <Nav setNavState={setNavState} />
         </Col>
         <If condition={navState === "home"}>
           <NavHome

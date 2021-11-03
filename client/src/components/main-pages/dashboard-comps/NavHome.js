@@ -24,42 +24,33 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
 
   const [newReaction, setNewReaction] = useState(null);
 
-  // const [mesReactions, setMesReactions] = useState([]);
-
   //   useEffects
   useEffect(async () => {
     if (ws) {
       ws.onmessage = async (e) => {
-        console.log(e.data);
-        console.log(typeof e.data);
         let data = JSON.parse(e.data);
-        console.log(data);
 
         if (data.type === "reaction" && data.chatroom === activeChatroom._id) {
-          console.log(data, "inside");
-          // if (data.detail === "create")
-          // setMessageReaction(data);
           setNewReaction(data);
         }
 
         if (data.type === "message") {
-          if (data.detail === "message") {
-            if (data.chatroom === activeChatroom._id) {
-              setChatroomMessages([...chatroomMessages, data]);
-              document.querySelector(`.chat-con-mid`).scrollTop =
-                document.querySelector(`.chat-con-mid`).scrollHeight;
-            }
-            if (
-              data.type === "message" &&
-              userChatrooms.filter((room) => room._id === data.chatroom)
-                .length > 0
-            ) {
-              if (data.chatroom !== activeChatroom._id) {
-                setChatroomUnreadMsgs({ chatroom: data.chatroom });
-              }
-              setChatroomLastMessage({ chatroom: data.chatroom });
-            }
+          // if (data.detail === "message") {
+          if (data.chatroom === activeChatroom._id) {
+            setChatroomMessages([...chatroomMessages, data]);
+            document.querySelector(`.chat-con-mid`).scrollTop =
+              document.querySelector(`.chat-con-mid`).scrollHeight;
           }
+          if (
+            userChatrooms.filter((room) => room._id === data.chatroom).length >
+            0
+          ) {
+            if (data.chatroom !== activeChatroom._id) {
+              setChatroomUnreadMsgs({ chatroom: data.chatroom });
+            }
+            setChatroomLastMessage({ chatroom: data.chatroom });
+          }
+          // }
         }
       };
     }

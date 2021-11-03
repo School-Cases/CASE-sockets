@@ -46,7 +46,7 @@ function App() {
             <GuardedRoute
               path="/dashboard"
               exact
-              component={Test}
+              component={PageDashboard}
               meta={{ auth: true }}
             />
             <GuardedRoute path="*" component={NotFound} />
