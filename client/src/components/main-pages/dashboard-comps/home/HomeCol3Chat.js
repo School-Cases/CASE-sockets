@@ -16,16 +16,12 @@ export const HomeCol3Chat = ({
   setChatroomMessages,
   newReaction,
   setNewReaction,
-  // mesReactions,
-  // setMesReactions,
 }) => {
   // states
   const [loading, setLoading] = useState(true);
   const [chatroomUsers, setChatroomUsers] = useState([]);
-  // const [chatroomMessages, setChatroomMessages] = useState([]);
   const [msgAva, setMsgAva] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
-  // const [showMessageDetails, setShowMessageDetails] = useState(null);
 
   // fetches
   const fetchChatroomUsersAndMessages = async (signal) => {
@@ -156,72 +152,6 @@ export const HomeCol3Chat = ({
             <If condition={chatroomMessages && chatroomMessages.length > 0}>
               {chatroomMessages.map((m, i) => {
                 return (
-                  // <div
-                  //   className={`flex ${
-                  //     m.sender === user._id ? "message-right" : "message-left"
-                  //   }`}
-                  // >
-                  //   <div
-                  //     className="flex message-wrapper"
-                  //     onClick={() =>
-                  //       showMessageDetails
-                  //         ? showMessageDetails === m
-                  //           ? setShowMessageDetails(null)
-                  //           : setShowMessageDetails(m)
-                  //         : setShowMessageDetails(m)
-                  //     }
-                  //   >
-                  //     <If
-                  //       condition={m.sender !== user._id && msgAva.includes(m)}
-                  //     >
-                  //       <StyledDiv
-                  //         img={
-                  //           chatroomUsers.filter((u) => u._id === m.sender)[0]
-                  //             .avatar
-                  //         }
-                  //         className="message-avatar"
-                  //       ></StyledDiv>
-                  //     </If>
-                  //     <div className="message-text">{m.text}</div>
-                  //     <If
-                  //       condition={m.sender === user._id && msgAva.includes(m)}
-                  //     >
-                  //       <StyledDiv
-                  //         img={
-                  //           chatroomUsers.filter((u) => u._id === m.sender)[0]
-                  //             .avatar
-                  //         }
-                  //         className="message-avatar"
-                  //       ></StyledDiv>
-                  //     </If>
-                  //   </div>
-                  //   <If condition={showMessageDetails === m}>
-                  //     <div className="flex">
-                  //       <div
-                  //         onClick={(e) => {
-                  //           fetchPostMsgReaction({
-                  //             reaction: e.target.value,
-                  //             messageId: m._id,
-                  //             userId: user._id,
-                  //           });
-                  //         }}
-                  //       >
-                  //         0
-                  //       </div>
-                  //       <div>1</div>
-                  //       <div>2</div>
-                  //       <div>3</div>
-                  //     </div>
-                  //     <div>
-                  //       Sent by:{" "}
-                  //       {
-                  //         chatroomUsers.filter((u) => u._id === m.sender)[0]
-                  //           .name
-                  //       }
-                  //     </div>
-                  //     <div>{m.time}</div>
-                  //   </If>
-                  // </div>
                   <Message
                     m={m}
                     user={user}
@@ -230,8 +160,6 @@ export const HomeCol3Chat = ({
                     ws={ws}
                     newReaction={newReaction}
                     setNewReaction={setNewReaction}
-                    // mesReactions={mesReactions}
-                    // setMesReactions={setMesReactions}
                   />
                 );
               })}
@@ -286,6 +214,8 @@ const Message = ({
           reacter: payload.userId,
           reaction: payload.reaction,
           chatroom: payload.message.chatroom,
+
+          messageId: payload.message._id,
           message: payload.message,
         })
       );
@@ -307,7 +237,7 @@ const Message = ({
           // reacter: payload.userId,
           reactionId: payload.reactionId,
           chatroom: payload.message.chatroom,
-          message: payload.message,
+          messageId: payload.message._id,
         })
       );
     return () => abortController.abort();
@@ -316,7 +246,7 @@ const Message = ({
   useEffect(async () => {
     if (!newReaction) {
       setMesReactions(m.reactions);
-    } else if (newReaction.message._id === m._id) {
+    } else if (newReaction.messageId === m._id) {
       if (newReaction.detail === "create") {
         setMesReactions([
           ...mesReactions,
@@ -350,7 +280,6 @@ const Message = ({
         }
       >
         <div>
-          {console.log(mesReactions)}
           {mesReactions.map((r) => {
             return (
               <div>

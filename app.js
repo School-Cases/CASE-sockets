@@ -124,7 +124,17 @@ wss.on("connection", (ws) => {
                 },
               });
 
-              return emitMessage(data.toString(), isBinary);
+              console.log(event, "event");
+              console.log(JSON.parse(data.toString()), "data");
+              console.log(MaM, "här");
+              let sendData = JSON.parse(data.toString());
+              sendData._id = MaM._id;
+              JSON.stringify(sendData);
+              JSON.parse(data.toString())._id = MaM._id;
+              // MaM["type"] = "event.type";
+              console.log(event, "här2");
+
+              return emitMessage(JSON.stringify(sendData), isBinary);
               // return emitMessage(data.toString(), isBinary);
               // return res.json({
               //   message: "create message success",
@@ -132,11 +142,12 @@ wss.on("connection", (ws) => {
               //   data: MaM,
               // });
             } catch (err) {
-              return res.json({
-                message: "create message fail",
-                success: false,
-                data: null,
-              });
+              return;
+              // res.json({
+              //   message: "create message fail",
+              //   success: false,
+              //   data: null,
+              // });
             }
         }
 

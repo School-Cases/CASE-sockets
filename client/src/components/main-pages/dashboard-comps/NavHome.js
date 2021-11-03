@@ -30,6 +30,8 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
   useEffect(async () => {
     if (ws) {
       ws.onmessage = async (e) => {
+        console.log(e.data);
+        console.log(typeof e.data);
         let data = JSON.parse(e.data);
         console.log(data);
 
