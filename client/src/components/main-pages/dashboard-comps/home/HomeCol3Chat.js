@@ -213,7 +213,6 @@ export const HomeCol3Chat = ({
                   </div>
                 );
               })}
-              {/* <span> is typing</span> */}
             </If>
           </section>
           <section className="flex chat-con-bot">
