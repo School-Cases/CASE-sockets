@@ -1,4 +1,4 @@
-// style: active chatroom home col2. gobot and byt butn. messagedetails.
+// style: active chatroom home col2. gobot and byt butn. messagedetails. res.messages.
 
 // import React from "react";
 import { useEffect, useState } from "react";
@@ -21,6 +21,7 @@ export const PageDashboard = () => {
   const [ws, setWs] = useState(null);
 
   const [userUpdated, setUserUpdated] = useState(false);
+  const [chatroomUpdated, setChatroomUpdated] = useState(false);
 
   const [user, setUser] = useState(null);
   const [userChatrooms, setUserChatrooms] = useState(null);
@@ -32,8 +33,24 @@ export const PageDashboard = () => {
   const fetchUserAndChatrooms = async (signal) => {
     let res = await get(`/protected/get-user`, signal);
     setUser(res.data);
+    let userID = res.data._id;
     // await fetchUser(signal);
-    return fetchChatrooms(signal, res.data._id);
+    let res2 = await get(`/protected/get-all-chatrooms`, signal);
+    setUserChatrooms(
+      res2.data
+        .filter((chat) => chat.members.includes(userID))
+        .sort((chatA, chatB) => {
+          return (
+            chatB.starmarked.includes(userID) -
+            chatA.starmarked.includes(userID)
+          );
+        })
+    );
+    setNotUserChatrooms(
+      res2.data.filter((chat) => !chat.members.includes(userID))
+    );
+    // return fetchChatrooms(signal, res.data._id);
+    setLoading(false);
   };
 
   const fetchUser = async (signal) => {
@@ -57,7 +74,7 @@ export const PageDashboard = () => {
     setNotUserChatrooms(
       res.data.filter((chat) => !chat.members.includes(userID))
     );
-    setLoading(false);
+    setChatroomUpdated(false);
   };
 
   // useEffects
@@ -68,6 +85,14 @@ export const PageDashboard = () => {
       return () => abortController.abort();
     }
   }, [userUpdated]);
+
+  useEffect(async () => {
+    if (chatroomUpdated) {
+      const abortController = new AbortController();
+      await fetchChatrooms(abortController.signal, user._id);
+      return () => abortController.abort();
+    }
+  }, [chatroomUpdated]);
 
   // useEffect(async () => {
   //   const abortController = new AbortController();
@@ -169,8 +194,9 @@ export const PageDashboard = () => {
           <NavSettings
             ws={ws}
             user={user}
-            setUserUpdated={setUserUpdated}
             userChatrooms={userChatrooms}
+            setUserUpdated={setUserUpdated}
+            setChatroomUpdated={setChatroomUpdated}
           />
         </If>
       </Row>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { post } from "../../../../utils/http";
 import { If } from "../../../../utils/If";
@@ -18,6 +18,8 @@ export const SettingsCol3 = ({ user, setUserUpdated }) => {
   const [newPassword, setNewPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
 
+  const [updateMessage, setUpdateMessage] = useState(null);
+
   // fetches
   const fetchUpdateUser = async () => {
     let res = await post(`/protected/update-user/${user._id}`, {
@@ -30,7 +32,13 @@ export const SettingsCol3 = ({ user, setUserUpdated }) => {
     });
     setUserUpdated(true);
     setAvatarSwitch(false);
+    setUpdateMessage(res.message);
   };
+
+  // useEffects
+  useEffect(() => {
+    if (updateMessage) setTimeout(() => setUpdateMessage(null), 4000);
+  }, [updateMessage]);
 
   return (
     <div className="col3-settings-con">
@@ -110,13 +118,16 @@ export const SettingsCol3 = ({ user, setUserUpdated }) => {
           })}
         </div>
       </If>
-      <div className="user-settings-save-con">
+      <div className="flex user-settings-save-con">
         <button
           className="user-settings-save-button"
           onClick={() => fetchUpdateUser()}
         >
           SAVE
         </button>
+        <If condition={updateMessage}>
+          <div>{updateMessage}</div>
+        </If>
       </div>
     </div>
   );

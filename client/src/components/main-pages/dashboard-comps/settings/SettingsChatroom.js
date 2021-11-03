@@ -3,7 +3,14 @@ import { useEffect, useState } from "react";
 import { If } from "../../../../utils/If";
 import { get, post } from "../../../../utils/http";
 
-export const SettingsChatroom = ({ ws, user, room, activeChatroom }) => {
+export const SettingsChatroom = ({
+  ws,
+  user,
+  room,
+  activeChatroom,
+  setChatroomUpdated,
+  setUpdateMessage,
+}) => {
   // states
   const [loading, setLoading] = useState(true);
   const [roomName, setRoomName] = useState(null);
@@ -53,12 +60,15 @@ export const SettingsChatroom = ({ ws, user, room, activeChatroom }) => {
       newRoomName = roomName;
     }
 
-    await post(`/protected/update-chatroom/` + roomId, {
+    let res = await post(`/protected/update-chatroom/` + roomId, {
       name: newRoomName,
       admins: newRoomAdmins,
       members: newRoomMembers,
       theme: newRoomTheme,
     });
+    console.log(res);
+    setChatroomUpdated(true);
+    setUpdateMessage(res.message);
   };
 
   const fetchDeleteChatroom = async (signal, roomId) => {

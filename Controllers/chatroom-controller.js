@@ -221,13 +221,13 @@ export const update_chatroom = async (req, res) => {
     // });
 
     return res.json({
-      message: "update chatroom success",
+      message: "Changes success!",
       success: true,
       data: null,
     });
   } catch (err) {
     return res.json({
-      message: "update chatroom failed",
+      message: "Changes failed...",
       success: false,
       data: null,
     });

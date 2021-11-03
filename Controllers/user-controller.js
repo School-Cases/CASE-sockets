@@ -224,13 +224,13 @@ export const update_user = async (req, res) => {
 
     // return res.redirect("/dashboard/" + user._id);
     return res.json({
-      message: "update user success",
+      message: "Changes success!",
       success: true,
       data: updatedUser,
     });
   } catch (err) {
     return res.json({
-      message: "update user failed" + err,
+      message: "Changes failed..",
       success: false,
       data: null,
     });

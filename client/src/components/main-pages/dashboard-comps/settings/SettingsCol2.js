@@ -13,10 +13,22 @@ const StyledSection = styled("section")`
   );
 `;
 
-export const SettingsCol2 = ({ ws, user, userChatrooms }) => {
+export const SettingsCol2 = ({
+  ws,
+  user,
+  userChatrooms,
+  setChatroomUpdated,
+}) => {
   // states
   const [activeChatroom, setActiveChatroom] = useState(null);
   const [searchChatrooms, setSearchChatrooms] = useState("");
+
+  const [updateMessage, setUpdateMessage] = useState(null);
+
+  // useEffects
+  useEffect(() => {
+    if (updateMessage) setTimeout(() => setUpdateMessage(null), 4000);
+  }, [updateMessage]);
 
   return (
     <section className="flex dash-settings-chatrooms">
@@ -32,7 +44,9 @@ export const SettingsCol2 = ({ ws, user, userChatrooms }) => {
           <If condition={room.name.includes(searchChatrooms)}>
             <StyledSection
               theme={room.theme}
-              className="col2-chatroom-con"
+              className={`col2-chatroom-con ${
+                activeChatroom === room ? "active" : ""
+              }`}
               onClick={() => {
                 setActiveChatroom(room);
               }}
@@ -43,12 +57,17 @@ export const SettingsCol2 = ({ ws, user, userChatrooms }) => {
                   <span>A</span>
                 </If>
               </h5>
+              <If condition={updateMessage}>
+                <div>{updateMessage}</div>
+              </If>
               <If condition={room === activeChatroom}>
                 <SettingsChatroom
                   ws={ws}
                   user={user}
                   room={room}
                   activeChatroom={activeChatroom}
+                  setChatroomUpdated={setChatroomUpdated}
+                  setUpdateMessage={setUpdateMessage}
                 />
               </If>
             </StyledSection>

@@ -5,7 +5,13 @@ import { Col } from "react-bootstrap";
 import { SettingsCol2 } from "./settings/SettingsCol2";
 import { SettingsCol3 } from "./settings/SettingsCol3";
 
-export const NavSettings = ({ ws, user, setUserUpdated, userChatrooms }) => {
+export const NavSettings = ({
+  ws,
+  user,
+  setUserUpdated,
+  userChatrooms,
+  setChatroomUpdated,
+}) => {
   // states
   const [W, setW] = useState(window.innerWidth);
 
@@ -25,7 +31,12 @@ export const NavSettings = ({ ws, user, setUserUpdated, userChatrooms }) => {
         xs={{ span: 12, order: 2 }}
         className="dashboard-con-col2"
       >
-        <SettingsCol2 ws={ws} user={user} userChatrooms={userChatrooms} />
+        <SettingsCol2
+          ws={ws}
+          user={user}
+          userChatrooms={userChatrooms}
+          setChatroomUpdated={setChatroomUpdated}
+        />
       </Col>
       <Col
         lg={{ span: 4, order: 3 }}
