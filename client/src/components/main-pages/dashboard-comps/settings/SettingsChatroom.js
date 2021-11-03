@@ -63,12 +63,12 @@ export const SettingsChatroom = ({ ws, user, room, activeChatroom }) => {
 
   const fetchDeleteChatroom = async (signal, roomId) => {
     let res = await get(`/protected/delete-chatroom/` + roomId, signal);
-    ws.send(
-      JSON.stringify({
-        type: "roomsUpdate",
-        detail: "roomDelete",
-      })
-    );
+    // ws.send(
+    //   JSON.stringify({
+    //     type: "roomsUpdate",
+    //     detail: "roomDelete",
+    //   })
+    // );
   };
 
   const fetchLeaveChatroom = async (signal, roomId) => {
@@ -76,14 +76,14 @@ export const SettingsChatroom = ({ ws, user, room, activeChatroom }) => {
       `/protected/leave-chatroom/` + roomId + "/" + user._id,
       signal
     );
-    ws.send(
-      JSON.stringify({
-        type: "roomsUpdate",
-        detail: "roomLeave",
-        room: roomId,
-        user: user._id,
-      })
-    );
+    // ws.send(
+    //   JSON.stringify({
+    //     type: "roomsUpdate",
+    //     detail: "roomLeave",
+    //     room: roomId,
+    //     user: user._id,
+    //   })
+    // );
   };
 
   // useEffects
@@ -159,7 +159,6 @@ const MemberChatroomSettings = ({
   return (
     <>
       <p className="chat-settings-members">{room.members.length} members</p>
-
       <div className="chat-settings-text">Members:</div>
       <div className="flex chat-settings-members-container">
         {roomMembers.map((m, i) => {
@@ -278,7 +277,6 @@ const AdminChatroomSettings = ({
   room,
   roomAdmins,
   setRoomAdmins,
-  roomName,
   setRoomName,
   roomMembers,
   setRoomMembers,

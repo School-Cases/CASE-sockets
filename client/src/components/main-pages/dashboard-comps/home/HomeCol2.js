@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+
 import styled from "styled-components";
 
-import { api_address, get, post } from "../../../../utils/http";
+import { get, post } from "../../../../utils/http";
 import { If } from "../../../../utils/If";
 
 export const HomeCol2 = ({
@@ -13,14 +14,13 @@ export const HomeCol2 = ({
   setActiveChatroom,
   setHomeCol3State,
   chatroomLastMessage,
-  setChatroomLastMessage,
   chatroomUnreadMsgs,
-  setChatroomUnreadMsgs,
 }) => {
   // states
   const [searchChatrooms, setSearchChatrooms] = useState("");
   const [showOtherChatrooms, setShowOtherChatrooms] = useState(false);
 
+  // fetches
   const fetchDeleteChatrooms = async (signal) => {
     await get(`/protected/delete-all-chatrooms`, signal);
   };
@@ -46,6 +46,7 @@ export const HomeCol2 = ({
       </section>
 
       <section className="flex dash-home-chatrooms">
+        {/* tillfälligt */}
         <button
           onClick={() => {
             const abortController = new AbortController();
@@ -64,6 +65,8 @@ export const HomeCol2 = ({
         >
           delete msgs
         </button>
+        {/* --------- */}
+
         <div className="flex home-chatrooms-con">
           <If condition={!showOtherChatrooms}>
             {userChatrooms.map((room) => {
@@ -128,20 +131,20 @@ const Chatroom = ({
   setHomeCol3State,
   chatroomLastMessage,
   chatroomUnreadMsgs,
-  ws,
 }) => {
-  const [lastMessage, setLastMessage] = useState(false);
-
+  // states
   const [loading, setLoading] = useState(true);
+
+  const [lastMessage, setLastMessage] = useState(false);
   const [roomUnreadMsgs, setRoomUnreadMsgs] = useState(0);
   const [nollifyUnreadMsgs, setNollifyUnreadMsgs] = useState(false);
 
+  // fetches
   const fetchLastMessage = async (signal) => {
     let res = await get(
       `/protected/get-chatroom-last-message/${room._id}`,
       signal
     );
-    console.log("fetchlastmsgs", res);
 
     setLastMessage(res.data);
     if (room !== activeChatroom) return fetchGetChatroomUnread(signal);
@@ -149,29 +152,23 @@ const Chatroom = ({
   };
 
   const fetchStarmarkChatroom = async () => {
-    console.log("fetch starmark");
-
     await post(`/protected/starmark-chatroom/${room._id}/${user._id}`);
   };
 
   const fetchUpdateChatroomUnread = async () => {
-    console.log(nollifyUnreadMsgs);
     let res = await post(`/protected/update-chatroom-unread`, {
       chatroomId: room._id,
       userId: user._id,
       nollify: nollifyUnreadMsgs,
     });
-    console.log(res);
     setRoomUnreadMsgs(res.data);
   };
 
   const fetchGetChatroomUnread = async (signal) => {
-    console.log("get unread");
     let res = await get(
       `/protected/get-chatroom-unread/${user._id}/${room._id}`,
       signal
     );
-    console.log(res);
     setRoomUnreadMsgs(res.data.unread);
     setLoading(false);
   };
@@ -189,6 +186,7 @@ const Chatroom = ({
     // );
   };
 
+  // useEffects
   useEffect(async () => {
     if (!joinable) {
       const abortController = new AbortController();
@@ -219,14 +217,6 @@ const Chatroom = ({
       }
     }
   }, [chatroomUnreadMsgs, nollifyUnreadMsgs]);
-
-  // useEffect(async () => {
-  //   if (!joinable) {
-  //     const abortController = new AbortController();
-  //     await fetchGetChatroomUnread(abortController.signal);
-  //     return () => abortController.abort();
-  //   }
-  // }, []);
 
   if (loading) {
     <h4>loading ...</h4>;
@@ -282,7 +272,14 @@ const Chatroom = ({
                 img={lastMessage.user.avatar}
                 className="con-mes-avatar"
               ></StyledDiv>
-              <LastMsg value={lastMessage.message} />
+              <div>
+                <div className="con-mes-message">
+                  {lastMessage.message.text}
+                </div>
+                <div className="con-mes-message-time">
+                  {lastMessage.message.time}
+                </div>
+              </div>
             </div>
           ) : (
             <div className="con-mes-no-message">no messages</div>
@@ -298,14 +295,5 @@ const Chatroom = ({
         </StyledSection>
       </If>
     </>
-  );
-};
-
-export const LastMsg = ({ value }) => {
-  return (
-    <div>
-      <div className="con-mes-message">{value.text}</div>
-      <div className="con-mes-message-time">{value.time}</div>
-    </div>
   );
 };

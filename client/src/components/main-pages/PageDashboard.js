@@ -1,20 +1,18 @@
 // style: active chatroom home col2. gobot and byt butn. messagedetails.
 
-import React from "react";
+// import React from "react";
 import { useEffect, useState } from "react";
 
 import { Container, Col, Row } from "react-bootstrap";
-
-import { ws_address, get } from "../../utils/http";
-import { breakpoints } from "../../utils/breakpoints";
-import { If } from "../../utils/If";
 
 import { Nav } from "./dashboard-comps/Nav";
 import { UserAvatar } from "./dashboard-comps/UserAvatar";
 import { NavSettings } from "./dashboard-comps/NavSettings";
 import { NavHome } from "./dashboard-comps/NavHome";
 
-const LastMsgContext = React.createContext("");
+import { ws_address, get } from "../../utils/http";
+import { breakpoints } from "../../utils/breakpoints";
+import { If } from "../../utils/If";
 
 export const PageDashboard = () => {
   // states
@@ -22,9 +20,12 @@ export const PageDashboard = () => {
   const [W, setW] = useState(window.innerWidth);
   const [ws, setWs] = useState(null);
 
+  const [userUpdated, setUserUpdated] = useState(false);
+
   const [user, setUser] = useState(null);
   const [userChatrooms, setUserChatrooms] = useState(null);
   const [notUserChatrooms, setNotUserChatrooms] = useState(null);
+  const [usersOnline, setUsersOnline] = useState([]);
   const [navState, setNavState] = useState("home");
 
   // fetches
@@ -38,6 +39,7 @@ export const PageDashboard = () => {
   const fetchUser = async (signal) => {
     let res = await get(`/protected/get-user`, signal);
     setUser(res.data);
+    setUserUpdated(false);
   };
 
   const fetchChatrooms = async (signal, userID) => {
@@ -60,6 +62,20 @@ export const PageDashboard = () => {
 
   // useEffects
   useEffect(async () => {
+    if (userUpdated) {
+      const abortController = new AbortController();
+      await fetchUser(abortController.signal);
+      return () => abortController.abort();
+    }
+  }, [userUpdated]);
+
+  // useEffect(async () => {
+  //   const abortController = new AbortController();
+  //   await fetchChatrooms(abortController.signal);
+  //   return () => abortController.abort();
+  // }, []);
+
+  useEffect(async () => {
     const abortController = new AbortController();
     await fetchUserAndChatrooms(abortController.signal);
     return () => abortController.abort();
@@ -75,7 +91,7 @@ export const PageDashboard = () => {
   useEffect(() => {
     // if (!ws) setWs(new WebSocket("ws://localhost:5002"));
     // if (!ws) setWs(new WebSocket("wss://chatwskul.herokuapp.com"));
-    if (!ws) setWs(new WebSocket(ws_address));
+    if (!ws && !loading) setWs(new WebSocket(ws_address + "?user=" + user._id));
     if (ws) {
       ws.onopen = () => {
         console.log("WebSocket Connected");
@@ -86,10 +102,22 @@ export const PageDashboard = () => {
       };
 
       ws.onmessage = async (e) => {
-        let theMessage = JSON.parse(e.data);
-        console.log(theMessage);
-        if (theMessage === "ah ah ah stay alive!") {
+        let data = JSON.parse(e.data);
+        console.log(data);
+        if (data === "ah ah ah stay alive!") {
           return;
+        }
+
+        if (data.type === "online") {
+          console.log("online");
+          console.log(data);
+          setUsersOnline(data.users);
+        }
+
+        if (data.type === "offline") {
+          console.log("offline");
+          console.log(data);
+          setUsersOnline(data.users);
         }
 
         // if (theMessage.type === "roomsUpdate") {
@@ -100,13 +128,12 @@ export const PageDashboard = () => {
         // }
       };
     }
-    // setLoading(false);
     return () => {
       if (ws) ws.close();
     };
-  }, [ws]);
+  }, [ws, loading]);
 
-  if (loading) {
+  if (loading || !user || !ws) {
     return <h2 className="">Loading...</h2>;
   }
 
@@ -134,10 +161,17 @@ export const PageDashboard = () => {
             user={user}
             userChatrooms={userChatrooms}
             notUserChatrooms={notUserChatrooms}
+            usersOnline={usersOnline}
+            setUsersOnline={setUsersOnline}
           />
         </If>
         <If condition={navState === "settings"}>
-          <NavSettings ws={ws} user={user} userChatrooms={userChatrooms} />
+          <NavSettings
+            ws={ws}
+            user={user}
+            setUserUpdated={setUserUpdated}
+            userChatrooms={userChatrooms}
+          />
         </If>
       </Row>
     </Container>

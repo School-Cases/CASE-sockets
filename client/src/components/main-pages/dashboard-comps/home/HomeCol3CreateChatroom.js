@@ -3,23 +3,20 @@ import { useState, useEffect } from "react";
 import { post, get } from "../../../../utils/http";
 import { If } from "../../../../utils/If";
 
-export const HomeCol3CreateChatroom = ({
-  homeCol3State,
-  setHomeCol3State,
-  user,
-  ws,
-}) => {
+export const HomeCol3CreateChatroom = ({ homeCol3State, user, ws }) => {
+  // states
   const [loading, setLoading] = useState(true);
+
   const [newRoomName, setNewRoomName] = useState("");
   const [newRoomTheme, setNewRoomTheme] = useState("#FA0000");
   const [newRoomMembers, setNewRoomMembers] = useState([user._id]);
   const [addableUsers, setAddableUsers] = useState([]);
   const [searchUsersInput, setSearchUsersInput] = useState("");
 
+  // fetches
   const fetchAllUsers = async (signal) => {
     let res = await get(`/protected/get-all-users`, signal);
     setAddableUsers(res.data);
-    console.log(res.data);
     setLoading(false);
   };
 
@@ -30,7 +27,6 @@ export const HomeCol3CreateChatroom = ({
       members: newRoomMembers,
       theme: newRoomTheme,
     });
-    console.log(res);
     // setCreateChatroom(false);
     // ws.send(
     //   JSON.stringify({
@@ -41,7 +37,7 @@ export const HomeCol3CreateChatroom = ({
 
   useEffect(async () => {
     const abortController = new AbortController();
-    if (homeCol3State) await fetchAllUsers(abortController.signal);
+    await fetchAllUsers(abortController.signal);
     return () => abortController.abort();
   }, []);
 
@@ -54,12 +50,6 @@ export const HomeCol3CreateChatroom = ({
       <section className="dashboard-con-create-con">
         <div className="flex create-con-top">
           <h3>Create chatroom</h3>
-          {/* <button
-          className="create-con-button-back"
-          onClick={() => setHomeCol3State(false)}
-        >
-          BACK
-        </button> */}
         </div>
 
         <div className="create-con-name">

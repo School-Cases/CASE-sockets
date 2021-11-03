@@ -3,27 +3,33 @@
 // ws: 3. user joins room. update if activechatroom === joined room.
 
 import { useEffect, useState } from "react";
+
 import { Col } from "react-bootstrap";
 
 import { HomeCol2 } from "./home/HomeCol2";
 import { HomeCol3Chat } from "./home/HomeCol3Chat";
 import { HomeCol3CreateChatroom } from "./home/HomeCol3CreateChatroom";
 
-import { If } from "../../../utils/If";
 import { breakpoints } from "../../../utils/breakpoints";
+import { If } from "../../../utils/If";
 
-export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
+export const NavHome = ({
+  ws,
+  user,
+  userChatrooms,
+  notUserChatrooms,
+  usersOnline,
+  setUsersOnline,
+}) => {
   // states
   const [W, setW] = useState(window.innerWidth);
-  const [activeChatroom, setActiveChatroom] = useState(false);
+
   const [homeCol3State, setHomeCol3State] = useState("createChatroom");
   const [chatroomLastMessage, setChatroomLastMessage] = useState(null);
   const [chatroomUnreadMsgs, setChatroomUnreadMsgs] = useState(null);
-
+  const [activeChatroom, setActiveChatroom] = useState(false);
   const [chatroomMessages, setChatroomMessages] = useState([]);
-
   const [newReaction, setNewReaction] = useState(null);
-
   const [membersTyping, setMembersTyping] = useState([]);
 
   //   useEffects
@@ -31,49 +37,56 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
     if (ws) {
       ws.onmessage = async (e) => {
         let data = JSON.parse(e.data);
+        console.log(data);
 
-        if (data.type === "isTyping" && data.chatroom === activeChatroom._id) {
-          if (data.user._id !== user._id) {
-            if (data.detail) {
-              setMembersTyping([
-                ...membersTyping,
-                {
-                  userName: data.user.name,
-                  userAva: data.user.avatar,
-                  userId: data.user._id,
-                },
-              ]);
+        switch (data.type) {
+          case "usersOnline":
+            setUsersOnline(data.users);
+            break;
+
+          case "isTyping":
+            if (data.chatroom === activeChatroom._id)
+              if (data.user._id !== user._id)
+                if (data.detail) {
+                  setMembersTyping([
+                    ...membersTyping,
+                    {
+                      userName: data.user.name,
+                      userAva: data.user.avatar,
+                      userId: data.user._id,
+                    },
+                  ]);
+                  document.querySelector(`.chat-con-mid`).scrollTop =
+                    document.querySelector(`.chat-con-mid`).scrollHeight;
+                } else {
+                  setMembersTyping(
+                    membersTyping.filter((m) => m.userId !== data.user._id)
+                  );
+                }
+            break;
+
+          case "reaction":
+            if (data.chatroom === activeChatroom._id) {
+              setNewReaction(data);
+            }
+            break;
+
+          case "message":
+            if (data.chatroom === activeChatroom._id) {
+              setChatroomMessages([...chatroomMessages, data]);
               document.querySelector(`.chat-con-mid`).scrollTop =
                 document.querySelector(`.chat-con-mid`).scrollHeight;
-            } else {
-              setMembersTyping(
-                membersTyping.filter((m) => m.userId !== data.user._id)
-              );
             }
-          }
-        }
-
-        if (data.type === "reaction" && data.chatroom === activeChatroom._id) {
-          setNewReaction(data);
-        }
-
-        if (data.type === "message") {
-          // if (data.detail === "message") {
-          if (data.chatroom === activeChatroom._id) {
-            setChatroomMessages([...chatroomMessages, data]);
-            document.querySelector(`.chat-con-mid`).scrollTop =
-              document.querySelector(`.chat-con-mid`).scrollHeight;
-          }
-          if (
-            userChatrooms.filter((room) => room._id === data.chatroom).length >
-            0
-          ) {
-            if (data.chatroom !== activeChatroom._id) {
-              setChatroomUnreadMsgs({ chatroom: data.chatroom });
+            if (
+              userChatrooms.filter((room) => room._id === data.chatroom)
+                .length > 0
+            ) {
+              if (data.chatroom !== activeChatroom._id) {
+                setChatroomUnreadMsgs({ chatroom: data.chatroom });
+              }
+              setChatroomLastMessage({ chatroom: data.chatroom });
             }
-            setChatroomLastMessage({ chatroom: data.chatroom });
-          }
-          // }
+            break;
         }
       };
     }
@@ -126,7 +139,7 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
               newReaction={newReaction}
               setNewReaction={setNewReaction}
               membersTyping={membersTyping}
-              // setMesReactions={setMesReactions}
+              usersOnline={usersOnline}
             />
           </If>
           <If condition={homeCol3State === "createChatroom"}>
@@ -134,7 +147,6 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
               ws={ws}
               user={user}
               homeCol3State={homeCol3State}
-              setHomeCol3State={setHomeCol3State}
             />
           </If>
         </Col>

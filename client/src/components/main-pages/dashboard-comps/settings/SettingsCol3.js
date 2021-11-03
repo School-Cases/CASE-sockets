@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
-import { post, get } from "../../../../utils/http";
+import { post } from "../../../../utils/http";
 import { If } from "../../../../utils/If";
 import avatars from "../../../../utils/avatars";
 
@@ -9,9 +9,7 @@ const StyledDiv = styled("div")`
   background-image: url(../avatars/${(props) => props.img});
 `;
 
-export const SettingsCol3 = ({ user }) => {
-  // const [loading, setLoading] = useState(true);
-
+export const SettingsCol3 = ({ user, setUserUpdated }) => {
   // states
   const [avatar, setAvatar] = useState([user.avatar, 0]);
   const [avatarSwitch, setAvatarSwitch] = useState(false);
@@ -30,25 +28,9 @@ export const SettingsCol3 = ({ user }) => {
       avatarChange: avatar[1],
       theme: theme,
     });
-    console.log(res);
-    // setFetchAgain(!fetchAgain);
+    setUserUpdated(true);
+    setAvatarSwitch(false);
   };
-
-  // const fetchUser = async (signal) => {
-  //   let res = await get(`/protected/get-user`, signal);
-  // };
-
-  // useEffects
-
-  // useEffect(async () => {
-  //   const abortController = new AbortController();
-  //   await fetchUser(abortController.signal);
-  //   return () => abortController.abort();
-  // }, [fetchAgain]);
-
-  // if (loading) {
-  //   return <h2 className="">Loading...</h2>;
-  // }
 
   return (
     <div className="col3-settings-con">

@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 
-import styled from "styled-components";
-
 import { get, post } from "../../../../utils/http";
 import { If } from "../../../../utils/If";
 import { getDateAndTime } from "../../../../utils/getDate&Time";
+
+import styled from "styled-components";
 const StyledDiv = styled("div")`
   background-image: url(../avatars/${(props) => props.img});
 `;
+
 export const HomeCol3Chat = ({
   ws,
   user,
@@ -17,14 +18,15 @@ export const HomeCol3Chat = ({
   newReaction,
   setNewReaction,
   membersTyping,
+  usersOnline,
 }) => {
   // states
   const [loading, setLoading] = useState(true);
+
   const [chatroomUsers, setChatroomUsers] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
   const [msgAva, setMsgAva] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
-
-  const [isTyping, setIsTyping] = useState(false);
 
   // fetches
   const fetchChatroomUsersAndMessages = async (signal) => {
@@ -73,6 +75,7 @@ export const HomeCol3Chat = ({
     setInputMessage("");
     setIsTyping(false);
   };
+
   const filterMsgsAva = (msgs) => {
     let arr = [];
     for (let i = 0; i < msgs.length; i++) {
@@ -86,8 +89,8 @@ export const HomeCol3Chat = ({
     }
     setMsgAva(arr);
   };
-  // useEffects
 
+  // useEffects
   useEffect(async () => {
     filterMsgsAva(chatroomMessages);
   }, [chatroomMessages]);
@@ -125,32 +128,6 @@ export const HomeCol3Chat = ({
         );
     }
   }, [isTyping]);
-
-  // useEffect(async () => {
-  //   if (ws) {
-  //     ws.onmessage = async (e) => {
-  //       let data = JSON.parse(e.data);
-  //       console.log(data);
-  //       if (data.type === "message") {
-  //         if (data.chatroom === activeChatroom._id) {
-  //           setChatroomMessages([...chatroomMessages, data]);
-  //           let msgs = chatroomMessages;
-  //           msgs.push(data);
-  //           filterMsgsAva(msgs);
-  //           document.querySelector(`.chat-con-mid`).scrollTop =
-  //             document.querySelector(`.chat-con-mid`).scrollHeight;
-  //         }
-  //         if (
-  //           userChatrooms.filter((room) => room._id === data.chatroom).length >
-  //           0
-  //         ) {
-  //           console.log("chat, setLast");
-  //           setChatroomLastMessage({ chatroom: data.chatroom });
-  //         }
-  //       }
-  //     };
-  //   }
-  // }, [ws.onmessage]);
 
   if (loading) {
     return <h4>loading ...</h4>;
@@ -192,6 +169,7 @@ export const HomeCol3Chat = ({
                     ws={ws}
                     newReaction={newReaction}
                     setNewReaction={setNewReaction}
+                    usersOnline={usersOnline}
                   />
                 );
               })}
@@ -199,7 +177,6 @@ export const HomeCol3Chat = ({
             <If condition={membersTyping.length > 0}>
               {membersTyping.map((m, i) => {
                 return (
-                  // <If condition={m.userId !== user._id}>
                   <div className="flex istyping-con">
                     <div className="flex">
                       <StyledDiv
@@ -212,7 +189,6 @@ export const HomeCol3Chat = ({
                       <span>is typing</span>
                     </If>
                   </div>
-                  // </If>
                 );
               })}
             </If>
@@ -225,10 +201,8 @@ export const HomeCol3Chat = ({
                 onChange={(e) => {
                   setInputMessage(e.target.value);
                   if (e.target.value.length > 0 && !isTyping) {
-                    console.log("true type");
                     setIsTyping(true);
                   } else if (e.target.value.length < 1 && isTyping) {
-                    console.log("false type");
                     setIsTyping(false);
                   }
                 }}
@@ -253,17 +227,15 @@ const Message = ({
   chatroomUsers,
   msgAva,
   newReaction,
-  setNewReaction,
-  // mesReactions,
-  // setMesReactions,
+  usersOnline,
 }) => {
+  // states
   const [showMessageDetails, setShowMessageDetails] = useState(null);
   const [mesReactions, setMesReactions] = useState([]);
-  // const [loading, setLoading] = useState(true);
 
+  // fetches
   const fetchPostMsgReaction = async (payload) => {
     let res = await post(`/protected/post-messagereaction`, payload);
-    console.log(res);
 
     if (ws && ws.readyState === 1)
       ws.send(
@@ -286,14 +258,12 @@ const Message = ({
       `/protected/delete-messagereaction/${payload.message._id}/${payload.reactionId}`,
       abortController.signal
     );
-    console.log(res);
 
     if (ws && ws.readyState === 1)
       ws.send(
         JSON.stringify({
           type: "reaction",
           detail: "delete",
-          // reacter: payload.userId,
           reactionId: payload.reactionId,
           chatroom: payload.message.chatroom,
           messageId: payload.message._id,
@@ -302,22 +272,27 @@ const Message = ({
     return () => abortController.abort();
   };
 
+  // useEffects
   useEffect(async () => {
     if (!newReaction) {
       setMesReactions(m.reactions);
     } else if (newReaction.messageId === m._id) {
-      if (newReaction.detail === "create") {
-        setMesReactions([
-          ...mesReactions,
-          {
-            reacter: newReaction.reacter,
-            reaction: newReaction.reaction,
-          },
-        ]);
-      } else if (newReaction.detail === "delete") {
-        setMesReactions(
-          mesReactions.filter((r) => r._id !== newReaction.reactionId)
-        );
+      switch (newReaction.detail) {
+        case "create":
+          setMesReactions([
+            ...mesReactions,
+            {
+              reacter: newReaction.reacter,
+              reaction: newReaction.reaction,
+            },
+          ]);
+          break;
+
+        case "delete":
+          setMesReactions(
+            mesReactions.filter((r) => r._id !== newReaction.reactionId)
+          );
+          break;
       }
     }
   }, [newReaction]);
@@ -364,6 +339,11 @@ const Message = ({
             img={chatroomUsers.filter((u) => u._id === m.sender)[0].avatar}
             className="message-avatar"
           ></StyledDiv>
+          {/* online */}
+          <If condition={usersOnline.includes(m.sender)}>
+            <span>:D</span>
+          </If>
+          {/* ------- */}
         </If>
         <div className="message-text">{m.text}</div>
         <If condition={m.sender === user._id && msgAva.includes(m)}>
@@ -371,12 +351,17 @@ const Message = ({
             img={chatroomUsers.filter((u) => u._id === m.sender)[0].avatar}
             className="message-avatar"
           ></StyledDiv>
+          {/* online */}
+          <If condition={usersOnline.includes(m.sender)}>
+            <span>:D</span>
+          </If>
+          {/* ------- */}
         </If>
       </div>
       <If condition={showMessageDetails === m}>
         <div className="flex">
           <div
-            onClick={(e) => {
+            onClick={() => {
               fetchPostMsgReaction({
                 reaction: 0,
                 message: m,
@@ -387,7 +372,7 @@ const Message = ({
             0
           </div>
           <div
-            onClick={(e) => {
+            onClick={() => {
               fetchPostMsgReaction({
                 reaction: 1,
                 message: m,
@@ -398,7 +383,7 @@ const Message = ({
             1
           </div>
           <div
-            onClick={(e) => {
+            onClick={() => {
               fetchPostMsgReaction({
                 reaction: 2,
                 message: m,
@@ -409,7 +394,7 @@ const Message = ({
             2
           </div>
           <div
-            onClick={(e) => {
+            onClick={() => {
               fetchPostMsgReaction({
                 reaction: 3,
                 message: m,

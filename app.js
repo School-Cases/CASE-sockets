@@ -14,12 +14,17 @@ import protectedRouter from "./routers/protected";
 import index from "./routers/index";
 import path from "path";
 
+import {
+  removeUserFromUsersOnline,
+  getValueFromKey,
+} from "./utils/usersOnline";
+
 import { messageModel } from "./Models/message-model";
 import { chatroomModel } from "./Models/chatroom-model";
 
 import { create_message } from "./Controllers/message-controller";
 
-import { URL } from "url"; // in Browser, the URL in native accessible on window
+import { URL } from "url";
 
 const __filename = new URL("", import.meta.url).pathname;
 const __dirname = new URL(".", import.meta.url).pathname;
@@ -71,36 +76,46 @@ const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 // const wss = new WebSocketServer({ noServer: true });
 
-function emitMessage(data, isBinary) {
+const emitMessage = (data, isBinary) => {
   wss.clients.forEach(function each(client) {
     if (client !== WebSocket && client.readyState === WebSocket.OPEN) {
       client.send(data, { binary: isBinary });
     }
   });
-}
+};
 
-wss.on("connection", (ws) => {
+let usersOnline = [];
+wss.on("connection", (ws, req) => {
   // setInterval(() => {
   //   wss.clients.forEach((client) => {
   //     client.send(JSON.stringify("ah ah ah stay alive!"));
   //   });
   // }, 28000);
-  // console.log(ws);
   console.log("Client connected from IP: ", ws._socket.remoteAddress);
   console.log("Number of connected clients: ", wss.clients.size);
 
-  // setTimeout(() => {
-  //   console.log(wss.clients.size);
-  // }, 5000);
+  let user = getValueFromKey(req.url, "user");
+  if (user !== "undefined") {
+    usersOnline.push(user);
+    let obj = { type: "usersOnline", users: usersOnline };
+
+    wss.broadcast(JSON.stringify(obj), ws);
+  }
 
   ws.on("close", (event) => {
     console.log("Client disconnected\n");
     console.log("Number of clients: ", wss.clients.size);
+
+    usersOnline = removeUserFromUsersOnline(user, usersOnline);
+
+    let obj = {
+      type: "usersOnline",
+      users: usersOnline,
+    };
+    wss.broadcast(JSON.stringify(obj));
   });
 
   ws.on("message", async (data, isBinary) => {
-    // console.log(data.toString(), isBinary);
-    // console.log(JSON.parse(data), isBinary);
     const event = JSON.parse(data);
 
     switch (event.type) {
@@ -147,33 +162,23 @@ wss.on("connection", (ws) => {
         }
 
       case "reaction":
-        console.log(data.toString());
         return emitMessage(data.toString(), isBinary);
 
       case "isTyping":
-        console.log(data.toString());
         return emitMessage(data.toString(), isBinary);
 
       case "roomsUpdate":
         return emitMessage(data.toString(), isBinary);
     }
-    // await create_message(data, );
-    // emitMessage(data.toString(), isBinary);
   });
-  // ws.on("message", async (data, isBinary) => {
-  //   // console.log(data.toString(), isBinary);
-  //   console.log(JSON.parse(data), isBinary);
-  //   const event = JSON.parse(data);
-  //   // await create_message(event, res);
-
-  //   switch (event.type) {
-  //     case "message":
-  //       return emitMessage(event.toString(), isBinary);
-  //   }
-
-  //   // emitMessage(data.toString(), isBinary);
-  // });
 });
+wss.broadcast = (data) => {
+  wss.clients.forEach(function each(client) {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(data);
+    }
+  });
+};
 // app.get("*", (req, res) => {
 //   res.sendFile(path.join(__dirname + "/client/build/index.html"));
 // });
