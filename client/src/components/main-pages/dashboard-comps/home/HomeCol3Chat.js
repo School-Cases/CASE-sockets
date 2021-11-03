@@ -198,6 +198,7 @@ export const HomeCol3Chat = ({
             <If condition={membersTyping.length > 0}>
               {membersTyping.map((m, i) => {
                 return (
+                  // <If condition={m.userId !== user._id}>
                   <div className="flex istyping-con">
                     <div className="flex">
                       <StyledDiv
@@ -206,11 +207,11 @@ export const HomeCol3Chat = ({
                       ></StyledDiv>
                       {m.userName}
                     </div>
-                    {/* <If condition={i !== membersTyping.length - 1}>,</If> */}
                     <If condition={i === membersTyping.length - 1}>
                       <span>is typing</span>
                     </If>
                   </div>
+                  // </If>
                 );
               })}
             </If>

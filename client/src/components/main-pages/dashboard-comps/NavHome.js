@@ -32,22 +32,27 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
       ws.onmessage = async (e) => {
         let data = JSON.parse(e.data);
 
-        if (data.type === "isTyping" && data.chatroom === activeChatroom._id) {
-          if (data.detail) {
-            setMembersTyping([
-              ...membersTyping,
-              {
-                userName: data.user.name,
-                userAva: data.user.avatar,
-                userId: data.user._id,
-              },
-            ]);
-            document.querySelector(`.chat-con-mid`).scrollTop =
-              document.querySelector(`.chat-con-mid`).scrollHeight;
-          } else {
-            setMembersTyping(
-              membersTyping.filter((m) => m.userId !== data.user._id)
-            );
+        if (data.user._id !== user._id) {
+          if (
+            data.type === "isTyping" &&
+            data.chatroom === activeChatroom._id
+          ) {
+            if (data.detail) {
+              setMembersTyping([
+                ...membersTyping,
+                {
+                  userName: data.user.name,
+                  userAva: data.user.avatar,
+                  userId: data.user._id,
+                },
+              ]);
+              document.querySelector(`.chat-con-mid`).scrollTop =
+                document.querySelector(`.chat-con-mid`).scrollHeight;
+            } else {
+              setMembersTyping(
+                membersTyping.filter((m) => m.userId !== data.user._id)
+              );
+            }
           }
         }
 
