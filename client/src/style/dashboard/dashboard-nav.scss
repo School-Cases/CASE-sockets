@@ -7,7 +7,6 @@
 @import url("https://use.typekit.net/rdr3hkg.css");
 
 .page {
-
   &.page-dashboard {
     //   BOTH MOBILE AND DESKTOP
 
@@ -76,6 +75,10 @@
           .nav-con-li {
             cursor: pointer;
             gap: 1rem;
+
+            .active {
+              border-bottom: 3px solid white;
+            }
           }
 
           a {

@@ -150,6 +150,10 @@ wss.on("connection", (ws) => {
         console.log(data.toString());
         return emitMessage(data.toString(), isBinary);
 
+      case "isTyping":
+        console.log(data.toString());
+        return emitMessage(data.toString(), isBinary);
+
       case "roomsUpdate":
         return emitMessage(data.toString(), isBinary);
     }

@@ -1,6 +1,6 @@
 import { useHistory } from "react-router";
 
-export const Nav = ({ setNavState }) => {
+export const Nav = ({ setNavState, navState }) => {
   const history = useHistory();
 
   const logout = () => {
@@ -65,7 +65,9 @@ export const Nav = ({ setNavState }) => {
             </g>
           </svg>
         </span>
-        <div className="nav-con-home">HOME</div>
+        <div className={`nav-con-home ${navState === "home" ? "active" : ""}`}>
+          HOME
+        </div>
       </div>
       <div
         className="flex nav-con-li"
@@ -101,7 +103,13 @@ export const Nav = ({ setNavState }) => {
             </g>
           </svg>
         </span>
-        <div>SETTINGS</div>
+        <div
+          className={`nav-con-settings ${
+            navState === "settings" ? "active" : ""
+          }`}
+        >
+          SETTINGS
+        </div>
       </div>
       <div onClick={logout} className="flex nav-con-li">
         <span>

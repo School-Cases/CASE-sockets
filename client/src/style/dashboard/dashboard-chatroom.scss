@@ -114,6 +114,19 @@
                 background-color: $greenC;
               }
             }
+
+            .istyping-con {
+              gap: 5px;
+
+              .istyping-avatar {
+                width: 1rem;
+                height: 1.5rem;
+                background-color: $white;
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+              }
+            }
           }
 
           .chat-con-mid::-webkit-scrollbar {

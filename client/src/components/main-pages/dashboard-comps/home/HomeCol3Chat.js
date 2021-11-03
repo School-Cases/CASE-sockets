@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import styled from "styled-components";
 
-import { api_address, get, post } from "../../../../utils/http";
+import { get, post } from "../../../../utils/http";
 import { If } from "../../../../utils/If";
 import { getDateAndTime } from "../../../../utils/getDate&Time";
 const StyledDiv = styled("div")`
@@ -16,12 +16,15 @@ export const HomeCol3Chat = ({
   setChatroomMessages,
   newReaction,
   setNewReaction,
+  membersTyping,
 }) => {
   // states
   const [loading, setLoading] = useState(true);
   const [chatroomUsers, setChatroomUsers] = useState([]);
   const [msgAva, setMsgAva] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
+
+  const [isTyping, setIsTyping] = useState(false);
 
   // fetches
   const fetchChatroomUsersAndMessages = async (signal) => {
@@ -67,6 +70,7 @@ export const HomeCol3Chat = ({
           time: getDateAndTime(),
         })
       );
+    setInputMessage("");
   };
   const filterMsgsAva = (msgs) => {
     let arr = [];
@@ -93,6 +97,33 @@ export const HomeCol3Chat = ({
       await fetchChatroomUsersAndMessages(abortController.signal);
     return () => abortController.abort();
   }, [activeChatroom]);
+
+  useEffect(async () => {
+    // if (inputMessage.length > 0) {
+    if (isTyping) {
+      console.log("typing");
+      if (ws && ws.readyState === 1)
+        ws.send(
+          JSON.stringify({
+            type: "isTyping",
+            detail: true,
+            user: user,
+            chatroom: activeChatroom._id,
+          })
+        );
+    } else {
+      // if (inputMessage.length > 1)
+      if (ws && ws.readyState === 1)
+        ws.send(
+          JSON.stringify({
+            type: "isTyping",
+            detail: false,
+            user: user,
+            chatroom: activeChatroom._id,
+          })
+        );
+    }
+  }, [isTyping]);
 
   // useEffect(async () => {
   //   if (ws) {
@@ -164,13 +195,42 @@ export const HomeCol3Chat = ({
                 );
               })}
             </If>
+            <If condition={membersTyping.length > 0}>
+              {membersTyping.map((m, i) => {
+                return (
+                  <div className="flex istyping-con">
+                    <div className="flex">
+                      <StyledDiv
+                        img={m.userAva}
+                        className="istyping-avatar"
+                      ></StyledDiv>
+                      {m.userName}
+                    </div>
+                    {/* <If condition={i !== membersTyping.length - 1}>,</If> */}
+                    <If condition={i === membersTyping.length - 1}>
+                      <span>is typing</span>
+                    </If>
+                  </div>
+                );
+              })}
+              {/* <span> is typing</span> */}
+            </If>
           </section>
           <section className="flex chat-con-bot">
             <div className="con-bot-con-message">
               <input
                 placeholder="write message"
                 value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
+                onChange={(e) => {
+                  setInputMessage(e.target.value);
+                  if (e.target.value.length > 0 && !isTyping) {
+                    console.log("true type");
+                    setIsTyping(true);
+                  } else if (e.target.value.length < 1 && isTyping) {
+                    console.log("false type");
+                    setIsTyping(false);
+                  }
+                }}
               />
             </div>
             <button type="button" onClick={() => sendMessage()}>
@@ -196,8 +256,6 @@ const Message = ({
   // mesReactions,
   // setMesReactions,
 }) => {
-  console.log(m);
-  console.log(newReaction);
   const [showMessageDetails, setShowMessageDetails] = useState(null);
   const [mesReactions, setMesReactions] = useState([]);
   // const [loading, setLoading] = useState(true);

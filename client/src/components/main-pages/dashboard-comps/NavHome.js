@@ -24,11 +24,32 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
 
   const [newReaction, setNewReaction] = useState(null);
 
+  const [membersTyping, setMembersTyping] = useState([]);
+
   //   useEffects
   useEffect(async () => {
     if (ws) {
       ws.onmessage = async (e) => {
         let data = JSON.parse(e.data);
+
+        if (data.type === "isTyping" && data.chatroom === activeChatroom._id) {
+          if (data.detail) {
+            setMembersTyping([
+              ...membersTyping,
+              {
+                userName: data.user.name,
+                userAva: data.user.avatar,
+                userId: data.user._id,
+              },
+            ]);
+            document.querySelector(`.chat-con-mid`).scrollTop =
+              document.querySelector(`.chat-con-mid`).scrollHeight;
+          } else {
+            setMembersTyping(
+              membersTyping.filter((m) => m.userId !== data.user._id)
+            );
+          }
+        }
 
         if (data.type === "reaction" && data.chatroom === activeChatroom._id) {
           setNewReaction(data);
@@ -102,7 +123,7 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
               setChatroomMessages={setChatroomMessages}
               newReaction={newReaction}
               setNewReaction={setNewReaction}
-              // mesReactions={mesReactions}
+              membersTyping={membersTyping}
               // setMesReactions={setMesReactions}
             />
           </If>
