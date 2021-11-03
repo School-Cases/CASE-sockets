@@ -32,11 +32,8 @@ export const NavHome = ({ ws, user, userChatrooms, notUserChatrooms }) => {
       ws.onmessage = async (e) => {
         let data = JSON.parse(e.data);
 
-        if (data.user._id !== user._id) {
-          if (
-            data.type === "isTyping" &&
-            data.chatroom === activeChatroom._id
-          ) {
+        if (data.type === "isTyping" && data.chatroom === activeChatroom._id) {
+          if (data.user._id !== user._id) {
             if (data.detail) {
               setMembersTyping([
                 ...membersTyping,

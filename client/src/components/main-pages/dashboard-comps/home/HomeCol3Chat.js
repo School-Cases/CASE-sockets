@@ -71,6 +71,7 @@ export const HomeCol3Chat = ({
         })
       );
     setInputMessage("");
+    setIsTyping(false);
   };
   const filterMsgsAva = (msgs) => {
     let arr = [];
