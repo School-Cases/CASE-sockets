@@ -10,8 +10,8 @@ const messageSchema = new Schema({
     required: true,
   },
   sender: {
-    type: Types.ObjectId,
-    ref: "User",
+    type: Object,
+    // ref: "User",
     // required: true,
   },
   time: {

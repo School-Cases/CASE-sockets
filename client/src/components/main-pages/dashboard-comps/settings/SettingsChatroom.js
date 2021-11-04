@@ -73,6 +73,7 @@ export const SettingsChatroom = ({
 
   const fetchDeleteChatroom = async (signal, roomId) => {
     let res = await get(`/protected/delete-chatroom/` + roomId, signal);
+    setChatroomUpdated(true);
     // ws.send(
     //   JSON.stringify({
     //     type: "roomsUpdate",
@@ -86,6 +87,7 @@ export const SettingsChatroom = ({
       `/protected/leave-chatroom/` + roomId + "/" + user._id,
       signal
     );
+    setChatroomUpdated(true);
     // ws.send(
     //   JSON.stringify({
     //     type: "roomsUpdate",

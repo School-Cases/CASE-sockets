@@ -123,6 +123,7 @@ wss.on("connection", (ws, req) => {
         switch (event.detail) {
           case "message":
             try {
+              console.log(event);
               let message = await new messageModel({
                 chatroom: event.chatroom,
                 sender: event.sender,
@@ -141,8 +142,48 @@ wss.on("connection", (ws, req) => {
 
               let sendData = JSON.parse(data.toString());
               sendData._id = MaM._id;
-              JSON.stringify(sendData);
-              JSON.parse(data.toString())._id = MaM._id;
+              // JSON.stringify(sendData);
+              // JSON.parse(data.toString())._id = MaM._id;
+
+              return emitMessage(JSON.stringify(sendData), isBinary);
+              // return emitMessage(data.toString(), isBinary);
+              // return res.json({
+              //   message: "create message success",
+              //   success: true,
+              //   data: MaM,
+              // });
+            } catch (err) {
+              return;
+              // res.json({
+              //   message: "create message fail",
+              //   success: false,
+              //   data: null,
+              // });
+            }
+
+          case "userJoined":
+            try {
+              console.log(event);
+              let message = await new messageModel({
+                chatroom: event.chatroom,
+                sender: event.sender,
+                time: event.time,
+                text: event.text,
+                reactions: [],
+              });
+              let MaM = message;
+              message = message.save();
+
+              await chatroomModel.findByIdAndUpdate(event.chatroom, {
+                $push: {
+                  messages: message._id,
+                },
+              });
+
+              let sendData = JSON.parse(data.toString());
+              sendData._id = MaM._id;
+              // JSON.stringify(sendData);
+              // JSON.parse(data.toString())._id = MaM._id;
 
               return emitMessage(JSON.stringify(sendData), isBinary);
               // return emitMessage(data.toString(), isBinary);
@@ -167,7 +208,7 @@ wss.on("connection", (ws, req) => {
       case "isTyping":
         return emitMessage(data.toString(), isBinary);
 
-      case "roomsUpdate":
+      case "userJoined":
         return emitMessage(data.toString(), isBinary);
     }
   });

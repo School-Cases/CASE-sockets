@@ -133,24 +133,11 @@ export const PageDashboard = () => {
           return;
         }
 
-        if (data.type === "online") {
+        if (data.type === "usersOnline") {
           console.log("online");
           console.log(data);
           setUsersOnline(data.users);
         }
-
-        if (data.type === "offline") {
-          console.log("offline");
-          console.log(data);
-          setUsersOnline(data.users);
-        }
-
-        // if (theMessage.type === "roomsUpdate") {
-        //   setFetchAgain(!fetchAgain);
-        //   const abortController = new AbortController();
-        //   await fetchChatrooms(abortController.signal, user._id);
-        //   return () => abortController.abort();
-        // }
       };
     }
     return () => {

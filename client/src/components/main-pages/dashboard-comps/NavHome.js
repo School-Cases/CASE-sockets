@@ -12,6 +12,7 @@ import { HomeCol3CreateChatroom } from "./home/HomeCol3CreateChatroom";
 
 import { breakpoints } from "../../../utils/breakpoints";
 import { If } from "../../../utils/If";
+import { getDateAndTime } from "../../../utils/getDate&Time";
 
 export const NavHome = ({
   ws,
@@ -86,6 +87,28 @@ export const NavHome = ({
                 setChatroomUnreadMsgs({ chatroom: data.chatroom });
               }
               setChatroomLastMessage({ chatroom: data.chatroom });
+            }
+            break;
+
+          case "userJoined":
+            console.log(data);
+            let chatroomAffected = userChatrooms.filter(
+              (ch) => ch._id === data.chatroomId
+            );
+            console.log(chatroomAffected[0]);
+            if (chatroomAffected[0]) {
+              console.log("includes");
+              ws.send(
+                JSON.stringify({
+                  type: "message",
+                  detail: "userJoined",
+                  sender: data.user,
+                  chatroom: data.chatroomId,
+                  reactions: [],
+                  text: `${data.user.name} has joined the chat!`,
+                  time: getDateAndTime(),
+                })
+              );
             }
             break;
         }

@@ -268,44 +268,19 @@ export const starmark_chatroom = async (req, res) => {
 export const delete_chatroom = async (req, res) => {
   const id = req.params.id;
   try {
-    // console.log(await messageModel.find({ chatroom: id }));
     await messageModel.deleteMany({ chatroom: id }).exec();
 
     await chatroomModel.findByIdAndDelete({ _id: id }).exec();
 
-    let arr = [];
     let allUsers = await userModel.find({}).exec();
     let filterredUsers = allUsers.filter((u) =>
-      u.chatrooms.map((ch) => ch.chatroom === id)
+      u.chatrooms.map((ch) => ch._id === id)
     );
-    // console.log(u.chatrooms.filter((ch) => ch.chatroom === id))
-    //   console.log(
-    //     u.chatrooms.map((ch) =>
-    //       console.log(
-    //         ch,
-    //         ch.chatroom.toString(),
-    //         "o",
-    //         id,
-    //         ch.chatroom.toString() === id
-    //       )
-    //     )
-    //   )
-    // );
-    console.log(filterredUsers, "users");
-
     filterredUsers.forEach((user) => {
-      let index = user.chatrooms.findIndex((ch) => ch.chatroom === id);
+      let index = user.chatrooms.findIndex((ch) => ch._id === id);
       user.chatrooms.splice(index, 1);
       user.save();
     });
-
-    // await userModel.find({}, (error, users) => {
-    // users.forEach((user) => {
-    //   let index = user.chatrooms.findIndex((ch) => ch._id === id);
-    //   user.chatrooms.splice(index, 1);
-    //   user.save();
-    // });
-    // });
 
     return res.json({
       message: "delete chatroom success",

@@ -139,6 +139,7 @@ const Chatroom = ({
   chatroomLastMessage,
   chatroomUnreadMsgs,
   setChatroomUpdated,
+  ws,
 }) => {
   // states
   const [loading, setLoading] = useState(true);
@@ -149,6 +150,7 @@ const Chatroom = ({
 
   // fetches
   const fetchLastMessage = async (signal) => {
+    console.log("lol");
     let res = await get(
       `/protected/get-chatroom-last-message/${room._id}`,
       signal
@@ -180,7 +182,6 @@ const Chatroom = ({
       `/protected/get-chatroom-unread/${user._id}/${room._id}`,
       signal
     );
-    console.log(res);
 
     setRoomUnreadMsgs(res.data.unread);
     setLoading(false);
@@ -191,13 +192,16 @@ const Chatroom = ({
       chatroomId: room._id,
       userId: user._id,
     });
-    console.log(res);
+
+    ws.send(
+      JSON.stringify({
+        type: "userJoined",
+        chatroomId: room._id,
+        user: user,
+      })
+    );
+
     setChatroomUpdated(true);
-    // ws.send(
-    //   JSON.stringify({
-    //     type: "roomsUpdate",
-    //   })
-    // );
   };
 
   // useEffects

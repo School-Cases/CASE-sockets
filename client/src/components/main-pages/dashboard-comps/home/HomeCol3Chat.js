@@ -65,7 +65,9 @@ export const HomeCol3Chat = ({
         JSON.stringify({
           type: "message",
           detail: "message",
-          sender: user._id,
+          sender: user,
+          // senderName: user.name,
+          // senderAva: user.avatar,
           chatroom: activeChatroom._id,
           reactions: [],
           text: inputMessage,
@@ -229,6 +231,7 @@ const Message = ({
   newReaction,
   usersOnline,
 }) => {
+  console.log(m);
   // states
   const [showMessageDetails, setShowMessageDetails] = useState(null);
   const [mesReactions, setMesReactions] = useState([]);
@@ -300,7 +303,7 @@ const Message = ({
   return (
     <div
       className={`flex ${
-        m.sender === user._id ? "message-right" : "message-left"
+        m.sender._id === user._id ? "message-right" : "message-left"
       }`}
     >
       <div
@@ -334,25 +337,26 @@ const Message = ({
             );
           })}
         </div>
-        <If condition={m.sender !== user._id && msgAva.includes(m)}>
+        <If condition={m.sender._id !== user._id && msgAva.includes(m)}>
           <StyledDiv
-            img={chatroomUsers.filter((u) => u._id === m.sender)[0].avatar}
+            img={m.sender.avatar}
             className="message-avatar"
           ></StyledDiv>
           {/* online */}
-          <If condition={usersOnline.includes(m.sender)}>
+          {console.log(usersOnline)}
+          <If condition={usersOnline.includes(m.sender._id)}>
             <span>:D</span>
           </If>
           {/* ------- */}
         </If>
         <div className="message-text">{m.text}</div>
-        <If condition={m.sender === user._id && msgAva.includes(m)}>
+        <If condition={m.sender._id === user._id && msgAva.includes(m)}>
           <StyledDiv
-            img={chatroomUsers.filter((u) => u._id === m.sender)[0].avatar}
+            img={m.sender.avatar}
             className="message-avatar"
           ></StyledDiv>
           {/* online */}
-          <If condition={usersOnline.includes(m.sender)}>
+          <If condition={usersOnline.includes(m.sender._id)}>
             <span>:D</span>
           </If>
           {/* ------- */}
@@ -406,7 +410,8 @@ const Message = ({
           </div>
         </div>
         <div>
-          Sent by: {chatroomUsers.filter((u) => u._id === m.sender)[0].name}
+          {/* Sent by: {chatroomUsers.filter((u) => u._id === m.sender)[0].name} */}
+          Sent by: {m.sender.name}
         </div>
         <div>{m.time}</div>
       </If>
