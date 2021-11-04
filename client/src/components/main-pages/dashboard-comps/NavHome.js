@@ -20,6 +20,7 @@ export const NavHome = ({
   notUserChatrooms,
   usersOnline,
   setUsersOnline,
+  setChatroomUpdated,
 }) => {
   // states
   const [W, setW] = useState(window.innerWidth);
@@ -120,6 +121,7 @@ export const NavHome = ({
           setChatroomLastMessage={setChatroomLastMessage}
           chatroomUnreadMsgs={chatroomUnreadMsgs}
           setChatroomUnreadMsgs={setChatroomUnreadMsgs}
+          setChatroomUpdated={setChatroomUpdated}
         />
       </Col>
       <If condition={W > breakpoints.medium}>

@@ -130,8 +130,10 @@ export const create_user = async (req, res) => {
 
 export const get_chatroom_unread = async (req, res) => {
   try {
+    console.log("get chatroom unread");
     let user = await userModel.findById(req.params.userId).exec();
     let chatroom = await chatroomModel.findById(req.params.chatroomId).exec();
+    console.log("2", user, chatroom);
 
     user.chatrooms.forEach((room) => {
       if (room._id.toString() === chatroom._id.toString()) {

@@ -188,6 +188,7 @@ export const PageDashboard = () => {
             notUserChatrooms={notUserChatrooms}
             usersOnline={usersOnline}
             setUsersOnline={setUsersOnline}
+            setChatroomUpdated={setChatroomUpdated}
           />
         </If>
         <If condition={navState === "settings"}>

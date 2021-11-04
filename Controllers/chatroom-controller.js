@@ -45,22 +45,19 @@ export const leave_chatroom = async (req, res) => {
   const chatroomId = req.params.chatroomId;
   const userId = req.params.userId;
 
-  try {
-    await chatroomModel
-      .findByIdAndUpdate(chatroomId, {
-        $pull: {
-          members: userId,
-        },
-      })
-      .exec();
+  // console.log();
 
-    await userModel
-      .findByIdAndUpdate(userId, {
-        $pull: {
-          chatrooms: chatroomId,
-        },
-      })
-      .exec();
+  try {
+    await userModel.findByIdAndUpdate(userId, {
+      $pull: {
+        chatrooms: { _id: chatroomId },
+      },
+    });
+    await chatroomModel.findByIdAndUpdate(chatroomId, {
+      $pull: {
+        members: userId,
+      },
+    });
 
     return res.json({
       message: "find chatroom success",

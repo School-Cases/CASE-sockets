@@ -15,6 +15,7 @@ export const HomeCol2 = ({
   setHomeCol3State,
   chatroomLastMessage,
   chatroomUnreadMsgs,
+  setChatroomUpdated,
 }) => {
   // states
   const [searchChatrooms, setSearchChatrooms] = useState("");
@@ -92,7 +93,13 @@ export const HomeCol2 = ({
             {notUserChatrooms.map((room) => {
               return (
                 <If condition={room.name.includes(searchChatrooms)}>
-                  <Chatroom joinable={true} room={room} user={user} ws={ws} />
+                  <Chatroom
+                    joinable={true}
+                    room={room}
+                    user={user}
+                    ws={ws}
+                    setChatroomUpdated={setChatroomUpdated}
+                  />
                 </If>
               );
             })}
@@ -131,6 +138,7 @@ const Chatroom = ({
   setHomeCol3State,
   chatroomLastMessage,
   chatroomUnreadMsgs,
+  setChatroomUpdated,
 }) => {
   // states
   const [loading, setLoading] = useState(true);
@@ -147,8 +155,11 @@ const Chatroom = ({
     );
 
     setLastMessage(res.data);
-    if (room !== activeChatroom) return fetchGetChatroomUnread(signal);
-    else setLoading(false);
+    if (room !== activeChatroom) {
+      return fetchGetChatroomUnread(signal);
+    } else {
+      setLoading(false);
+    }
   };
 
   const fetchStarmarkChatroom = async () => {
@@ -169,6 +180,8 @@ const Chatroom = ({
       `/protected/get-chatroom-unread/${user._id}/${room._id}`,
       signal
     );
+    console.log(res);
+
     setRoomUnreadMsgs(res.data.unread);
     setLoading(false);
   };
@@ -179,6 +192,7 @@ const Chatroom = ({
       userId: user._id,
     });
     console.log(res);
+    setChatroomUpdated(true);
     // ws.send(
     //   JSON.stringify({
     //     type: "roomsUpdate",
