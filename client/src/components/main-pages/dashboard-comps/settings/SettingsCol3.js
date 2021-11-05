@@ -41,7 +41,7 @@ export const SettingsCol3 = ({ user, setUserUpdated }) => {
   }, [updateMessage]);
 
   return (
-    <div className="col3-settings-con">
+    <div className="height100 col3-settings-con">
       <div className="user-settings-input-con">
         <label className="user-settings-text" htmlFor="name">
           Name:

@@ -31,7 +31,7 @@ export const SettingsCol2 = ({
   }, [updateMessage]);
 
   return (
-    <section className="flex dash-settings-chatrooms">
+    <section className="flex height100 dash-settings-chatrooms">
       <section className="flex search-chatroom-con">
         <input
           type="text"
