@@ -129,8 +129,6 @@ wss.on("connection", async (ws, req) => {
 
   ws.on("message", async (data, isBinary) => {
     const event = JSON.parse(data);
-    console.log(data);
-    console.log(event);
 
     switch (event.type) {
       case "message":
