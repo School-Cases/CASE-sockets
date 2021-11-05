@@ -160,12 +160,14 @@ export const NavHome = ({
               ws={ws}
               user={user}
               activeChatroom={activeChatroom}
+              setActiveChatroom={setActiveChatroom}
               chatroomMessages={chatroomMessages}
               setChatroomMessages={setChatroomMessages}
               newReaction={newReaction}
               setNewReaction={setNewReaction}
               membersTyping={membersTyping}
               usersOnline={usersOnline}
+              setChatroomUpdated={setChatroomUpdated}
             />
           </If>
           <If condition={homeCol3State === "createChatroom"}>

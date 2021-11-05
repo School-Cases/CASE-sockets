@@ -69,6 +69,7 @@ export const HomeCol2 = ({
         <If condition={showOnlineUsers}>
           {usersOnline.map((u) => {
             return (
+              // <If condition={u._id !== user._id}>
               <div className="flex">
                 <StyledDiv
                   img={u.avatar}
@@ -76,6 +77,7 @@ export const HomeCol2 = ({
                 ></StyledDiv>
                 <div>{u.name}</div>
               </div>
+              // </If>
             );
           })}
         </If>

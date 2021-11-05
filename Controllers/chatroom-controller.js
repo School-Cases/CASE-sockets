@@ -200,6 +200,7 @@ export const update_chatroom = async (req, res) => {
       members: req.body.members,
     });
 
+    let updatedRoom = await chatroomModel.findById(req.params.id).exec();
     // chatroom.members.forEach((m) => {
     //   if (!m.chatrooms.includes(chatroom._id)) {
     //     await userModel.findByIdAndUpdate(m._id, {
@@ -220,7 +221,7 @@ export const update_chatroom = async (req, res) => {
     return res.json({
       message: "Changes success!",
       success: true,
-      data: null,
+      data: updatedRoom,
     });
   } catch (err) {
     return res.json({

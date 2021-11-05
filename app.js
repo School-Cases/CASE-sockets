@@ -148,7 +148,7 @@ wss.on("connection", async (ws, req) => {
 
               await chatroomModel.findByIdAndUpdate(event.chatroom, {
                 $push: {
-                  messages: message._id,
+                  messages: MaM._id,
                 },
               });
 

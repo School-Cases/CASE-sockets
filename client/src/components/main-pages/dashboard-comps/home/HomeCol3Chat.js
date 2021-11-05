@@ -5,6 +5,7 @@ import { If } from "../../../../utils/If";
 import { getDateAndTime } from "../../../../utils/getDate&Time";
 
 import styled from "styled-components";
+import { HomeCol3ChatSettings } from "./HomeCol3ChatSettings";
 const StyledDiv = styled("div")`
   background-image: url(../avatars/${(props) => props.img});
 `;
@@ -13,12 +14,14 @@ export const HomeCol3Chat = ({
   ws,
   user,
   activeChatroom,
+  setActiveChatroom,
   chatroomMessages,
   setChatroomMessages,
   newReaction,
   setNewReaction,
   membersTyping,
   usersOnline,
+  setChatroomUpdated,
 }) => {
   // states
   const [loading, setLoading] = useState(true);
@@ -27,6 +30,8 @@ export const HomeCol3Chat = ({
   const [isTyping, setIsTyping] = useState(false);
   const [msgAva, setMsgAva] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
+
+  const [chatState, setChatState] = useState(true);
 
   // fetches
   const fetchChatroomUsersAndMessages = async (signal) => {
@@ -137,20 +142,42 @@ export const HomeCol3Chat = ({
 
   return (
     <>
-      {activeChatroom ? (
-        <section className="flex height100 col3-chat-con">
-          <section className="flex chat-con-top">
-            <div className="flex top-userinfo">
-              <div className="userinfo-avatar">ava</div>
-              <div className="top-userinfo-chatroom-name">
-                {activeChatroom.name}
-              </div>
+      {/* {activeChatroom ? ( */}
+      <section className="flex height100 col3-chat-con">
+        <section className="flex chat-con-top">
+          <div className="flex top-userinfo">
+            <div className="userinfo-avatar">ava</div>
+            <div className="top-userinfo-chatroom-name">
+              {activeChatroom.name}
             </div>
-            <div className="flex top-settings">
-              <div className="userinfo-avatar">...</div>
+          </div>
+          <div className="flex top-settings">
+            <div
+              onClick={() => {
+                setChatState(!chatState);
+              }}
+              className="userinfo-avatar"
+            >
+              ...
             </div>
-          </section>
+          </div>
+        </section>
 
+        <If condition={!chatState}>
+          <section className="chat-con-mid">
+            <HomeCol3ChatSettings
+              ws={ws}
+              user={user}
+              room={activeChatroom}
+              activeChatroom={activeChatroom}
+              setActiveChatroom={setActiveChatroom}
+              setChatroomUpdated={setChatroomUpdated}
+              setChatState={setChatState}
+            />
+          </section>
+        </If>
+
+        <If condition={chatState}>
           <div
             onClick={() => {
               document.querySelector(`.chat-con-mid`).scrollTop =
@@ -214,10 +241,12 @@ export const HomeCol3Chat = ({
               send
             </button>
           </section>
-        </section>
-      ) : (
-        <h2>no active</h2>
-      )}
+        </If>
+      </section>
+
+      {/* ) : ( */}
+      {/* <h2>no active</h2> */}
+      {/* )} */}
     </>
   );
 };
