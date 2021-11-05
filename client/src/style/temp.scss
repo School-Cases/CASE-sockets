@@ -60,3 +60,9 @@ body,
   // linear-gradient(#58C0F6, #E99D34);
   // background-size: contain;
 }
+
+.dashboard-con-col1,
+.dashboard-con-col2,
+.dashboard-con-col3 {
+  max-height: calc(100vh - 6rem);
+}

@@ -27,6 +27,7 @@ export const HomeCol2 = ({
   chatroomUnreadMsgs,
   setChatroomUpdated,
   usersOnline,
+  setMobileCol2Chatrooms,
 }) => {
   // states
   const [searchChatrooms, setSearchChatrooms] = useState("");
@@ -120,6 +121,7 @@ export const HomeCol2 = ({
                     chatroomLastMessage={chatroomLastMessage}
                     chatroomUnreadMsgs={chatroomUnreadMsgs}
                     ws={ws}
+                    setMobileCol2Chatrooms={setMobileCol2Chatrooms}
                   />
                 </If>
               );
@@ -147,6 +149,7 @@ export const HomeCol2 = ({
       <button
         onClick={() => {
           setHomeCol3State("createChatroom");
+          setMobileCol2Chatrooms(false);
         }}
       >
         create
@@ -166,6 +169,7 @@ const Chatroom = ({
   chatroomUnreadMsgs,
   setChatroomUpdated,
   ws,
+  setMobileCol2Chatrooms,
 }) => {
   // states
   const [loading, setLoading] = useState(true);
@@ -221,7 +225,8 @@ const Chatroom = ({
 
     ws.send(
       JSON.stringify({
-        type: "userJoined",
+        type: "chatroomUpdate",
+        detail: "userJoined",
         chatroomId: room._id,
         user: user,
       })
@@ -277,6 +282,7 @@ const Chatroom = ({
           onClick={async () => {
             setActiveChatroom(room);
             setHomeCol3State("chat");
+            setMobileCol2Chatrooms(false);
             if (roomUnreadMsgs > 0) {
               setNollifyUnreadMsgs(true);
             }

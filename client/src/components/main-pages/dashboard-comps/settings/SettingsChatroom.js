@@ -88,14 +88,14 @@ export const SettingsChatroom = ({
       signal
     );
     setChatroomUpdated(true);
-    // ws.send(
-    //   JSON.stringify({
-    //     type: "roomsUpdate",
-    //     detail: "roomLeave",
-    //     room: roomId,
-    //     user: user._id,
-    //   })
-    // );
+    ws.send(
+      JSON.stringify({
+        type: "chatroomUpdate",
+        detail: "userLeft",
+        chatroomId: roomId,
+        user: user,
+      })
+    );
   };
 
   // useEffects
@@ -148,6 +148,7 @@ export const SettingsChatroom = ({
           setSearchUsersInput={setSearchUsersInput}
           fetchLeaveChatroom={fetchLeaveChatroom}
           fetchUpdateChatroom={fetchUpdateChatroom}
+          // ws={ws}
         />
       </If>
     </>
@@ -167,6 +168,7 @@ const MemberChatroomSettings = ({
   setSearchUsersInput,
   fetchLeaveChatroom,
   fetchUpdateChatroom,
+  // ws,
 }) => {
   return (
     <>

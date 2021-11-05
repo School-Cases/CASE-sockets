@@ -129,6 +129,8 @@ wss.on("connection", async (ws, req) => {
 
   ws.on("message", async (data, isBinary) => {
     const event = JSON.parse(data);
+    console.log(data);
+    console.log(event);
 
     switch (event.type) {
       case "message":
@@ -136,6 +138,30 @@ wss.on("connection", async (ws, req) => {
           case "message":
             try {
               console.log(event);
+              let message = await new messageModel({
+                chatroom: event.chatroom,
+                sender: event.sender,
+                time: event.time,
+                text: event.text,
+                reactions: [],
+              });
+              let MaM = message;
+              message = message.save();
+              await chatroomModel.findByIdAndUpdate(event.chatroom, {
+                $push: {
+                  messages: MaM._id,
+                },
+              });
+              let sendData = JSON.parse(data.toString());
+              sendData._id = MaM._id;
+              return emitMessage(JSON.stringify(sendData), isBinary);
+            } catch (err) {
+              return;
+            }
+
+          case "userJoined":
+            try {
+              console.log("jaaaa event", event);
               let message = await new messageModel({
                 chatroom: event.chatroom,
                 sender: event.sender,
@@ -158,24 +184,13 @@ wss.on("connection", async (ws, req) => {
               // JSON.parse(data.toString())._id = MaM._id;
 
               return emitMessage(JSON.stringify(sendData), isBinary);
-              // return emitMessage(data.toString(), isBinary);
-              // return res.json({
-              //   message: "create message success",
-              //   success: true,
-              //   data: MaM,
-              // });
             } catch (err) {
               return;
-              // res.json({
-              //   message: "create message fail",
-              //   success: false,
-              //   data: null,
-              // });
             }
 
-          case "userJoined":
+          case "userLeft":
             try {
-              console.log(event);
+              console.log("jaaaa event", event);
               let message = await new messageModel({
                 chatroom: event.chatroom,
                 sender: event.sender,
@@ -188,7 +203,7 @@ wss.on("connection", async (ws, req) => {
 
               await chatroomModel.findByIdAndUpdate(event.chatroom, {
                 $push: {
-                  messages: message._id,
+                  messages: MaM._id,
                 },
               });
 
@@ -198,19 +213,8 @@ wss.on("connection", async (ws, req) => {
               // JSON.parse(data.toString())._id = MaM._id;
 
               return emitMessage(JSON.stringify(sendData), isBinary);
-              // return emitMessage(data.toString(), isBinary);
-              // return res.json({
-              //   message: "create message success",
-              //   success: true,
-              //   data: MaM,
-              // });
             } catch (err) {
               return;
-              // res.json({
-              //   message: "create message fail",
-              //   success: false,
-              //   data: null,
-              // });
             }
         }
 
@@ -220,7 +224,7 @@ wss.on("connection", async (ws, req) => {
       case "isTyping":
         return emitMessage(data.toString(), isBinary);
 
-      case "userJoined":
+      case "chatroomUpdate":
         return emitMessage(data.toString(), isBinary);
     }
   });
