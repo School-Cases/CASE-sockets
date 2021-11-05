@@ -75,6 +75,18 @@
         font-style: italic;
       }
 
+      .dash-home-usersonline {
+        .con-online-avatar {
+          border-radius: 50px;
+          width: 2rem;
+          height: 2rem;
+          background-color: #ffffff;
+          background-size: contain;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+      }
+
       .dash-home-chatrooms {
         flex-direction: column;
         width: 100%;

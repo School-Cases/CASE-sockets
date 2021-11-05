@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 
-import styled from "styled-components";
-
 import { get, post } from "../../../../utils/http";
 import { If } from "../../../../utils/If";
+
+import styled from "styled-components";
+const StyledSection = styled("section")`
+  background: linear-gradient(
+    235deg,
+    ${(props) => props.theme} 25%,
+    rgba(255, 255, 255, 1) 25%
+  );
+`;
+const StyledDiv = styled("div")`
+  background-image: url(../avatars/${(props) => props.img});
+`;
 
 export const HomeCol2 = ({
   ws,
@@ -16,10 +26,12 @@ export const HomeCol2 = ({
   chatroomLastMessage,
   chatroomUnreadMsgs,
   setChatroomUpdated,
+  usersOnline,
 }) => {
   // states
   const [searchChatrooms, setSearchChatrooms] = useState("");
   const [showOtherChatrooms, setShowOtherChatrooms] = useState(false);
+  const [showOnlineUsers, setShowOnlineUsers] = useState(false);
 
   // fetches
   const fetchDeleteChatrooms = async (signal) => {
@@ -44,6 +56,29 @@ export const HomeCol2 = ({
             onChange={(e) => setShowOtherChatrooms(e.target.checked)}
           />
         </div>
+      </section>
+
+      <section className="dash-home-usersonline">
+        <div
+          onClick={() => {
+            setShowOnlineUsers(!showOnlineUsers);
+          }}
+        >
+          Users online ({usersOnline.length})
+        </div>
+        <If condition={showOnlineUsers}>
+          {usersOnline.map((u) => {
+            return (
+              <div className="flex">
+                <StyledDiv
+                  img={u.avatar}
+                  className="con-online-avatar"
+                ></StyledDiv>
+                <div>{u.name}</div>
+              </div>
+            );
+          })}
+        </If>
       </section>
 
       <section className="flex dash-home-chatrooms">
@@ -117,17 +152,6 @@ export const HomeCol2 = ({
     </>
   );
 };
-
-const StyledSection = styled("section")`
-  background: linear-gradient(
-    235deg,
-    ${(props) => props.theme} 25%,
-    rgba(255, 255, 255, 1) 25%
-  );
-`;
-const StyledDiv = styled("div")`
-  background-image: url(../avatars/${(props) => props.img});
-`;
 
 const Chatroom = ({
   joinable,

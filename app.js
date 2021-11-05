@@ -21,6 +21,7 @@ import {
 
 import { messageModel } from "./Models/message-model";
 import { chatroomModel } from "./Models/chatroom-model";
+import { userModel } from "./Models/user-model";
 
 import { create_message } from "./Controllers/message-controller";
 
@@ -85,7 +86,7 @@ const emitMessage = (data, isBinary) => {
 };
 
 let usersOnline = [];
-wss.on("connection", (ws, req) => {
+wss.on("connection", async (ws, req) => {
   // setInterval(() => {
   //   wss.clients.forEach((client) => {
   //     client.send(JSON.stringify("ah ah ah stay alive!"));
@@ -94,7 +95,18 @@ wss.on("connection", (ws, req) => {
   console.log("Client connected from IP: ", ws._socket.remoteAddress);
   console.log("Number of connected clients: ", wss.clients.size);
 
-  let user = getValueFromKey(req.url, "user");
+  let userId = getValueFromKey(req.url, "userId");
+  let user;
+  try {
+    user = await userModel.findById(userId).exec();
+    // return res.json({
+    //   message: "find user success",
+    //   success: true,
+    //   data: user,
+    // });
+  } catch (err) {
+    return console.log("failed");
+  }
   if (user !== "undefined") {
     usersOnline.push(user);
     let obj = { type: "usersOnline", users: usersOnline };

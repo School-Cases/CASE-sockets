@@ -145,6 +145,7 @@ export const NavHome = ({
           chatroomUnreadMsgs={chatroomUnreadMsgs}
           setChatroomUnreadMsgs={setChatroomUnreadMsgs}
           setChatroomUpdated={setChatroomUpdated}
+          usersOnline={usersOnline}
         />
       </Col>
       <If condition={W > breakpoints.medium}>

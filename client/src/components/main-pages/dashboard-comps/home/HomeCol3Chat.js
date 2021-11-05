@@ -231,7 +231,6 @@ const Message = ({
   newReaction,
   usersOnline,
 }) => {
-  console.log(m);
   // states
   const [showMessageDetails, setShowMessageDetails] = useState(null);
   const [mesReactions, setMesReactions] = useState([]);
@@ -343,8 +342,11 @@ const Message = ({
             className="message-avatar"
           ></StyledDiv>
           {/* online */}
-          {console.log(usersOnline)}
-          <If condition={usersOnline.includes(m.sender._id)}>
+          <If
+            condition={
+              usersOnline.filter((user) => user._id === m.sender._id).length > 0
+            }
+          >
             <span>:D</span>
           </If>
           {/* ------- */}
@@ -356,7 +358,11 @@ const Message = ({
             className="message-avatar"
           ></StyledDiv>
           {/* online */}
-          <If condition={usersOnline.includes(m.sender._id)}>
+          <If
+            condition={
+              usersOnline.filter((user) => user._id === m.sender._id).length > 0
+            }
+          >
             <span>:D</span>
           </If>
           {/* ------- */}
