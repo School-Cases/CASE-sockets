@@ -11,6 +11,7 @@ export const HomeCol3ChatSettings = ({
   setActiveChatroom,
   setChatroomUpdated,
   setChatState,
+  setHomeCol3State,
   //   setUpdateMessage,
 }) => {
   // states
@@ -92,14 +93,15 @@ export const HomeCol3ChatSettings = ({
       signal
     );
     setChatroomUpdated(true);
-    // ws.send(
-    //   JSON.stringify({
-    //     type: "roomsUpdate",
-    //     detail: "roomLeave",
-    //     room: roomId,
-    //     user: user._id,
-    //   })
-    // );
+    setHomeCol3State("createChatroom");
+    ws.send(
+      JSON.stringify({
+        type: "chatroomUpdate",
+        detail: "userLeft",
+        chatroomId: roomId,
+        user: user,
+      })
+    );
   };
 
   // useEffects

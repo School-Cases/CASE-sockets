@@ -74,12 +74,13 @@ export const SettingsChatroom = ({
   const fetchDeleteChatroom = async (signal, roomId) => {
     let res = await get(`/protected/delete-chatroom/` + roomId, signal);
     setChatroomUpdated(true);
-    // ws.send(
-    //   JSON.stringify({
-    //     type: "roomsUpdate",
-    //     detail: "roomDelete",
-    //   })
-    // );
+    ws.send(
+      JSON.stringify({
+        type: "chatroomDelete",
+        detail: "chatroomDelete",
+        chatroomId: roomId,
+      })
+    );
   };
 
   const fetchLeaveChatroom = async (signal, roomId) => {

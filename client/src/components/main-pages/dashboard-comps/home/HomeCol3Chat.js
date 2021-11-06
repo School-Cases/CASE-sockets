@@ -22,6 +22,7 @@ export const HomeCol3Chat = ({
   membersTyping,
   usersOnline,
   setChatroomUpdated,
+  setHomeCol3State,
 }) => {
   // states
   const [loading, setLoading] = useState(true);
@@ -173,6 +174,7 @@ export const HomeCol3Chat = ({
               setActiveChatroom={setActiveChatroom}
               setChatroomUpdated={setChatroomUpdated}
               setChatState={setChatState}
+              setHomeCol3State={setHomeCol3State}
             />
           </section>
         </If>

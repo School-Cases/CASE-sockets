@@ -154,17 +154,18 @@ export const create_chatroom = async (req, res) => {
     //     },
     //   },
     // });
+    let resChatroom = Chatroom;
 
     Chatroom = Chatroom.save();
 
     return res.json({
-      message: "create chatroom success",
+      message: "Chatroom created!",
       success: true,
-      data: null,
+      data: resChatroom,
     });
   } catch (err) {
     return res.json({
-      message: "create chatroom fail " + err,
+      message: "Chatroom created!",
       success: false,
       data: null,
     });

@@ -3,7 +3,12 @@ import { useState, useEffect } from "react";
 import { post, get } from "../../../../utils/http";
 import { If } from "../../../../utils/If";
 
-export const HomeCol3CreateChatroom = ({ homeCol3State, user, ws }) => {
+export const HomeCol3CreateChatroom = ({
+  homeCol3State,
+  user,
+  ws,
+  setChatroomUpdated,
+}) => {
   // states
   const [loading, setLoading] = useState(true);
 
@@ -12,6 +17,8 @@ export const HomeCol3CreateChatroom = ({ homeCol3State, user, ws }) => {
   const [newRoomMembers, setNewRoomMembers] = useState([user._id]);
   const [addableUsers, setAddableUsers] = useState([]);
   const [searchUsersInput, setSearchUsersInput] = useState("");
+
+  const [createMessage, setCreateMessage] = useState(null);
 
   // fetches
   const fetchAllUsers = async (signal) => {
@@ -27,13 +34,26 @@ export const HomeCol3CreateChatroom = ({ homeCol3State, user, ws }) => {
       members: newRoomMembers,
       theme: newRoomTheme,
     });
-    // setCreateChatroom(false);
-    // ws.send(
-    //   JSON.stringify({
-    //     type: "roomsUpdate",
-    //   })
-    // );
+    if (res.success) {
+      setCreateMessage(res.message);
+      setNewRoomName("");
+      setNewRoomTheme("#FA0000");
+      setNewRoomMembers([user._id]);
+      setAddableUsers([]);
+      setSearchUsersInput("");
+
+      ws.send(
+        JSON.stringify({
+          type: "chatroomCreate",
+          detail: "chatroomCreate",
+        })
+      );
+    }
   };
+
+  useEffect(() => {
+    if (createMessage) setTimeout(() => setCreateMessage(null), 4000);
+  }, [createMessage]);
 
   useEffect(async () => {
     const abortController = new AbortController();
@@ -61,6 +81,7 @@ export const HomeCol3CreateChatroom = ({ homeCol3State, user, ws }) => {
             className="create-con-input-text"
             type="text"
             name="name"
+            value={newRoomName}
             onChange={(e) => setNewRoomName(e.target.value)}
           />
         </div>
@@ -105,6 +126,7 @@ export const HomeCol3CreateChatroom = ({ homeCol3State, user, ws }) => {
             className="create-con-input-text"
             type="text"
             placeholder="search user"
+            value={searchUsersInput}
             onChange={(e) => setSearchUsersInput(e.target.value)}
           />
           <div className="flex add-user-user-container">
@@ -144,6 +166,9 @@ export const HomeCol3CreateChatroom = ({ homeCol3State, user, ws }) => {
         >
           CREATE
         </button>
+        <If condition={createMessage}>
+          <div>{createMessage}</div>
+        </If>
       </section>
     </section>
   );

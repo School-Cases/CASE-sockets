@@ -154,7 +154,7 @@ wss.on("connection", async (ws, req) => {
               sendData._id = MaM._id;
               return emitMessage(JSON.stringify(sendData), isBinary);
             } catch (err) {
-              return;
+              return console.log(err);
             }
 
           case "userJoined":
@@ -183,7 +183,7 @@ wss.on("connection", async (ws, req) => {
 
               return emitMessage(JSON.stringify(sendData), isBinary);
             } catch (err) {
-              return;
+              return console.log(err);
             }
 
           case "userLeft":
@@ -212,7 +212,7 @@ wss.on("connection", async (ws, req) => {
 
               return emitMessage(JSON.stringify(sendData), isBinary);
             } catch (err) {
-              return;
+              return console.log(err);
             }
         }
 
@@ -223,6 +223,12 @@ wss.on("connection", async (ws, req) => {
         return emitMessage(data.toString(), isBinary);
 
       case "chatroomUpdate":
+        return emitMessage(data.toString(), isBinary);
+
+      case "chatroomCreate":
+        return emitMessage(data.toString(), isBinary);
+
+      case "chatroomDelete":
         return emitMessage(data.toString(), isBinary);
     }
   });

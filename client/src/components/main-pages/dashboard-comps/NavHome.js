@@ -97,13 +97,10 @@ export const NavHome = ({
             break;
 
           case "chatroomUpdate":
-            console.log(data);
             let chatroomAffected = userChatrooms.filter(
               (ch) => ch._id === data.chatroomId
             );
-            console.log(chatroomAffected[0]);
             if (chatroomAffected[0]) {
-              console.log("includes");
               switch (data.detail) {
                 case "userJoined":
                   ws.send(
@@ -135,6 +132,19 @@ export const NavHome = ({
                   }
                   break;
               }
+            }
+            break;
+
+          case "chatroomCreate":
+            setChatroomUpdated(true);
+            break;
+
+          case "chatroomDelete":
+            setChatroomUpdated(true);
+
+            if (data.chatroomId === activeChatroom._id) {
+              setHomeCol3State("createChatroom");
+              setActiveChatroom(null);
             }
             break;
         }
@@ -196,6 +206,7 @@ export const NavHome = ({
               membersTyping={membersTyping}
               usersOnline={usersOnline}
               setChatroomUpdated={setChatroomUpdated}
+              setHomeCol3State={setHomeCol3State}
             />
           </If>
           <If condition={homeCol3State === "createChatroom"}>
@@ -228,6 +239,7 @@ export const NavHome = ({
               membersTyping={membersTyping}
               usersOnline={usersOnline}
               setChatroomUpdated={setChatroomUpdated}
+              setHomeCol3State={setHomeCol3State}
             />
           </If>
           <If condition={homeCol3State === "createChatroom"}>
@@ -235,6 +247,7 @@ export const NavHome = ({
               ws={ws}
               user={user}
               homeCol3State={homeCol3State}
+              setChatroomUpdated={setChatroomUpdated}
             />
           </If>
         </Col>
