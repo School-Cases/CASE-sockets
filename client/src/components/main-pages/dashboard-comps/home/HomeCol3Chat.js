@@ -348,11 +348,12 @@ const Message = ({
             : setShowMessageDetails(m)
         }
       >
-        <div>
+        <div className="flex">
           {mesReactions.map((r) => {
+            console.log(r);
             return (
               <div>
-                {r.reaction}
+                <i className={r.reaction}></i>
                 <If condition={r.reacter === user._id}>
                   <span
                     onClick={() => {
@@ -406,46 +407,74 @@ const Message = ({
           <div
             onClick={() => {
               fetchPostMsgReaction({
-                reaction: 0,
+                reaction: "fas fa-thumbs-up",
                 message: m,
                 userId: user._id,
               });
             }}
           >
-            {/* <BsEmojiSmileUpsideDown /> */}0
+            {/* thumbsup */}
+            <i className="fas fa-thumbs-up"></i>
           </div>
           <div
             onClick={() => {
               fetchPostMsgReaction({
-                reaction: 1,
+                reaction: "far fa-grin",
                 message: m,
                 userId: user._id,
               });
             }}
           >
-            1
+            {/* happy */}
+            <i className="far fa-grin"></i>
           </div>
           <div
             onClick={() => {
               fetchPostMsgReaction({
-                reaction: 2,
+                reaction: "far fa-grin-squint-tears",
                 message: m,
                 userId: user._id,
               });
             }}
           >
-            2
+            {/* laugh */}
+            <i className="far fa-grin-squint-tears"></i>
           </div>
           <div
             onClick={() => {
               fetchPostMsgReaction({
-                reaction: 3,
+                reaction: "far fa-angry",
                 message: m,
                 userId: user._id,
               });
             }}
           >
-            3
+            {/* angry */}
+            <i className="far fa-angry"></i>
+          </div>
+          <div
+            onClick={() => {
+              fetchPostMsgReaction({
+                reaction: "far fa-frown",
+                message: m,
+                userId: user._id,
+              });
+            }}
+          >
+            {/* sad */}
+            <i className="far fa-frown"></i>
+          </div>
+          <div
+            onClick={() => {
+              fetchPostMsgReaction({
+                reaction: "fas fa-thumbs-down",
+                message: m,
+                userId: user._id,
+              });
+            }}
+          >
+            {/* thumbsdown */}
+            <i className="fas fa-thumbs-down"></i>
           </div>
         </div>
         <div>

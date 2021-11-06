@@ -30,7 +30,7 @@ const messageSchema = new Schema({
         ref: "User",
       },
       reaction: {
-        type: Number,
+        type: String,
       },
     },
   ],
