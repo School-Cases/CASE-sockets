@@ -99,11 +99,6 @@ wss.on("connection", async (ws, req) => {
   let user;
   try {
     user = await userModel.findById(userId).exec();
-    // return res.json({
-    //   message: "find user success",
-    //   success: true,
-    //   data: user,
-    // });
   } catch (err) {
     return console.log("failed");
   }
@@ -135,7 +130,6 @@ wss.on("connection", async (ws, req) => {
         switch (event.detail) {
           case "message":
             try {
-              console.log(event);
               let message = await new messageModel({
                 chatroom: event.chatroom,
                 sender: event.sender,
@@ -156,10 +150,10 @@ wss.on("connection", async (ws, req) => {
             } catch (err) {
               return console.log(err);
             }
+            break;
 
           case "userJoined":
             try {
-              console.log("jaaaa event", event);
               let message = await new messageModel({
                 chatroom: event.chatroom,
                 sender: event.sender,
@@ -178,13 +172,11 @@ wss.on("connection", async (ws, req) => {
 
               let sendData = JSON.parse(data.toString());
               sendData._id = MaM._id;
-              // JSON.stringify(sendData);
-              // JSON.parse(data.toString())._id = MaM._id;
-
               return emitMessage(JSON.stringify(sendData), isBinary);
             } catch (err) {
               return console.log(err);
             }
+            break;
 
           case "userLeft":
             try {
@@ -204,32 +196,34 @@ wss.on("connection", async (ws, req) => {
                   messages: MaM._id,
                 },
               });
-
               let sendData = JSON.parse(data.toString());
               sendData._id = MaM._id;
-              // JSON.stringify(sendData);
-              // JSON.parse(data.toString())._id = MaM._id;
-
               return emitMessage(JSON.stringify(sendData), isBinary);
             } catch (err) {
               return console.log(err);
             }
+            break;
         }
 
       case "reaction":
         return emitMessage(data.toString(), isBinary);
+        break;
 
       case "isTyping":
         return emitMessage(data.toString(), isBinary);
+        break;
 
       case "chatroomUpdate":
         return emitMessage(data.toString(), isBinary);
+        break;
 
       case "chatroomCreate":
         return emitMessage(data.toString(), isBinary);
+        break;
 
       case "chatroomDelete":
         return emitMessage(data.toString(), isBinary);
+        break;
     }
   });
 });
