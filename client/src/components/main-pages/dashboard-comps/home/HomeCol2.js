@@ -71,12 +71,12 @@ export const HomeCol2 = ({
           {usersOnline.map((u) => {
             return (
               // <If condition={u._id !== user._id}>
-              <div className="flex">
+              <div className="flex users-online-container">
                 <StyledDiv
                   img={u.avatar}
                   className="con-online-avatar"
                 ></StyledDiv>
-                <div>{u.name}</div>
+                <div className="con-online-username">{u.name}</div>
               </div>
               // </If>
             );
@@ -295,7 +295,6 @@ const Chatroom = ({
                 <If condition={room.admins.includes(user._id)}>
                   <div className="fav-con-admin-icon">A</div>
                 </If>
-                <div>{roomUnreadMsgs} new msgs</div>
               </div>
             </div>
             <svg
@@ -334,6 +333,9 @@ const Chatroom = ({
           ) : (
             <div className="con-mes-no-message">no messages</div>
           )}
+          <div className="new-message-container">
+            <div className="new-messages-icon">{roomUnreadMsgs}</div>
+          </div>
         </StyledSection>
       </If>
       <If condition={joinable}>

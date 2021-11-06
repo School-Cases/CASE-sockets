@@ -1,5 +1,31 @@
 // style: active chatroom home col2. gobot and byt butn. messagedetails. res.messages.
 
+// style: for chosen avatar loginpage.
+// style: not so much whitespace on col3 create room. laso, style addable users.
+
+// allmänt: change avavtar in mobile view.
+// style: nav text overflows into col2
+// style: colorpick in col3 overflows
+
+// style: mobile view: navhome: hamburgerNav. padding on col2. user avatar not there.
+// style: mobile view: navhome: col3Chat; whole chat needs style.
+
+// style: navSettings: Col3: 2much whitespace. also overflows
+
+// allmänt: style: reactions
+
+// allmänt: navSettings: mobile view: nav usersettings & roomsettings.
+// style: ResMessages style
+// style: loading... style
+// style: isTyping... style
+
+// style: goBot button.
+// style: msg height === avatar height = notgood.
+
+// style: onlineUser
+
+// style: col1 main avatar
+
 // import React from "react";
 import { useEffect, useState } from "react";
 

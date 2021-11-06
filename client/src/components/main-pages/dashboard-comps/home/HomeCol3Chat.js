@@ -12,6 +12,10 @@ const StyledDiv = styled("div")`
   background-image: url(../avatars/${(props) => props.img});
 `;
 
+const StyledSpan = styled("span")`
+  background-color: ${(props) => props.color};
+`;
+
 export const HomeCol3Chat = ({
   ws,
   user,
@@ -90,7 +94,7 @@ export const HomeCol3Chat = ({
     let arr = [];
     for (let i = 0; i < msgs.length; i++) {
       if (msgs[i + 1]) {
-        if (msgs[i].sender !== msgs[i + 1].sender) {
+        if (msgs[i].sender._id !== msgs[i + 1].sender._id) {
           arr.push(msgs[i]);
         }
       } else {
@@ -241,7 +245,12 @@ export const HomeCol3Chat = ({
                 }}
               />
             </div>
-            <button type="button" onClick={() => sendMessage()}>
+            <button
+              type="button"
+              onClick={() => {
+                if (inputMessage !== "") sendMessage();
+              }}
+            >
               send
             </button>
           </section>
@@ -371,35 +380,35 @@ const Message = ({
           })}
         </div>
         <If condition={m.sender._id !== user._id && msgAva.includes(m)}>
-          <StyledDiv
-            img={m.sender.avatar}
-            className="message-avatar"
-          ></StyledDiv>
-          {/* online */}
-          <If
-            condition={
-              usersOnline.filter((user) => user._id === m.sender._id).length > 0
-            }
-          >
-            <span>:D</span>
-          </If>
-          {/* ------- */}
+          <StyledDiv img={m.sender.avatar} className="message-avatar">
+            <div className="onlinestatus-con">
+              <StyledSpan
+                color={
+                  usersOnline.filter((user) => user._id === m.sender._id)
+                    .length > 0
+                    ? "#A2DC68"
+                    : "#FF997D"
+                }
+                className="user-con-onlinestatus"
+              ></StyledSpan>
+            </div>
+          </StyledDiv>
         </If>
         <div className="message-text">{m.text}</div>
         <If condition={m.sender._id === user._id && msgAva.includes(m)}>
-          <StyledDiv
-            img={m.sender.avatar}
-            className="message-avatar"
-          ></StyledDiv>
-          {/* online */}
-          <If
-            condition={
-              usersOnline.filter((user) => user._id === m.sender._id).length > 0
-            }
-          >
-            <span>:D</span>
-          </If>
-          {/* ------- */}
+          <StyledDiv img={m.sender.avatar} className="message-avatar">
+            <div className="onlinestatus-con">
+              <StyledSpan
+                color={
+                  usersOnline.filter((user) => user._id === m.sender._id)
+                    .length > 0
+                    ? "#A2DC68"
+                    : "#FF997D"
+                }
+                className="user-con-onlinestatus"
+              ></StyledSpan>
+            </div>
+          </StyledDiv>
         </If>
       </div>
       <If condition={showMessageDetails === m}>
