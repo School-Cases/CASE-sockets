@@ -15,6 +15,9 @@ export const SettingsChatroom = ({
   const [loading, setLoading] = useState(true);
   const [roomName, setRoomName] = useState(null);
   const [roomMembers, setRoomMembers] = useState([]);
+
+  const [newRoomMembers, setNewRoomMembers] = useState([]);
+
   const [roomAdmins, setRoomAdmins] = useState([]);
   const [roomTheme, setRoomTheme] = useState(null);
   const [notRoomMembers, setNotRoomMembers] = useState([]);
@@ -148,6 +151,8 @@ export const SettingsChatroom = ({
           setSearchUsersInput={setSearchUsersInput}
           fetchLeaveChatroom={fetchLeaveChatroom}
           fetchUpdateChatroom={fetchUpdateChatroom}
+          newRoomMembers={newRoomMembers}
+          setNewRoomMembers={setNewRoomMembers}
           // ws={ws}
         />
       </If>
@@ -168,6 +173,8 @@ const MemberChatroomSettings = ({
   setSearchUsersInput,
   fetchLeaveChatroom,
   fetchUpdateChatroom,
+  newRoomMembers,
+  setNewRoomMembers,
   // ws,
 }) => {
   return (
@@ -184,6 +191,24 @@ const MemberChatroomSettings = ({
                   <span>A</span>
                 </If>
               </div>
+              <If condition={newRoomMembers.includes(m)}>
+                <div
+                  className="chat-settings-kick"
+                  onClick={() => {
+                    let newArr = roomMembers.filter((me) => me._id !== m._id);
+                    setRoomMembers(newArr);
+                    let newArr2 = notRoomMembers;
+                    if (!newArr2.includes(m)) newArr2.push(m);
+                    setNotRoomMembers(newArr2);
+                    let newArr3 = newRoomMembers.filter(
+                      (me) => me._id !== m._id
+                    );
+                    setNewRoomMembers(newArr3);
+                  }}
+                >
+                  X
+                </div>
+              </If>
             </div>
           );
         })}
@@ -211,11 +236,14 @@ const MemberChatroomSettings = ({
                 >
                   <span
                     className="chat-settings-add-member-user"
-                    onClick={() =>
+                    onClick={() => {
                       setRoomMembers((prev) => {
                         return [...prev, m];
-                      })
-                    }
+                      });
+                      setNewRoomMembers((prev) => {
+                        return [...prev, m];
+                      });
+                    }}
                   >
                     {m.name}
                   </span>
