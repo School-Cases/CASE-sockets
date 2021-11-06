@@ -66,7 +66,6 @@ export const SettingsChatroom = ({
       members: newRoomMembers,
       theme: newRoomTheme,
     });
-    console.log(res);
     setChatroomUpdated(true);
     setUpdateMessage(res.message);
   };

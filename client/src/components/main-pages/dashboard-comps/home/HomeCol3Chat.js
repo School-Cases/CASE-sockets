@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+// import { BsEmojiSmileUpsideDown } from "react-icons/bs";
+
 import { get, post } from "../../../../utils/http";
 import { If } from "../../../../utils/If";
 import { getDateAndTime } from "../../../../utils/getDate&Time";
@@ -410,7 +412,7 @@ const Message = ({
               });
             }}
           >
-            0
+            {/* <BsEmojiSmileUpsideDown /> */}0
           </div>
           <div
             onClick={() => {

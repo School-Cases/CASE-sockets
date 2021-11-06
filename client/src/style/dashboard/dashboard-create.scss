@@ -134,6 +134,63 @@
           width: 30%;
           justify-content: space-between;
         }
+
+        .chat-settings-members-container {
+          gap: 0.5rem;
+          padding-bottom: 0.5rem;
+        }
+
+        .chat-settings-current-members {
+          color: $white;
+          background-color: $olfred;
+          border-radius: 23px;
+          padding: 0 0 0.2rem 0.5rem;
+
+          .current-members {
+            padding-right: 0.5rem;
+          }
+
+          span {
+            font-size: 13px;
+            color: $olfYellow;
+            background-color: white;
+            border-radius: 23px;
+            padding: 0.1rem 0.5rem 0.3rem 0.5rem;
+            transform: translate(-2px, 1.5px);
+          }
+        }
+
+        .chat-settings-make-admin,
+        .chat-settings-kick {
+          color: $greyD;
+          font-style: italic;
+        }
+
+        .chat-settings-kick {
+          padding-bottom: 0.5rem;
+        }
+
+        .chat-settings-text {
+          @include font-red-basic;
+          padding-right: 0.5rem;
+          padding-bottom: 0.5rem;
+        }
+
+        .chat-settings-input-text {
+          @include grey-input-field;
+        }
+
+        .chat-settings-add-member-user {
+          color: $white;
+          background-color: $olfred;
+          padding: 0.2rem 0.5rem;
+          border-radius: 15px;
+
+          &:hover {
+            background-color: $blueC;
+            cursor: pointer;
+          }
+        }
       }
     }
 

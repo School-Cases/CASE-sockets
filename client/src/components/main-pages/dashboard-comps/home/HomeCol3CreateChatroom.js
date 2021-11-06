@@ -14,8 +14,11 @@ export const HomeCol3CreateChatroom = ({
 
   const [newRoomName, setNewRoomName] = useState("");
   const [newRoomTheme, setNewRoomTheme] = useState("#FA0000");
-  const [newRoomMembers, setNewRoomMembers] = useState([user._id]);
-  const [addableUsers, setAddableUsers] = useState([]);
+  const [newRoomAdmins, setNewRoomAdmins] = useState([user._id]);
+  const [newRoomMembers, setNewRoomMembers] = useState([user]);
+  // const [newRoomMembers, setNewRoomMembers] = useState([user._id]);
+  // const [addableUsers, setAddableUsers] = useState([]);
+  const [notRoomMembers, setNotRoomMembers] = useState([]);
   const [searchUsersInput, setSearchUsersInput] = useState("");
 
   const [createMessage, setCreateMessage] = useState(null);
@@ -23,14 +26,14 @@ export const HomeCol3CreateChatroom = ({
   // fetches
   const fetchAllUsers = async (signal) => {
     let res = await get(`/protected/get-all-users`, signal);
-    setAddableUsers(res.data);
+    setNotRoomMembers(res.data);
     setLoading(false);
   };
 
   const fetchCreateChatroom = async () => {
     let res = await post(`/protected/create-chatroom`, {
       name: newRoomName,
-      admins: [user._id],
+      admins: newRoomAdmins,
       members: newRoomMembers,
       theme: newRoomTheme,
     });
@@ -38,8 +41,10 @@ export const HomeCol3CreateChatroom = ({
       setCreateMessage(res.message);
       setNewRoomName("");
       setNewRoomTheme("#FA0000");
-      setNewRoomMembers([user._id]);
-      setAddableUsers([]);
+      setNewRoomMembers([user]);
+      setNewRoomAdmins([user._id]);
+      // setAddableUsers([]);
+      setNotRoomMembers([]);
       setSearchUsersInput("");
 
       ws.send(
@@ -118,9 +123,64 @@ export const HomeCol3CreateChatroom = ({
           />
         </div>
 
+        <div className="chat-settings-text">Members:</div>
+        <div className="flex chat-settings-members-container">
+          {newRoomMembers.map((m, i) => {
+            return (
+              // <div>
+              //   <div className="flex chat-settings-current-members">
+              //     <div className="current-members">{m.name}</div>
+              //     <If condition={newRoomAdmins.includes(m._id)}>
+              //       <span>A</span>
+              //     </If>
+              //   </div>
+              // </div>
+              <div>
+                <div className="flex chat-settings-current-members">
+                  <div className="current-members">{m.name} </div>
+                  <If condition={newRoomAdmins.includes(m._id)}>
+                    <span>A</span>
+                  </If>
+                </div>
+                <If condition={m._id !== user._id}>
+                  <If condition={!newRoomAdmins.includes(m._id)}>
+                    <div
+                      className="chat-settings-make-admin"
+                      onClick={() =>
+                        setNewRoomAdmins((prev) => {
+                          return [...prev, m._id];
+                        })
+                      }
+                    >
+                      adminize
+                    </div>
+                  </If>
+                  <div
+                    className="chat-settings-kick"
+                    onClick={() => {
+                      let newArr = newRoomMembers.filter(
+                        (me) => me._id !== m._id
+                      );
+                      setNewRoomMembers(newArr);
+                      let newArr2 = notRoomMembers;
+                      if (!newArr2.includes(m)) newArr2.push(m);
+                      setNotRoomMembers(newArr2);
+
+                      let newArr3 = newRoomAdmins.filter((me) => me !== m._id);
+                      setNewRoomAdmins(newArr3);
+                    }}
+                  >
+                    kick
+                  </div>
+                </If>
+              </div>
+            );
+          })}
+        </div>
+
         <div className="create-con-add-user">
           <label className="create-con-text" htmlFor="">
-            Add ppl:
+            Add members:
           </label>
           <input
             className="create-con-input-text"
@@ -131,29 +191,25 @@ export const HomeCol3CreateChatroom = ({
           />
           <div className="flex add-user-user-container">
             <If condition={searchUsersInput !== ""}>
-              {addableUsers.map((m) => {
+              {notRoomMembers.map((m) => {
                 return (
-                  <If condition={m.name.includes(searchUsersInput)}>
-                    <div
-                      className="flex"
-                      onClick={() => {
-                        !newRoomMembers.includes(m._id)
-                          ? setNewRoomMembers((prev) => {
-                              return [...prev, m._id];
-                            })
-                          : setNewRoomMembers(
-                              newRoomMembers.filter((me) => me !== m._id)
-                            );
-                      }}
+                  <If
+                    condition={
+                      m.name.includes(searchUsersInput) &&
+                      !newRoomMembers.includes(m) &&
+                      m._id !== user._id
+                    }
+                  >
+                    <span
+                      className="chat-settings-add-member-user"
+                      onClick={() =>
+                        setNewRoomMembers((prev) => {
+                          return [...prev, m];
+                        })
+                      }
                     >
-                      <div
-                        className={`user-add-name ${
-                          newRoomMembers.includes(m._id) ? "added" : ""
-                        }`}
-                      >
-                        {m.name}
-                      </div>
-                    </div>
+                      {m.name}
+                    </span>
                   </If>
                 );
               })}
