@@ -121,8 +121,8 @@ export const PageHome = () => {
                   img={avatar[0]}
                   className="chosen-avatar"
                 ></StyledDiv>
-                <button onClick={() => setAvatarSwitch(!avatarSwitch)}>
-                  byt
+                <button className="change-avatar-btn" onClick={() => setAvatarSwitch(!avatarSwitch)}>
+                  change
                 </button>
               </Col>
               <Col
@@ -131,8 +131,8 @@ export const PageHome = () => {
                 xs={{ span: 6, order: 2 }}
                 className="login-con-theme-con col-nopad"
               >
-                <button onClick={() => setTheme([0, 1])}>olf theme</button>
-                <button onClick={() => setTheme([1, 1])}>poke theme</button>
+                <button className="olf-theme-btn" onClick={() => setTheme([0, 1])}>olf theme</button>
+                <button className="poke-theme-btn" onClick={() => setTheme([1, 1])}>poke theme</button>
               </Col>
             </Col>
             <If condition={avatarSwitch}>

@@ -43,6 +43,7 @@
           background-size: contain;
           background-position: center;
           background-repeat: no-repeat;
+          border: 4px solid white;
           border-radius: 50%;
           width: 110px;
           height: 110px;
@@ -53,6 +54,7 @@
         .user-con-user-name {
           justify-content: center;
           padding-bottom: 3rem;
+          font-style: italic;
         }
 
         .col1-user-con {

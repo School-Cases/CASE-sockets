@@ -1,6 +1,7 @@
 @import "/src/style/components/colours.scss";
 @import "/src/style/components/fonts.scss";
 @import "/src/style/components/buttons.scss";
+@import "/src/style/components/mixins.scss";
 @import url("https://use.typekit.net/rdr3hkg.css");
 
 .page {
@@ -29,7 +30,6 @@
         background-color: $greyL;
         border-radius: 23px;
         padding: 0.5rem 0.5rem 0.6rem 1rem;
-        margin-top: 0.2rem;
       }
 
       input:focus,
@@ -55,9 +55,7 @@
         }
 
         label {
-          margin-top: 1rem;
-          margin-left: 1rem;
-          padding-bottom: 0.2rem;
+          padding: 1rem 0 0.5rem 0;
         }
       }
 
@@ -76,7 +74,38 @@
         }
       }
 
+      .login-con-avatar-con {
+
+        .chosen-avatar {
+          height: 90%;
+          width: 100%;
+          background-color: $white;
+          background-size: contain;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+      }
+
+      .change-avatar-btn {
+        float: right;
+        background-color: transparent;
+        border: none;
+        color: $olfred;
+        text-decoration-line: underline;
+        padding: 0.25rem 0.5rem;
+        border-radius: 23px;
+
+        &:hover {
+          color: $olfRedL;
+        }
+      }
+
       .login-con-theme-con {
+        display: flex;
+        gap: 0.5rem;
+        flex-direction: column;
+        justify-content: center;
+        align-content: center;
         button {
           color: $white;
           font-size: 20px;
@@ -86,7 +115,29 @@
           border-style: none;
           padding: 1.3rem 0rem;
           width: 100%;
-          margin-bottom: 0.5rem;
+        }
+      }
+
+      .olf-theme-btn {
+        background-image: url(../images/Olf-pattern.png),
+        linear-gradient(#f6c658, #ff997d);
+        background-size: 50%;
+
+        &:hover {
+          background-image: url(../images/Olf-pattern.png),
+          linear-gradient(#ffd46f, #ffa78f)
+        }
+        
+      }
+
+      .poke-theme-btn {
+        background-image: url(../images/Group-622x.png),
+        linear-gradient(#58C0F6, #E99D34);
+        background-size: cover;
+        background-position-y: 30%;
+
+        &:hover {
+          filter: brightness(110%);
         }
       }
     }
@@ -113,7 +164,6 @@
 
         .login-con-logsign-con {
           gap: 0.4rem;
-          margin-top: 3rem;
 
           .login-btn {
             width: 8rem;
@@ -129,29 +179,18 @@
       }
     }
 
+    .login-con-avatar-con {
+      height: 40%; 
+    }
+
     .home-con-col2 {
       border-left: 3px solid $olfRedL;
       padding-left: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
 
-      .login-con-avatar-con {
-        height: 50%;
-        // background-image: url(../images/avatars/avatar-prel.png);
-        // background-color: white;
-        // background-size: 65%;
-        // background-position: center;
-        // background-repeat: no-repeat;
-
-        .chosen-avatar {
-          height: 90%;
-          width: 100%;
-          // background-image: url(../images/avatars/avatar-prel.png);
-          background-color: $white;
-          background-size: 65%;
-          background-position: center;
-          background-repeat: no-repeat;
-        }
-      }
-
+    
       .login-con-theme-con {
         height: 50%;
       }
@@ -160,6 +199,10 @@
     .home-con-col3 {
       flex-wrap: wrap;
       justify-content: space-around;
+      overflow: scroll;
+      height: 50vh;
+      @include hidden-scroll;
+
       .avatars {
         height: 5rem;
         width: 5rem;
@@ -169,6 +212,11 @@
         background-repeat: no-repeat;
       }
     }
+
+    .home-con-col3::-webkit-scrollbar {
+      display: none;
+    }
+
   }
 
   //   ONLY ON WIDTH < MEDIUM (MOBILE)
@@ -190,8 +238,8 @@
     .login-con-logsign-con {
       flex-direction: column;
       align-items: center;
-      margin-top: 3rem;
       gap: 1rem;
+      padding-top: 1.5rem;
 
       .login-btn {
         width: 7rem;
