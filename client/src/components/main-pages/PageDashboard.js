@@ -1,7 +1,8 @@
+// unread adds, even if offline
+
 // style: active chatroom home col2. gobot and byt butn. messagedetails. res.messages.
 
-// style: for chosen avatar loginpage.
-// style: not so much whitespace on col3 create room. laso, style addable users.
+// style: not so much whitespace on col3 create room. also, style addable users.
 
 // allmänt: change avavtar in mobile view.
 // style: nav text overflows into col2

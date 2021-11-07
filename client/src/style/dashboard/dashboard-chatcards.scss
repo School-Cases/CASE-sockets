@@ -93,6 +93,7 @@
       }
 
       .dash-home-usersonline {
+        padding-bottom: 1rem;
         .con-online-avatar {
           border-radius: 50px;
           width: 2rem;
@@ -182,6 +183,23 @@
                 background-size: contain;
                 background-position: center;
                 background-repeat: no-repeat;
+
+                .onlinestatus-con {
+                  display: flex;
+                  justify-content: flex-end;
+                  flex-direction: column;
+                  height: 100%;
+                  float: right;
+                  padding-right: 0.6rem;
+
+                  .user-con-onlinestatus {
+                    height: 0.7rem;
+                    width: 0.7rem;
+                    border-radius: 50%;
+                    display: table;
+                    position: absolute;
+                  }
+                }
               }
 
               .con-mes-message {
@@ -224,7 +242,7 @@
 
         .dash-home-chatrooms {
           @include hidden-scroll;
-          height: 78vh;
+          // height: 78vh;
         }
 
         .dash-home-chatrooms::-webkit-scrollbar {

@@ -14,6 +14,9 @@ const StyledSection = styled("section")`
 const StyledDiv = styled("div")`
   background-image: url(../avatars/${(props) => props.img});
 `;
+const StyledSpan = styled("span")`
+  background-color: ${(props) => props.color};
+`;
 
 export const HomeCol2 = ({
   ws,
@@ -35,12 +38,22 @@ export const HomeCol2 = ({
   const [showOnlineUsers, setShowOnlineUsers] = useState(false);
 
   // fetches
-  const fetchDeleteChatrooms = async (signal) => {
-    await get(`/protected/delete-all-chatrooms`, signal);
-  };
-  const fetchDeleteMSGS = async (signal) => {
-    await get(`/protected/delete-all-messages`, signal);
-  };
+  // const fetchDeleteChatrooms = async (signal) => {
+  //   await get(`/protected/delete-all-chatrooms`, signal);
+  // };
+  // const fetchDeleteMSGS = async (signal) => {
+  //   await get(`/protected/delete-all-messages`, signal);
+  // };
+
+  // height: calc(100% - 7rem);
+
+  useEffect(() => {
+    document.querySelector(
+      ".dash-home-chatrooms"
+    ).style.height = `calc(100% - 5rem - ${
+      document.querySelector(".dash-home-usersonline").offsetHeight
+    }px)`;
+  }, [showOnlineUsers]);
   return (
     <>
       <section className="flex search-chatroom-con">
@@ -65,7 +78,13 @@ export const HomeCol2 = ({
             setShowOnlineUsers(!showOnlineUsers);
           }}
         >
-          Users online ({usersOnline.length})
+          Users online ({usersOnline.length}){" "}
+          <If condition={!showOnlineUsers}>
+            <i class="fas fa-caret-down"></i>
+          </If>
+          <If condition={showOnlineUsers}>
+            <i class="fas fa-caret-up"></i>
+          </If>
         </div>
         <If condition={showOnlineUsers}>
           {usersOnline.map((u) => {
@@ -86,7 +105,7 @@ export const HomeCol2 = ({
 
       <section className="flex dash-home-chatrooms">
         {/* tillfälligt */}
-        <button
+        {/* <button
           onClick={() => {
             const abortController = new AbortController();
             fetchDeleteChatrooms(abortController.signal);
@@ -103,7 +122,7 @@ export const HomeCol2 = ({
           }}
         >
           delete msgs
-        </button>
+        </button> */}
         {/* --------- */}
 
         <div className="flex home-chatrooms-con">
@@ -122,6 +141,7 @@ export const HomeCol2 = ({
                     chatroomUnreadMsgs={chatroomUnreadMsgs}
                     ws={ws}
                     setMobileCol2Chatrooms={setMobileCol2Chatrooms}
+                    usersOnline={usersOnline}
                   />
                 </If>
               );
@@ -170,6 +190,7 @@ const Chatroom = ({
   setChatroomUpdated,
   ws,
   setMobileCol2Chatrooms,
+  usersOnline,
 }) => {
   // states
   const [loading, setLoading] = useState(true);
@@ -320,7 +341,20 @@ const Chatroom = ({
               <StyledDiv
                 img={lastMessage.user.avatar}
                 className="con-mes-avatar"
-              ></StyledDiv>
+              >
+                <div className="onlinestatus-con">
+                  <StyledSpan
+                    color={
+                      usersOnline.filter(
+                        (user) => user._id === lastMessage.user._id
+                      ).length > 0
+                        ? "#A2DC68"
+                        : "#FF997D"
+                    }
+                    className="user-con-onlinestatus"
+                  ></StyledSpan>
+                </div>
+              </StyledDiv>
               <div>
                 <div className="con-mes-message">
                   {lastMessage.message.text}

@@ -121,7 +121,10 @@ export const PageHome = () => {
                   img={avatar[0]}
                   className="chosen-avatar"
                 ></StyledDiv>
-                <button className="change-avatar-btn" onClick={() => setAvatarSwitch(!avatarSwitch)}>
+                <button
+                  className="change-avatar-btn"
+                  onClick={() => setAvatarSwitch(!avatarSwitch)}
+                >
                   change
                 </button>
               </Col>
@@ -131,8 +134,18 @@ export const PageHome = () => {
                 xs={{ span: 6, order: 2 }}
                 className="login-con-theme-con col-nopad"
               >
-                <button className="olf-theme-btn" onClick={() => setTheme([0, 1])}>olf theme</button>
-                <button className="poke-theme-btn" onClick={() => setTheme([1, 1])}>poke theme</button>
+                <button
+                  className="olf-theme-btn"
+                  onClick={() => setTheme([0, 1])}
+                >
+                  olf theme
+                </button>
+                <button
+                  className="poke-theme-btn"
+                  onClick={() => setTheme([1, 1])}
+                >
+                  poke theme
+                </button>
               </Col>
             </Col>
             <If condition={avatarSwitch}>
@@ -143,10 +156,13 @@ export const PageHome = () => {
                 className="flex col-nopad home-con-col3"
               >
                 {avatars.map((a) => {
+                  console.log(avatar[0] === a);
                   return (
                     <StyledDiv
                       img={a}
-                      className="avatars"
+                      className={`avatars ${
+                        avatar[0] === a ? "chosen-avatar" : ""
+                      }`}
                       onClick={() => setAvatar([a, 1])}
                     ></StyledDiv>
                   );

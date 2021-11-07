@@ -75,7 +75,6 @@
       }
 
       .login-con-avatar-con {
-
         .chosen-avatar {
           height: 90%;
           width: 100%;
@@ -120,19 +119,18 @@
 
       .olf-theme-btn {
         background-image: url(../images/Olf-pattern.png),
-        linear-gradient(#f6c658, #ff997d);
+          linear-gradient(#f6c658, #ff997d);
         background-size: 50%;
 
         &:hover {
           background-image: url(../images/Olf-pattern.png),
-          linear-gradient(#ffd46f, #ffa78f)
+            linear-gradient(#ffd46f, #ffa78f);
         }
-        
       }
 
       .poke-theme-btn {
         background-image: url(../images/Group-622x.png),
-        linear-gradient(#58C0F6, #E99D34);
+          linear-gradient(#58c0f6, #e99d34);
         background-size: cover;
         background-position-y: 30%;
 
@@ -180,7 +178,7 @@
     }
 
     .login-con-avatar-con {
-      height: 40%; 
+      height: 40%;
     }
 
     .home-con-col2 {
@@ -190,7 +188,6 @@
       flex-direction: column;
       justify-content: space-evenly;
 
-    
       .login-con-theme-con {
         height: 50%;
       }
@@ -210,13 +207,17 @@
         background-size: 60%;
         background-position: center;
         background-repeat: no-repeat;
+        border-radius: 6px;
+
+        &.chosen-avatar {
+          background-color: #f2f2f2;
+        }
       }
     }
 
     .home-con-col3::-webkit-scrollbar {
       display: none;
     }
-
   }
 
   //   ONLY ON WIDTH < MEDIUM (MOBILE)

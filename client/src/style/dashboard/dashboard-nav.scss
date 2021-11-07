@@ -89,6 +89,11 @@
           .nav-con-li {
             cursor: pointer;
             gap: 1rem;
+            font-size: 1.3vw;
+
+            svg {
+              width: 3vw;
+            }
 
             .active {
               border-bottom: 3px solid white;

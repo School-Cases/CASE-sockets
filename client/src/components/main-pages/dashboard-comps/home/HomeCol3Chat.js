@@ -16,6 +16,10 @@ const StyledSpan = styled("span")`
   background-color: ${(props) => props.color};
 `;
 
+const StyledSection = styled("section")`
+  background-color: ${(props) => props.color};
+`;
+
 export const HomeCol3Chat = ({
   ws,
   user,
@@ -150,10 +154,17 @@ export const HomeCol3Chat = ({
   return (
     <>
       {/* {activeChatroom ? ( */}
-      <section className="flex height100 col3-chat-con">
+      <section
+        className={`flex height100 col3-chat-con ${
+          chatState ? "chatstate" : "settingsstate"
+        }`}
+      >
         <section className="flex chat-con-top">
           <div className="flex top-userinfo">
-            <div className="userinfo-avatar">ava</div>
+            <StyledSection
+              color={activeChatroom.theme}
+              className="userinfo-avatar"
+            ></StyledSection>
             <div className="top-userinfo-chatroom-name">
               {activeChatroom.name}
             </div>
@@ -165,7 +176,12 @@ export const HomeCol3Chat = ({
               }}
               className="userinfo-avatar"
             >
-              ...
+              <If condition={!chatState}>
+                <i class="fas fa-times"></i>
+              </If>
+              <If condition={chatState}>
+                <i class="fas fa-ellipsis-v"></i>
+              </If>
             </div>
           </div>
         </section>
@@ -276,6 +292,7 @@ const Message = ({
   // states
   const [showMessageDetails, setShowMessageDetails] = useState(null);
   const [mesReactions, setMesReactions] = useState([]);
+  const [showReactions, setShowReactions] = useState(false);
 
   // fetches
   const fetchPostMsgReaction = async (payload) => {
@@ -345,147 +362,142 @@ const Message = ({
     <div
       className={`flex ${
         m.sender._id === user._id ? "message-right" : "message-left"
-      }`}
+      } ${showReactions ? "active" : ""}`}
     >
-      <div
-        className="flex message-wrapper"
-        onClick={() =>
-          showMessageDetails
-            ? showMessageDetails === m
-              ? setShowMessageDetails(null)
+      <section className="flex reactions-con">
+        <If condition={m.sender._id === user._id}>
+          <If
+            condition={
+              !showReactions &&
+              !mesReactions.some((r) => r.reacter === user._id)
+            }
+          >
+            <div
+              className="reactions-con-showadd"
+              onClick={() => setShowReactions(true)}
+            >
+              <i class="fas fa-plus"></i>
+            </div>
+          </If>
+          <If condition={showReactions}>
+            <Reactions
+              fetchPostMsgReaction={fetchPostMsgReaction}
+              m={m}
+              user={user}
+              showReactions={showReactions}
+              setShowReactions={setShowReactions}
+            />
+          </If>
+          <div className="flex reactions-added-con">
+            {mesReactions.map((r) => {
+              console.log(r);
+              return (
+                <>
+                  <i className={r.reaction}></i>
+                  <If condition={r.reacter === user._id}>
+                    <span
+                      onClick={() => {
+                        fetchDeleteMsgReaction({
+                          message: m,
+                          reactionId: r._id,
+                        });
+                      }}
+                    ></span>
+                  </If>
+                </>
+              );
+            })}
+          </div>
+        </If>
+        <div
+          className="flex message-wrapper"
+          onClick={() =>
+            showMessageDetails
+              ? showMessageDetails === m
+                ? setShowMessageDetails(null)
+                : setShowMessageDetails(m)
               : setShowMessageDetails(m)
-            : setShowMessageDetails(m)
-        }
-      >
-        <div className="flex">
-          {mesReactions.map((r) => {
-            console.log(r);
-            return (
-              <div>
-                <i className={r.reaction}></i>
-                <If condition={r.reacter === user._id}>
-                  <span
-                    onClick={() => {
-                      fetchDeleteMsgReaction({
-                        message: m,
-                        reactionId: r._id,
-                      });
-                    }}
-                  >
-                    X
-                  </span>
-                </If>
+          }
+        >
+          <If condition={m.sender._id !== user._id && msgAva.includes(m)}>
+            <StyledDiv img={m.sender.avatar} className="message-avatar">
+              <div className="onlinestatus-con">
+                <StyledSpan
+                  color={
+                    usersOnline.filter((user) => user._id === m.sender._id)
+                      .length > 0
+                      ? "#A2DC68"
+                      : "#FF997D"
+                  }
+                  className="user-con-onlinestatus"
+                ></StyledSpan>
               </div>
-            );
-          })}
+            </StyledDiv>
+          </If>
+
+          <div className="message-text">{m.text}</div>
+          <If condition={m.sender._id === user._id && msgAva.includes(m)}>
+            <StyledDiv img={m.sender.avatar} className="message-avatar">
+              <div className="onlinestatus-con">
+                <StyledSpan
+                  color={
+                    usersOnline.filter((user) => user._id === m.sender._id)
+                      .length > 0
+                      ? "#A2DC68"
+                      : "#FF997D"
+                  }
+                  className="user-con-onlinestatus"
+                ></StyledSpan>
+              </div>
+            </StyledDiv>
+          </If>
         </div>
-        <If condition={m.sender._id !== user._id && msgAva.includes(m)}>
-          <StyledDiv img={m.sender.avatar} className="message-avatar">
-            <div className="onlinestatus-con">
-              <StyledSpan
-                color={
-                  usersOnline.filter((user) => user._id === m.sender._id)
-                    .length > 0
-                    ? "#A2DC68"
-                    : "#FF997D"
-                }
-                className="user-con-onlinestatus"
-              ></StyledSpan>
+        <If condition={m.sender._id !== user._id}>
+          <If
+            condition={
+              !showReactions &&
+              !mesReactions.some((r) => r.reacter === user._id)
+            }
+          >
+            <div
+              className="reactions-con-showadd"
+              onClick={() => setShowReactions(true)}
+            >
+              <i class="fas fa-plus"></i>
             </div>
-          </StyledDiv>
+          </If>
+          <If condition={showReactions}>
+            <Reactions
+              fetchPostMsgReaction={fetchPostMsgReaction}
+              m={m}
+              user={user}
+              showReactions={showReactions}
+              setShowReactions={setShowReactions}
+            />
+          </If>
+          <div className="flex reactions-added-con">
+            {mesReactions.map((r) => {
+              console.log(r);
+              return (
+                <>
+                  <i className={r.reaction}></i>
+                  <If condition={r.reacter === user._id}>
+                    <span
+                      onClick={() => {
+                        fetchDeleteMsgReaction({
+                          message: m,
+                          reactionId: r._id,
+                        });
+                      }}
+                    ></span>
+                  </If>
+                </>
+              );
+            })}
+          </div>
         </If>
-        <div className="message-text">{m.text}</div>
-        <If condition={m.sender._id === user._id && msgAva.includes(m)}>
-          <StyledDiv img={m.sender.avatar} className="message-avatar">
-            <div className="onlinestatus-con">
-              <StyledSpan
-                color={
-                  usersOnline.filter((user) => user._id === m.sender._id)
-                    .length > 0
-                    ? "#A2DC68"
-                    : "#FF997D"
-                }
-                className="user-con-onlinestatus"
-              ></StyledSpan>
-            </div>
-          </StyledDiv>
-        </If>
-      </div>
+      </section>
       <If condition={showMessageDetails === m}>
-        <div className="flex">
-          <div
-            onClick={() => {
-              fetchPostMsgReaction({
-                reaction: "fas fa-thumbs-up",
-                message: m,
-                userId: user._id,
-              });
-            }}
-          >
-            {/* thumbsup */}
-            <i className="fas fa-thumbs-up"></i>
-          </div>
-          <div
-            onClick={() => {
-              fetchPostMsgReaction({
-                reaction: "far fa-grin",
-                message: m,
-                userId: user._id,
-              });
-            }}
-          >
-            {/* happy */}
-            <i className="far fa-grin"></i>
-          </div>
-          <div
-            onClick={() => {
-              fetchPostMsgReaction({
-                reaction: "far fa-grin-squint-tears",
-                message: m,
-                userId: user._id,
-              });
-            }}
-          >
-            {/* laugh */}
-            <i className="far fa-grin-squint-tears"></i>
-          </div>
-          <div
-            onClick={() => {
-              fetchPostMsgReaction({
-                reaction: "far fa-angry",
-                message: m,
-                userId: user._id,
-              });
-            }}
-          >
-            {/* angry */}
-            <i className="far fa-angry"></i>
-          </div>
-          <div
-            onClick={() => {
-              fetchPostMsgReaction({
-                reaction: "far fa-frown",
-                message: m,
-                userId: user._id,
-              });
-            }}
-          >
-            {/* sad */}
-            <i className="far fa-frown"></i>
-          </div>
-          <div
-            onClick={() => {
-              fetchPostMsgReaction({
-                reaction: "fas fa-thumbs-down",
-                message: m,
-                userId: user._id,
-              });
-            }}
-          >
-            {/* thumbsdown */}
-            <i className="fas fa-thumbs-down"></i>
-          </div>
-        </div>
         <div>
           {/* Sent by: {chatroomUsers.filter((u) => u._id === m.sender)[0].name} */}
           Sent by: {m.sender.name}
@@ -495,3 +507,100 @@ const Message = ({
     </div>
   );
 };
+
+const Reactions = ({
+  fetchPostMsgReaction,
+  m,
+  user,
+  showReactions,
+  setShowReactions,
+}) => {
+  return (
+    <div className={`flex reactions-add-con`}>
+      <div
+        onClick={() => {
+          fetchPostMsgReaction({
+            reaction: "fas fa-thumbs-up",
+            message: m,
+            userId: user._id,
+          });
+          setShowReactions(false);
+        }}
+      >
+        {/* thumbsup */}
+        <i className="fas fa-thumbs-up"></i>
+      </div>
+      <div
+        onClick={() => {
+          fetchPostMsgReaction({
+            reaction: "far fa-grin",
+            message: m,
+            userId: user._id,
+          });
+          setShowReactions(false);
+        }}
+      >
+        {/* happy */}
+        <i className="far fa-grin"></i>
+      </div>
+      <div
+        onClick={() => {
+          fetchPostMsgReaction({
+            reaction: "far fa-grin-squint-tears",
+            message: m,
+            userId: user._id,
+          });
+          setShowReactions(false);
+        }}
+      >
+        {/* laugh */}
+        <i className="far fa-grin-squint-tears"></i>
+      </div>
+      <div
+        onClick={() => {
+          fetchPostMsgReaction({
+            reaction: "far fa-angry",
+            message: m,
+            userId: user._id,
+          });
+          setShowReactions(false);
+        }}
+      >
+        {/* angry */}
+        <i className="far fa-angry"></i>
+      </div>
+      <div
+        onClick={() => {
+          fetchPostMsgReaction({
+            reaction: "far fa-frown",
+            message: m,
+            userId: user._id,
+          });
+          setShowReactions(false);
+        }}
+      >
+        {/* sad */}
+        <i className="far fa-frown"></i>
+      </div>
+      <div
+        onClick={() => {
+          fetchPostMsgReaction({
+            reaction: "fas fa-thumbs-down",
+            message: m,
+            userId: user._id,
+          });
+          setShowReactions(false);
+        }}
+      >
+        {/* thumbsdown */}
+        <i className="fas fa-thumbs-down"></i>
+      </div>
+
+      <div onClick={() => setShowReactions(false)}>
+        <i className="fas fa-times"></i>
+      </div>
+    </div>
+  );
+};
+
+<i class="fas fa-times"></i>;
