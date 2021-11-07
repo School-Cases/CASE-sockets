@@ -46,10 +46,10 @@ const corsOptions = {
 app.use(cors(corsOptions)); // Use this after the variable declaration
 app.use(express.json());
 // dev
-app.use("/", express.static("./client/public"));
-app.use("/static", express.static("./public/static"));
+// app.use("/", express.static("./client/public"));
+// app.use("/static", express.static("./public/static"));
 // heroku
-// app.use(express.static(path.join(__dirname, "/client/build")));
+app.use(express.static(path.join(__dirname, "/client/build")));
 app.use(
   session({
     secret: "keyboard cat",
@@ -72,11 +72,11 @@ const emitMessage = (data, isBinary) => {
 };
 let usersOnline = [];
 wss.on("connection", async (ws, req) => {
-  // setInterval(() => {
-  //   wss.clients.forEach((client) => {
-  //     client.send(JSON.stringify("ah ah ah stay alive!"));
-  //   });
-  // }, 28000);
+  setInterval(() => {
+    wss.clients.forEach((client) => {
+      client.send(JSON.stringify("ah ah ah stay alive!"));
+    });
+  }, 28000);
   console.log("Client connected from IP: ", ws._socket.remoteAddress);
   console.log("Number of connected clients: ", wss.clients.size);
   let userId = getValueFromKey(req.url, "userId");
@@ -215,17 +215,21 @@ wss.broadcast = (data) => {
     }
   });
 };
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname + "/client/build/index.html"));
-// });
-app.get("*", (req, res) =>
-  res.sendFile("index.html", {
-    root: "./client/public",
-  })
-);
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
+});
+// app.get("*", (req, res) =>
+//   res.sendFile("index.html", {
+//     root: "./client/public",
+//   })
+// );
 // server.listen(process.env.PORT, () => {
 //   console.log("Server lyssnar på port", process.env.PORT);
 // });
-server.listen(process.env.PORT || 5002, () => {
-  console.log("Server lyssnar på port", process.env.PORT || 5002);
+// server.listen(process.env.PORT || 5002, () => {
+//   console.log("Server lyssnar på port", process.env.PORT || 5002);
+// });
+
+server.listen(process.env.PORT || 80, () => {
+  console.log("Server lyssnar på port", 80);
 });
