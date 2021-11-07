@@ -45,8 +45,6 @@ export const HomeCol2 = ({
   //   await get(`/protected/delete-all-messages`, signal);
   // };
 
-  // height: calc(100% - 7rem);
-
   useEffect(() => {
     document.querySelector(
       ".dash-home-chatrooms"
@@ -59,12 +57,16 @@ export const HomeCol2 = ({
       <section className="flex search-chatroom-con">
         <input
           type="text"
-          placeholder="search chatrooms"
+          placeholder={
+            showOtherChatrooms
+              ? "search other chatrooms"
+              : "search your chatrooms"
+          }
           onInput={(e) => setSearchChatrooms(e.target.value)}
         />
 
         <div className="flex">
-          <label>all:</label>
+          <label>other</label>
           <input
             type="checkbox"
             onChange={(e) => setShowOtherChatrooms(e.target.checked)}
@@ -78,7 +80,7 @@ export const HomeCol2 = ({
             setShowOnlineUsers(!showOnlineUsers);
           }}
         >
-          Users online ({usersOnline.length}){" "}
+          <i class="fas fa-users"></i> Users online ({usersOnline.length}){" "}
           <If condition={!showOnlineUsers}>
             <i class="fas fa-caret-down"></i>
           </If>
@@ -166,14 +168,17 @@ export const HomeCol2 = ({
         </div>
       </section>
 
-      <button
-        onClick={() => {
-          setHomeCol3State("createChatroom");
-          setMobileCol2Chatrooms(false);
-        }}
-      >
-        create
-      </button>
+      <div className="create-con">
+        <i class="fas fa-plus"></i>{" "}
+        <button
+          onClick={() => {
+            setHomeCol3State("createChatroom");
+            setMobileCol2Chatrooms(false);
+          }}
+        >
+          create new chatroom
+        </button>
+      </div>
     </>
   );
 };
@@ -367,9 +372,11 @@ const Chatroom = ({
           ) : (
             <div className="con-mes-no-message">no messages</div>
           )}
-          <div className="new-message-container">
-            <div className="new-messages-icon">{roomUnreadMsgs}</div>
-          </div>
+          <If condition={roomUnreadMsgs > 0}>
+            <div className="new-message-container">
+              <div className="new-messages-icon">{roomUnreadMsgs}</div>
+            </div>
+          </If>
         </StyledSection>
       </If>
       <If condition={joinable}>

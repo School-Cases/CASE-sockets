@@ -109,6 +109,7 @@ wss.on("connection", async (ws, req) => {
           case "message":
             try {
               let message = await new messageModel({
+                msgType: "message",
                 chatroom: event.chatroom,
                 sender: event.sender,
                 time: event.time,
@@ -124,6 +125,7 @@ wss.on("connection", async (ws, req) => {
               });
               let sendData = JSON.parse(data.toString());
               sendData._id = MaM._id;
+              sendData.msgType = "message";
               return emitMessage(JSON.stringify(sendData), isBinary);
             } catch (err) {
               return console.log(err);
@@ -133,6 +135,7 @@ wss.on("connection", async (ws, req) => {
           case "userJoined":
             try {
               let message = await new messageModel({
+                msgType: "userUpdate",
                 chatroom: event.chatroom,
                 sender: event.sender,
                 time: event.time,
@@ -148,6 +151,7 @@ wss.on("connection", async (ws, req) => {
               });
               let sendData = JSON.parse(data.toString());
               sendData._id = MaM._id;
+              sendData.msgType = "userUpdate";
               return emitMessage(JSON.stringify(sendData), isBinary);
             } catch (err) {
               return console.log(err);
@@ -158,6 +162,7 @@ wss.on("connection", async (ws, req) => {
             try {
               console.log("jaaaa event", event);
               let message = await new messageModel({
+                msgType: "userUpdate",
                 chatroom: event.chatroom,
                 sender: event.sender,
                 time: event.time,
@@ -174,6 +179,7 @@ wss.on("connection", async (ws, req) => {
               });
               let sendData = JSON.parse(data.toString());
               sendData._id = MaM._id;
+              sendData.msgType = "userUpdate";
               return emitMessage(JSON.stringify(sendData), isBinary);
             } catch (err) {
               return console.log(err);

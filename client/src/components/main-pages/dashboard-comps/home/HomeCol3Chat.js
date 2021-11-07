@@ -98,7 +98,11 @@ export const HomeCol3Chat = ({
     let arr = [];
     for (let i = 0; i < msgs.length; i++) {
       if (msgs[i + 1]) {
-        if (msgs[i].sender._id !== msgs[i + 1].sender._id) {
+        if (
+          msgs[i].sender._id !== msgs[i + 1].sender._id ||
+          (msgs[i].sender._id === msgs[i + 1].sender._id &&
+            msgs[i + 1].msgType === "userUpdate")
+        ) {
           arr.push(msgs[i]);
         }
       } else {
@@ -153,7 +157,6 @@ export const HomeCol3Chat = ({
 
   return (
     <>
-      {/* {activeChatroom ? ( */}
       <section
         className={`flex height100 col3-chat-con ${
           chatState ? "chatstate" : "settingsstate"
@@ -202,15 +205,24 @@ export const HomeCol3Chat = ({
         </If>
 
         <If condition={chatState}>
-          <div
+          {/* <div
             onClick={() => {
               document.querySelector(`.chat-con-mid`).scrollTop =
                 document.querySelector(`.chat-con-mid`).scrollHeight;
             }}
           >
-            go bot
-          </div>
+            <i class="fas fa-arrow-down"></i>
+          </div> */}
           <section className={`chat-con-mid`}>
+            <div
+              onClick={() => {
+                document.querySelector(`.chat-con-mid`).scrollTop =
+                  document.querySelector(`.chat-con-mid`).scrollHeight;
+              }}
+              className="arr-con"
+            >
+              <i class="fas fa-arrow-down"></i>
+            </div>
             <If condition={chatroomMessages && chatroomMessages.length > 0}>
               {chatroomMessages.map((m, i) => {
                 return (
@@ -237,9 +249,9 @@ export const HomeCol3Chat = ({
                         className="istyping-avatar"
                       ></StyledDiv>
                       {m.userName}
-                    </div>
+                    </div>{" "}
                     <If condition={i === membersTyping.length - 1}>
-                      <span>is typing</span>
+                      <span> is typing...</span>
                     </If>
                   </div>
                 );
@@ -267,15 +279,11 @@ export const HomeCol3Chat = ({
                 if (inputMessage !== "") sendMessage();
               }}
             >
-              send
+              <i class="fas fa-paper-plane"></i>
             </button>
           </section>
         </If>
       </section>
-
-      {/* ) : ( */}
-      {/* <h2>no active</h2> */}
-      {/* )} */}
     </>
   );
 };
@@ -359,152 +367,169 @@ const Message = ({
   }, [newReaction]);
 
   return (
-    <div
-      className={`flex ${
-        m.sender._id === user._id ? "message-right" : "message-left"
-      } ${showReactions ? "active" : ""}`}
-    >
-      <section className="flex reactions-con">
-        <If condition={m.sender._id === user._id}>
-          <If
-            condition={
-              !showReactions &&
-              !mesReactions.some((r) => r.reacter === user._id)
-            }
-          >
-            <div
-              className="reactions-con-showadd"
-              onClick={() => setShowReactions(true)}
-            >
-              <i class="fas fa-plus"></i>
-            </div>
-          </If>
-          <If condition={showReactions}>
-            <Reactions
-              fetchPostMsgReaction={fetchPostMsgReaction}
-              m={m}
-              user={user}
-              showReactions={showReactions}
-              setShowReactions={setShowReactions}
-            />
-          </If>
-          <div className="flex reactions-added-con">
-            {mesReactions.map((r) => {
-              console.log(r);
-              return (
-                <>
-                  <i className={r.reaction}></i>
-                  <If condition={r.reacter === user._id}>
-                    <span
-                      onClick={() => {
-                        fetchDeleteMsgReaction({
-                          message: m,
-                          reactionId: r._id,
-                        });
-                      }}
-                    ></span>
-                  </If>
-                </>
-              );
-            })}
-          </div>
-        </If>
-        <div
-          className="flex message-wrapper"
-          onClick={() =>
-            showMessageDetails
-              ? showMessageDetails === m
-                ? setShowMessageDetails(null)
-                : setShowMessageDetails(m)
-              : setShowMessageDetails(m)
-          }
-        >
-          <If condition={m.sender._id !== user._id && msgAva.includes(m)}>
-            <StyledDiv img={m.sender.avatar} className="message-avatar">
-              <div className="onlinestatus-con">
-                <StyledSpan
-                  color={
-                    usersOnline.filter((user) => user._id === m.sender._id)
-                      .length > 0
-                      ? "#A2DC68"
-                      : "#FF997D"
-                  }
-                  className="user-con-onlinestatus"
-                ></StyledSpan>
-              </div>
-            </StyledDiv>
-          </If>
-
-          <div className="message-text">{m.text}</div>
-          <If condition={m.sender._id === user._id && msgAva.includes(m)}>
-            <StyledDiv img={m.sender.avatar} className="message-avatar">
-              <div className="onlinestatus-con">
-                <StyledSpan
-                  color={
-                    usersOnline.filter((user) => user._id === m.sender._id)
-                      .length > 0
-                      ? "#A2DC68"
-                      : "#FF997D"
-                  }
-                  className="user-con-onlinestatus"
-                ></StyledSpan>
-              </div>
-            </StyledDiv>
-          </If>
+    <>
+      {console.log(m)}
+      <If condition={m.msgType === "userUpdate"}>
+        <div className="flex userupdate-msg">
+          <StyledDiv
+            img={m.sender.avatar}
+            className="userupdate-msg-ava"
+          ></StyledDiv>
+          <i>{m.text}</i>
         </div>
-        <If condition={m.sender._id !== user._id}>
-          <If
-            condition={
-              !showReactions &&
-              !mesReactions.some((r) => r.reacter === user._id)
-            }
-          >
-            <div
-              className="reactions-con-showadd"
-              onClick={() => setShowReactions(true)}
-            >
-              <i class="fas fa-plus"></i>
-            </div>
-          </If>
-          <If condition={showReactions}>
-            <Reactions
-              fetchPostMsgReaction={fetchPostMsgReaction}
-              m={m}
-              user={user}
-              showReactions={showReactions}
-              setShowReactions={setShowReactions}
-            />
-          </If>
-          <div className="flex reactions-added-con">
-            {mesReactions.map((r) => {
-              console.log(r);
-              return (
-                <>
-                  <i className={r.reaction}></i>
-                  <If condition={r.reacter === user._id}>
-                    <span
-                      onClick={() => {
-                        fetchDeleteMsgReaction({
-                          message: m,
-                          reactionId: r._id,
-                        });
-                      }}
-                    ></span>
-                  </If>
-                </>
-              );
-            })}
-          </div>
-        </If>
-      </section>
-      <If condition={showMessageDetails === m}>
-        <div>
-          {/* Sent by: {chatroomUsers.filter((u) => u._id === m.sender)[0].name} */}
-          Sent by: {m.sender.name}
-        </div>
-        <div>{m.time}</div>
       </If>
-    </div>
+
+      <If condition={m.msgType === "message"}>
+        <div
+          className={`flex ${
+            m.sender._id === user._id ? "message-right" : "message-left"
+          } ${showReactions ? "active" : ""} ${
+            !msgAva.includes(m) ? "noava" : ""
+          }`}
+        >
+          <section className="flex reactions-con">
+            <If condition={m.sender._id === user._id}>
+              <If
+                condition={
+                  !showReactions &&
+                  !mesReactions.some((r) => r.reacter === user._id)
+                }
+              >
+                <div
+                  className="reactions-con-showadd"
+                  onClick={() => setShowReactions(true)}
+                >
+                  <i class="fas fa-plus"></i>
+                </div>
+              </If>
+              <If condition={showReactions}>
+                <Reactions
+                  fetchPostMsgReaction={fetchPostMsgReaction}
+                  m={m}
+                  user={user}
+                  showReactions={showReactions}
+                  setShowReactions={setShowReactions}
+                />
+              </If>
+              <div className="flex reactions-added-con">
+                {mesReactions.map((r) => {
+                  console.log(r);
+                  return (
+                    <>
+                      <i className={r.reaction}></i>
+                      <If condition={r.reacter === user._id}>
+                        <span
+                          onClick={() => {
+                            fetchDeleteMsgReaction({
+                              message: m,
+                              reactionId: r._id,
+                            });
+                          }}
+                        ></span>
+                      </If>
+                    </>
+                  );
+                })}
+              </div>
+            </If>
+            <div
+              className="flex message-wrapper"
+              onClick={() =>
+                showMessageDetails
+                  ? showMessageDetails === m
+                    ? setShowMessageDetails(null)
+                    : setShowMessageDetails(m)
+                  : setShowMessageDetails(m)
+              }
+            >
+              <If condition={m.sender._id !== user._id && msgAva.includes(m)}>
+                <StyledDiv img={m.sender.avatar} className="message-avatar">
+                  <div className="onlinestatus-con">
+                    <StyledSpan
+                      color={
+                        usersOnline.filter((user) => user._id === m.sender._id)
+                          .length > 0
+                          ? "#A2DC68"
+                          : "#FF997D"
+                      }
+                      className="user-con-onlinestatus"
+                    ></StyledSpan>
+                  </div>
+                </StyledDiv>
+              </If>
+
+              <div className="message-text">{m.text}</div>
+              <If condition={m.sender._id === user._id && msgAva.includes(m)}>
+                <StyledDiv img={m.sender.avatar} className="message-avatar">
+                  <div className="onlinestatus-con">
+                    <StyledSpan
+                      color={
+                        usersOnline.filter((user) => user._id === m.sender._id)
+                          .length > 0
+                          ? "#A2DC68"
+                          : "#FF997D"
+                      }
+                      className="user-con-onlinestatus"
+                    ></StyledSpan>
+                  </div>
+                </StyledDiv>
+              </If>
+            </div>
+            <If condition={m.sender._id !== user._id}>
+              <If
+                condition={
+                  !showReactions &&
+                  !mesReactions.some((r) => r.reacter === user._id)
+                }
+              >
+                <div
+                  className="reactions-con-showadd"
+                  onClick={() => setShowReactions(true)}
+                >
+                  <i class="fas fa-plus"></i>
+                </div>
+              </If>
+              <If condition={showReactions}>
+                <Reactions
+                  fetchPostMsgReaction={fetchPostMsgReaction}
+                  m={m}
+                  user={user}
+                  showReactions={showReactions}
+                  setShowReactions={setShowReactions}
+                />
+              </If>
+              <div className="flex reactions-added-con">
+                {mesReactions.map((r) => {
+                  console.log(r);
+                  return (
+                    <>
+                      <i className={r.reaction}></i>
+                      <If condition={r.reacter === user._id}>
+                        <span
+                          onClick={() => {
+                            fetchDeleteMsgReaction({
+                              message: m,
+                              reactionId: r._id,
+                            });
+                          }}
+                        ></span>
+                      </If>
+                    </>
+                  );
+                })}
+              </div>
+            </If>
+          </section>
+          <If condition={showMessageDetails === m}>
+            <div className="msg-details-name">
+              {/* Sent by: {chatroomUsers.filter((u) => u._id === m.sender)[0].name} */}
+              Sent by: {m.sender.name}
+            </div>
+            <div className="msg-details-time">{m.time}</div>
+          </If>
+        </div>
+      </If>
+    </>
   );
 };
 
@@ -602,5 +627,3 @@ const Reactions = ({
     </div>
   );
 };
-
-<i class="fas fa-times"></i>;

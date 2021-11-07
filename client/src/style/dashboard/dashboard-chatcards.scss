@@ -17,6 +17,10 @@
 
     .col2-chatroom-con {
       box-shadow: 0px 3px 6px #00000029;
+
+      &.active {
+        transform: scale(1.03);
+      }
     }
 
     .search-chatroom-con {
@@ -69,11 +73,16 @@
         display: none;
       }
 
-      button {
-        background-color: transparent;
-        border-style: none;
+      .create-con {
+        text-align: center;
         color: $white;
-        border-bottom: 2px solid white;
+
+        button {
+          background-color: transparent;
+          border-style: none;
+          color: $white;
+          border-bottom: 2px solid white;
+        }
       }
 
       input {

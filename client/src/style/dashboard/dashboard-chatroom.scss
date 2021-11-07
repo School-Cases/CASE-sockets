@@ -87,6 +87,32 @@
             flex-direction: column;
             position: relative;
             padding-right: 0.4rem;
+            // position: relative;
+
+            .arr-con {
+              position: relative;
+              text-align: center;
+              i {
+                position: fixed;
+                z-index: 1000;
+                background-color: white;
+                border-radius: 111px;
+                padding: 0.5rem;
+                margin-top: 0.5rem;
+              }
+            }
+
+            .userupdate-msg {
+              justify-content: center;
+              .userupdate-msg-ava {
+                min-width: 1.5rem;
+                height: 1.5rem;
+                background-color: $white;
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+              }
+            }
 
             .message-right,
             .message-left {
@@ -95,6 +121,16 @@
               // margin-bottom: 1rem;
               max-width: 70%;
 
+              .msg-details-name {
+                padding-top: 0.6rem;
+                color: $greyD;
+              }
+
+              .msg-details-time {
+                color: $greyM;
+                font-size: 70%;
+              }
+
               &.active {
                 margin-top: 1.7rem;
               }
@@ -102,9 +138,14 @@
               .message-wrapper {
                 gap: 1rem;
 
+                &:hover {
+                  cursor: pointer;
+                }
+
                 .message-text {
                   color: $white;
                   // padding: 0.5rem 1rem;
+
                   padding: 0.35rem 1rem 0.5rem 1rem;
                   border-radius: 23px;
                   align-items: center;
@@ -114,7 +155,7 @@
                 .message-avatar {
                   align-self: end;
                   min-width: 2.5rem;
-                  height: 3rem;
+                  height: 2.5rem;
                   background-color: $white;
                   background-size: contain;
                   background-position: center;
@@ -144,6 +185,10 @@
               margin-left: auto;
               align-items: flex-end;
 
+              &.noava {
+                padding-right: 2.5rem;
+              }
+
               .reactions-con {
                 position: relative;
 
@@ -156,6 +201,10 @@
                     color: $olfred;
                     left: -0.7rem;
                     top: -0.4rem;
+
+                    &:hover {
+                      cursor: pointer;
+                    }
                   }
                 }
 
@@ -204,6 +253,10 @@
               margin-right: auto;
               align-items: flex-start;
 
+              &.noava {
+                padding-left: 2.5rem;
+              }
+
               .reactions-con {
                 position: relative;
 
@@ -216,6 +269,10 @@
                     color: $olfred;
                     top: -0.4rem;
                     right: -0.4rem;
+
+                    &:hover {
+                      cursor: pointer;
+                    }
                   }
                 }
 
@@ -412,6 +469,7 @@
           }
 
           .chat-con-bot {
+            padding-top: 1rem;
             .con-bot-con-message {
               width: 100%;
               padding-right: 1rem;

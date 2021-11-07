@@ -69,7 +69,6 @@ export const HomeCol3ChatSettings = ({
       members: newRoomMembers,
       theme: newRoomTheme,
     });
-    console.log(res);
     setChatroomUpdated(true);
     setChatState(true);
     setActiveChatroom(res.data);
@@ -234,7 +233,7 @@ const MemberChatroomSettings = ({
 
       <hr />
 
-      <div className="chat-settings-text">color:</div>
+      <div className="chat-settings-text">Color:</div>
       <div className="flex chat-settings-default-colors">
         <div
           className={`settings-con-green ${
@@ -263,7 +262,7 @@ const MemberChatroomSettings = ({
       </div>
 
       <div className="flex chat-settings-color-pick">
-        <div className="chat-settings-text">pick:</div>
+        <div className="chat-settings-text">Pick your own:</div>
         <input
           className="chat-settings-color-picker"
           type="color"
@@ -313,13 +312,15 @@ const AdminChatroomSettings = ({
     <>
       <p className="chat-settings-members">{room.members.length} members</p>
 
-      <label className="chat-settings-text">Change name:</label>
-      <input
-        className="chat-settings-input-text"
-        type="text"
-        placeholder={room.name}
-        onChange={(e) => setRoomName(e.target.value)}
-      />
+      <div className="flex">
+        <label className="chat-settings-text">Change name:</label>
+        <input
+          className="chat-settings-input-text"
+          type="text"
+          placeholder={room.name}
+          onChange={(e) => setRoomName(e.target.value)}
+        />
+      </div>
 
       <div className="chat-settings-text">Members:</div>
       <div className="flex chat-settings-members-container">

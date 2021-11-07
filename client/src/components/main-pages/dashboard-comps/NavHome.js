@@ -76,6 +76,7 @@ export const NavHome = ({
             break;
 
           case "message":
+            console.log(data);
             if (data.chatroom === activeChatroom._id) {
               if (data.detail === "userLeft" && user._id === data.sender._id) {
                 return;
@@ -162,8 +163,8 @@ export const NavHome = ({
   return (
     <>
       <Col
-        lg={{ span: 5, order: 2 }}
-        md={{ span: 5, order: 2 }}
+        lg={{ span: 4, order: 2 }}
+        md={{ span: 4, order: 2 }}
         xs={{ span: 12, order: 2 }}
         className="dashboard-con-col2"
       >
@@ -221,8 +222,8 @@ export const NavHome = ({
 
       <If condition={W > breakpoints.medium}>
         <Col
-          lg={{ span: 5, order: 3 }}
-          md={{ span: 5, order: 3 }}
+          lg={{ span: 6, order: 3 }}
+          md={{ span: 6, order: 3 }}
           xs={{ span: 12, order: 3 }}
           className="dashboard-con-col3"
         >

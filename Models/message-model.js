@@ -5,6 +5,9 @@ const { Schema, Types } = mongoose;
 const messageSchema = new Schema({
   // createdAt: { type: Date, default: new Date() },
   // updatedAt: { type: Date, default: null },
+  msgType: {
+    type: String,
+  },
   chatroom: {
     type: Types.ObjectId,
     required: true,
