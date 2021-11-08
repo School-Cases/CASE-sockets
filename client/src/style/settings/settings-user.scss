@@ -74,7 +74,7 @@
 
       .avatars-con {
         @include hidden-scroll;
-        max-height: 33vh;
+        max-height: 10rem;
         overflow: scroll;
         flex-wrap: wrap;
         gap: 0.5rem;

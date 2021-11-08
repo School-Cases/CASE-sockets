@@ -44,6 +44,10 @@ export const HomeCol3Chat = ({
 
   const [chatState, setChatState] = useState(true);
 
+  const [showGoBotArrow, setShowGoBotArrow] = useState(false);
+
+    const [chatScrollTop, setChatScrollTop] = useState(null);
+
   // fetches
   const fetchChatroomUsersAndMessages = async (signal) => {
     setLoading(true);
@@ -118,8 +122,31 @@ export const HomeCol3Chat = ({
     setMsgAva(arr);
   };
 
+  // const checkIfGoBotArrow = (el) => {
+  //   setChatScrollTop(el.scrollTop);
+  //   console.log(el.scrollTop);
+
+  // }
+   const handleScroll = (e) => {
+    const bottom = e.scrollHeight - e.scrollTop === e.clientHeight;
+    if (bottom) { 
+      setShowGoBotArrow(false);
+     } else {
+       setShowGoBotArrow(true);
+     }
+  }
+
   // useEffects
 
+  // useEffect(async () => {
+  //   if (chatScrollTop) {
+  //     console.log(chatScrollTop, document.querySelector(`.chat-con-mid`).scrollHeight);
+  //   if (chatScrollTop === document.querySelector(`.chat-con-mid`).scrollHeight) {
+  //     setShowGoBotArrow(false);
+  //   } else {
+  //     setShowGoBotArrow(true);
+  //   }}
+  // }, [chatScrollTop]);
 
   useEffect(async () => {
     filterMsgsAva(chatroomMessages);
@@ -217,7 +244,8 @@ export const HomeCol3Chat = ({
 
         <If condition={chatState}>
           
-          <section className={`chat-con-mid`}>
+          <section className={`chat-con-mid`} onScroll={(e) => handleScroll(e.target)}>
+          <If condition={showGoBotArrow}>
             <div
               onClick={() => {
                 document.querySelector(`.chat-con-mid`).scrollTop =
@@ -227,6 +255,7 @@ export const HomeCol3Chat = ({
             >
               <i class="fas fa-arrow-down"></i>
             </div>
+            </If>
             <If condition={chatroomMessages && chatroomMessages.length > 0}>
               {chatroomMessages.map((m, i) => {
                 return (

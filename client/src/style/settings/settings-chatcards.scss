@@ -64,6 +64,7 @@
       .chat-settings-members-container {
         gap: 0.5rem;
         padding-bottom: 0.5rem;
+        flex-wrap: wrap;
       }
 
       .chat-settings-current-members {
@@ -106,10 +107,15 @@
         @include grey-input-field;
       }
 
-      .chat-settings-add-member-user {
+      .chat-settings-addable-members {
+        flex-wrap: wrap;
+        gap: 0.3rem;
+
+        .chat-settings-add-member-user {
         color: $white;
         background-color: $olfred;
         padding: 0.2rem 0.5rem;
+        margin-top: 0.2rem;
         border-radius: 15px;
 
         &:hover {
@@ -117,6 +123,10 @@
           cursor: pointer;
         }
       }
+        
+      }
+
+      
 
       .chat-settings-default-colors {
         gap: 0.5rem;

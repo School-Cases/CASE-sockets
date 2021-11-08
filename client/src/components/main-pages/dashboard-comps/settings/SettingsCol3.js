@@ -9,10 +9,10 @@ const StyledDiv = styled("div")`
   background-image: url(../avatars/${(props) => props.img});
 `;
 
-export const SettingsCol3 = ({ user, setUserUpdated }) => {
+export const SettingsCol3 = ({ user, setUserUpdated, avatarSwitch, setAvatarSwitch }) => {
   // states
   const [avatar, setAvatar] = useState([user.avatar, 0]);
-  const [avatarSwitch, setAvatarSwitch] = useState(false);
+  // const [avatarSwitch, setAvatarSwitch] = useState(false);
   const [theme, setTheme] = useState(user.theme);
   const [name, setName] = useState(user.name);
   const [newPassword, setNewPassword] = useState("");
@@ -92,6 +92,7 @@ export const SettingsCol3 = ({ user, setUserUpdated }) => {
           ></div>
         </div>
       </div>
+      
 
       <div className="flex user-settings-input-con">
         <label className="user-settings-text" htmlFor="avatar">

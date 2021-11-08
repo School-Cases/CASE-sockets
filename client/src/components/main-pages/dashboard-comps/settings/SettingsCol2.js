@@ -18,6 +18,8 @@ export const SettingsCol2 = ({
   user,
   userChatrooms,
   setChatroomUpdated,
+  avatarSwitch,
+  setAvatarSwitch
 }) => {
   // states
   const [activeChatroom, setActiveChatroom] = useState(null);
@@ -29,6 +31,10 @@ export const SettingsCol2 = ({
   useEffect(() => {
     if (updateMessage) setTimeout(() => setUpdateMessage(null), 4000);
   }, [updateMessage]);
+
+  useEffect(() => {
+    if (activeChatroom) setAvatarSwitch(false);
+  }, [activeChatroom]);
 
   return (
     <section className="flex height100 dash-settings-chatrooms">
