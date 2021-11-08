@@ -75,6 +75,12 @@ export const HomeCol3Chat = ({
   };
 
   //   functions
+
+  const handleKeyPress = (e) => {
+  if (e.key === 'Enter' && inputMessage !== "") 
+    sendMessage();
+}
+
   const sendMessage = () => {
     if (ws && ws.readyState === 1)
       ws.send(
@@ -113,6 +119,8 @@ export const HomeCol3Chat = ({
   };
 
   // useEffects
+
+
   useEffect(async () => {
     filterMsgsAva(chatroomMessages);
   }, [chatroomMessages]);
@@ -158,6 +166,9 @@ export const HomeCol3Chat = ({
   return (
     <>
       <section
+      onKeyPress={(e) => { 
+        if (chatState) handleKeyPress(e)
+      }}
         className={`flex height100 col3-chat-con ${
           chatState ? "chatstate" : "settingsstate"
         }`}
@@ -205,14 +216,7 @@ export const HomeCol3Chat = ({
         </If>
 
         <If condition={chatState}>
-          {/* <div
-            onClick={() => {
-              document.querySelector(`.chat-con-mid`).scrollTop =
-                document.querySelector(`.chat-con-mid`).scrollHeight;
-            }}
-          >
-            <i class="fas fa-arrow-down"></i>
-          </div> */}
+          
           <section className={`chat-con-mid`}>
             <div
               onClick={() => {
@@ -274,12 +278,14 @@ export const HomeCol3Chat = ({
               />
             </div>
             <button
+             className="send-btn"
               type="button"
+              // onKeyPress={(e) => console.log(e)}
               onClick={() => {
                 if (inputMessage !== "") sendMessage();
               }}
             >
-              <i class="fas fa-paper-plane"></i>
+              <i className="fas fa-paper-plane"></i>
             </button>
           </section>
         </If>
@@ -368,7 +374,6 @@ const Message = ({
 
   return (
     <>
-      {console.log(m)}
       <If condition={m.msgType === "userUpdate"}>
         <div className="flex userupdate-msg">
           <StyledDiv

@@ -82,6 +82,7 @@
 
           .chat-con-mid {
             @include hidden-scroll;
+            height: 100%;
 
             display: flex;
             flex-direction: column;

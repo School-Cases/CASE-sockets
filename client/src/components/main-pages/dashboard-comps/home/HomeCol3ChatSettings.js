@@ -93,8 +93,10 @@ export const HomeCol3ChatSettings = ({
       `/protected/leave-chatroom/` + roomId + "/" + user._id,
       signal
     );
+    
     setChatroomUpdated(true);
     setHomeCol3State("createChatroom");
+    setActiveChatroom(null);
     ws.send(
       JSON.stringify({
         type: "chatroomUpdate",
