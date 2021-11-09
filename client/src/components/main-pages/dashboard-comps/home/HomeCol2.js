@@ -107,7 +107,7 @@ export const HomeCol2 = ({
 
       <section className="flex dash-home-chatrooms">
         {/* tillfälligt */}
-        <button
+        {/* <button
           onClick={() => {
             const abortController = new AbortController();
             fetchDeleteChatrooms(abortController.signal);
@@ -124,7 +124,7 @@ export const HomeCol2 = ({
           }}
         >
           delete msgs
-        </button>
+        </button> */}
         {/* --------- */}
 
         <div className="flex home-chatrooms-con">
