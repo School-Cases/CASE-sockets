@@ -1,9 +1,9 @@
-// export const api_address = "http://localhost:5002";
-// export const client_address = "http://localhost:3000";
-// export const ws_address = "ws://localhost:5002";
-export const ws_address = "wss://chatwskul.herokuapp.com";
-export const api_address = "https://chatwskul.herokuapp.com";
-export const client_address = "https://chatwskul.herokuapp.com";
+export const api_address = "http://localhost:5002";
+export const client_address = "http://localhost:3000";
+export const ws_address = "ws://localhost:5002";
+// export const ws_address = "wss://chatwskul.herokuapp.com";
+// export const api_address = "https://chatwskul.herokuapp.com";
+// export const client_address = "https://chatwskul.herokuapp.com";
 // export const api_address = "192.168.222.178:5002";
 // export const client_address = "192.168.222.178:3000";
 
