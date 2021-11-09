@@ -272,7 +272,26 @@ export const HomeCol3Chat = ({
                 );
               })}
             </If>
-            <If condition={membersTyping.length > 0}>
+            {/* <If condition={membersTyping.length > 0}>
+              {membersTyping.map((m, i) => {
+                return (
+                  <div className="flex istyping-con">
+                    <div className="flex">
+                      <StyledDiv
+                        img={m.userAva}
+                        className="istyping-avatar"
+                      ></StyledDiv>
+                      {m.userName}
+                    </div>{" "}
+                    <If condition={i === membersTyping.length - 1}>
+                      <span> is typing...</span>
+                    </If>
+                  </div>
+                );
+              })}
+            </If> */}
+          </section>
+          <If condition={membersTyping.length > 0}>
               {membersTyping.map((m, i) => {
                 return (
                   <div className="flex istyping-con">
@@ -290,7 +309,6 @@ export const HomeCol3Chat = ({
                 );
               })}
             </If>
-          </section>
           <section className="flex chat-con-bot">
             <div className="con-bot-con-message">
               <input

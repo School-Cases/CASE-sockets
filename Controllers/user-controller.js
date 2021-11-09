@@ -154,11 +154,14 @@ export const get_chatroom_unread = async (req, res) => {
 
 export const update_chatroom_unread = async (req, res) => {
   try {
+    console.log(req.body);
     let user = await userModel.findById(req.body.userId).exec();
-
+console.log(user);
     let lastunread;
     user.chatrooms.forEach(async (room, i) => {
+      console.log(room);
       if (room._id.toString() === req.body.chatroomId) {
+        console.log(room, 'heheh');
         lastunread = room.unread;
       }
     });
@@ -170,6 +173,8 @@ export const update_chatroom_unread = async (req, res) => {
         "chatrooms.$.unread": req.body.nollify ? 0 : lastunread + 1,
       },
     };
+
+    console.log(lastunread);
 
     await userModel.updateOne(query, updateDocument);
     return res.json({

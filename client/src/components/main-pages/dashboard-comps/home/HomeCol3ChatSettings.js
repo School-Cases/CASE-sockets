@@ -79,13 +79,12 @@ export const HomeCol3ChatSettings = ({
     let res = await get(`/protected/delete-chatroom/` + roomId, signal);
     setChatroomUpdated(true);
     setHomeCol3State("createChatroom");
-    setActiveChatroom(null);
+    setActiveChatroom(false);
     ws.send(
       JSON.stringify({
-        type: "chatroomUpdate",
-        detail: "userLeft",
+        type: "chatroomDelete",
+        detail: "chatroomDelete",
         chatroomId: roomId,
-        user: user,
       })
     );
   };
@@ -98,7 +97,7 @@ export const HomeCol3ChatSettings = ({
     
     setChatroomUpdated(true);
     setHomeCol3State("createChatroom");
-    setActiveChatroom(null);
+    setActiveChatroom(false);
     ws.send(
       JSON.stringify({
         type: "chatroomUpdate",

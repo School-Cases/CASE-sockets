@@ -90,6 +90,7 @@ export const NavHome = ({
                 .length > 0
             ) {
               if (data.chatroom !== activeChatroom._id) {
+                console.log('score');
                 setChatroomUnreadMsgs({ chatroom: data.chatroom });
               }
               setChatroomLastMessage({ chatroom: data.chatroom });
@@ -142,9 +143,9 @@ export const NavHome = ({
           case "chatroomDelete":
             setChatroomUpdated(true);
 
-            if (data.chatroomId === activeChatroom._id) {
+            if (activeChatroom && data.chatroomId === activeChatroom._id) {
               setHomeCol3State("createChatroom");
-              setActiveChatroom(null);
+              setActiveChatroom(false);
             }
             break;
         }

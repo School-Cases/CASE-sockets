@@ -24,6 +24,20 @@
             gap: 1rem;
           }
         }
+
+        .istyping-con {
+              gap: 5px;
+
+              .istyping-avatar {
+                width: 1rem;
+                height: 1.5rem;
+                margin-right: 4px;
+                background-color: $white;
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
+              }
+            }
       }
 
       .chat-con-bot,
@@ -90,6 +104,8 @@
             padding-right: 0.4rem;
             padding-top: 0.4rem;
             // position: relative;
+
+            
 
             .arr-con {
               position: relative;
@@ -350,18 +366,18 @@
               }
             }
 
-            .istyping-con {
-              gap: 5px;
+            // .istyping-con {
+            //   gap: 5px;
 
-              .istyping-avatar {
-                width: 1rem;
-                height: 1.5rem;
-                background-color: $white;
-                background-size: contain;
-                background-position: center;
-                background-repeat: no-repeat;
-              }
-            }
+            //   .istyping-avatar {
+            //     width: 1rem;
+            //     height: 1.5rem;
+            //     background-color: $white;
+            //     background-size: contain;
+            //     background-position: center;
+            //     background-repeat: no-repeat;
+            //   }
+            // }
 
             // TEMP SETTINGS
 
@@ -425,6 +441,19 @@
                 cursor: pointer;
               }
             }
+
+            // .istyping-con {
+            //   gap: 5px;
+
+            //   .istyping-avatar {
+            //     width: 1rem;
+            //     height: 1.5rem;
+            //     background-color: $white;
+            //     background-size: contain;
+            //     background-position: center;
+            //     background-repeat: no-repeat;
+            //   }
+            // }
 
             .chat-settings-default-colors {
               gap: 0.5rem;

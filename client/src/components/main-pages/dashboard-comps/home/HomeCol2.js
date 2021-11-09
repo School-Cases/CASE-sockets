@@ -38,12 +38,12 @@ export const HomeCol2 = ({
   const [showOnlineUsers, setShowOnlineUsers] = useState(false);
 
   // fetches
-  // const fetchDeleteChatrooms = async (signal) => {
-  //   await get(`/protected/delete-all-chatrooms`, signal);
-  // };
-  // const fetchDeleteMSGS = async (signal) => {
-  //   await get(`/protected/delete-all-messages`, signal);
-  // };
+  const fetchDeleteChatrooms = async (signal) => {
+    await get(`/protected/delete-all-chatrooms`, signal);
+  };
+  const fetchDeleteMSGS = async (signal) => {
+    await get(`/protected/delete-all-messages`, signal);
+  };
 
   useEffect(() => {
     document.querySelector(
@@ -107,7 +107,7 @@ export const HomeCol2 = ({
 
       <section className="flex dash-home-chatrooms">
         {/* tillfälligt */}
-        {/* <button
+        <button
           onClick={() => {
             const abortController = new AbortController();
             fetchDeleteChatrooms(abortController.signal);
@@ -124,7 +124,7 @@ export const HomeCol2 = ({
           }}
         >
           delete msgs
-        </button> */}
+        </button>
         {/* --------- */}
 
         <div className="flex home-chatrooms-con">
@@ -174,6 +174,7 @@ export const HomeCol2 = ({
           onClick={() => {
             setHomeCol3State("createChatroom");
             setMobileCol2Chatrooms(false);
+            setActiveChatroom(false);
           }}
         >
           create new chatroom
@@ -228,8 +229,9 @@ const Chatroom = ({
     let res = await post(`/protected/update-chatroom-unread`, {
       chatroomId: room._id,
       userId: user._id,
-      nollify: nollifyUnreadMsgs,
+      nollify: activeChatroom._id === room._id ? true : false,
     });
+    console.log(res);
     setRoomUnreadMsgs(res.data);
   };
 
@@ -262,6 +264,11 @@ const Chatroom = ({
   };
 
   // useEffects
+
+// useEffect(async () => {
+//     setNollifyUnreadMsgs(false);
+//   }, [activeChatroom]);
+
   useEffect(async () => {
     if (!joinable) {
       const abortController = new AbortController();
@@ -372,6 +379,7 @@ const Chatroom = ({
           ) : (
             <div className="con-mes-no-message">no messages</div>
           )}
+          {console.log(roomUnreadMsgs, "ahahhahah")}
           <If condition={roomUnreadMsgs > 0}>
             <div className="new-message-container">
               <div className="new-messages-icon">{roomUnreadMsgs}</div>
