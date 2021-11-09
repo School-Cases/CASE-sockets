@@ -76,8 +76,7 @@ export const NavHome = ({
             break;
 
           case "message":
-            console.log(data);
-            if (data.chatroom === activeChatroom._id) {
+            if (activeChatroom && data.chatroom === activeChatroom._id) {
               if (data.detail === "userLeft" && user._id === data.sender._id) {
                 return;
               } else {

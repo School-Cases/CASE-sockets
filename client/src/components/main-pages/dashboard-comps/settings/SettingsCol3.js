@@ -9,10 +9,10 @@ const StyledDiv = styled("div")`
   background-image: url(../avatars/${(props) => props.img});
 `;
 
-export const SettingsCol3 = ({ user, setUserUpdated }) => {
+export const SettingsCol3 = ({ user, setUserUpdated, avatarSwitch, setAvatarSwitch }) => {
   // states
   const [avatar, setAvatar] = useState([user.avatar, 0]);
-  const [avatarSwitch, setAvatarSwitch] = useState(false);
+  // const [avatarSwitch, setAvatarSwitch] = useState(false);
   const [theme, setTheme] = useState(user.theme);
   const [name, setName] = useState(user.name);
   const [newPassword, setNewPassword] = useState("");
@@ -92,6 +92,7 @@ export const SettingsCol3 = ({ user, setUserUpdated }) => {
           ></div>
         </div>
       </div>
+      
 
       <div className="flex user-settings-input-con">
         <label className="user-settings-text" htmlFor="avatar">
@@ -102,7 +103,13 @@ export const SettingsCol3 = ({ user, setUserUpdated }) => {
           className="change-avatar-button"
           onClick={() => setAvatarSwitch(!avatarSwitch)}
         >
-          Change
+          Change{" "}
+          <If condition={!avatarSwitch}>
+            <i class="fas fa-caret-down"></i>
+          </If>
+          <If condition={avatarSwitch}>
+            <i class="fas fa-caret-up"></i>
+          </If>
         </button>
       </div>
       <If condition={avatarSwitch}>
@@ -125,10 +132,11 @@ export const SettingsCol3 = ({ user, setUserUpdated }) => {
         >
           SAVE
         </button>
-        <If condition={updateMessage}>
-          <div>{updateMessage}</div>
-        </If>
+        
       </div>
+      <If condition={updateMessage}>
+          <div>{updateMessage} <i className="fas fa-check"></i></div>
+        </If>
     </div>
   );
 };

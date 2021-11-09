@@ -44,6 +44,9 @@ export const HomeCol3Chat = ({
 
   const [chatState, setChatState] = useState(true);
 
+  const [showGoBotArrow, setShowGoBotArrow] = useState(false);
+    const [chatScrollTop, setChatScrollTop] = useState(null);
+
   // fetches
   const fetchChatroomUsersAndMessages = async (signal) => {
     setLoading(true);
@@ -75,6 +78,12 @@ export const HomeCol3Chat = ({
   };
 
   //   functions
+
+  const handleKeyPress = (e) => {
+  if (e.key === 'Enter' && inputMessage !== "") 
+    sendMessage();
+}
+
   const sendMessage = () => {
     if (ws && ws.readyState === 1)
       ws.send(
@@ -112,7 +121,32 @@ export const HomeCol3Chat = ({
     setMsgAva(arr);
   };
 
+  // const checkIfGoBotArrow = (el) => {
+  //   setChatScrollTop(el.scrollTop);
+  //   console.log(el.scrollTop);
+
+  // }
+   const handleScroll = (e) => {
+    const bottom = e.scrollHeight - e.scrollTop === e.clientHeight;
+    if (bottom) { 
+      setShowGoBotArrow(false);
+     } else {
+       setShowGoBotArrow(true);
+     }
+  }
+
   // useEffects
+
+  // useEffect(async () => {
+  //   if (chatScrollTop) {
+  //     console.log(chatScrollTop, document.querySelector(`.chat-con-mid`).scrollHeight);
+  //   if (chatScrollTop === document.querySelector(`.chat-con-mid`).scrollHeight) {
+  //     setShowGoBotArrow(false);
+  //   } else {
+  //     setShowGoBotArrow(true);
+  //   }}
+  // }, [chatScrollTop]);
+
   useEffect(async () => {
     filterMsgsAva(chatroomMessages);
   }, [chatroomMessages]);
@@ -120,6 +154,7 @@ export const HomeCol3Chat = ({
   useEffect(async () => {
     const abortController = new AbortController();
     if (activeChatroom)
+      setChatState(true);
       await fetchChatroomUsersAndMessages(abortController.signal);
     return () => abortController.abort();
   }, [activeChatroom]);
@@ -158,6 +193,9 @@ export const HomeCol3Chat = ({
   return (
     <>
       <section
+      onKeyPress={(e) => { 
+        if (chatState) handleKeyPress(e)
+      }}
         className={`flex height100 col3-chat-con ${
           chatState ? "chatstate" : "settingsstate"
         }`}
@@ -205,15 +243,9 @@ export const HomeCol3Chat = ({
         </If>
 
         <If condition={chatState}>
-          {/* <div
-            onClick={() => {
-              document.querySelector(`.chat-con-mid`).scrollTop =
-                document.querySelector(`.chat-con-mid`).scrollHeight;
-            }}
-          >
-            <i class="fas fa-arrow-down"></i>
-          </div> */}
-          <section className={`chat-con-mid`}>
+          
+          <section className={`chat-con-mid`} onScroll={(e) => handleScroll(e.target)}>
+          <If condition={showGoBotArrow}>
             <div
               onClick={() => {
                 document.querySelector(`.chat-con-mid`).scrollTop =
@@ -223,6 +255,7 @@ export const HomeCol3Chat = ({
             >
               <i class="fas fa-arrow-down"></i>
             </div>
+            </If>
             <If condition={chatroomMessages && chatroomMessages.length > 0}>
               {chatroomMessages.map((m, i) => {
                 return (
@@ -274,12 +307,14 @@ export const HomeCol3Chat = ({
               />
             </div>
             <button
+             className="send-btn"
               type="button"
+              // onKeyPress={(e) => console.log(e)}
               onClick={() => {
                 if (inputMessage !== "") sendMessage();
               }}
             >
-              <i class="fas fa-paper-plane"></i>
+              <i className="fas fa-paper-plane"></i>
             </button>
           </section>
         </If>
@@ -368,7 +403,6 @@ const Message = ({
 
   return (
     <>
-      {console.log(m)}
       <If condition={m.msgType === "userUpdate"}>
         <div className="flex userupdate-msg">
           <StyledDiv
@@ -385,9 +419,9 @@ const Message = ({
             m.sender._id === user._id ? "message-right" : "message-left"
           } ${showReactions ? "active" : ""} ${
             !msgAva.includes(m) ? "noava" : ""
-          }`}
+          } ${mesReactions.length > 0 ? "reac" : ""}`}
         >
-          <section className="flex reactions-con">
+          <section className={`flex reactions-con`}>
             <If condition={m.sender._id === user._id}>
               <If
                 condition={
@@ -433,7 +467,7 @@ const Message = ({
               </div>
             </If>
             <div
-              className="flex message-wrapper"
+              className={`flex message-wrapper`}
               onClick={() =>
                 showMessageDetails
                   ? showMessageDetails === m

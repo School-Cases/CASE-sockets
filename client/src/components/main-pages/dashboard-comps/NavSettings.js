@@ -14,6 +14,7 @@ export const NavSettings = ({
 }) => {
   // states
   const [W, setW] = useState(window.innerWidth);
+  const [avatarSwitch, setAvatarSwitch] = useState(false);
 
   // useEffects
   useEffect(() => {
@@ -26,7 +27,7 @@ export const NavSettings = ({
   return (
     <>
       <Col
-        lg={{ span: 6, order: 2 }}
+        lg={{ span: avatarSwitch ? 4 : 6, order: 2 }}
         md={{ span: 6, order: 2 }}
         xs={{ span: 12, order: 2 }}
         className="dashboard-con-col2"
@@ -36,15 +37,17 @@ export const NavSettings = ({
           user={user}
           userChatrooms={userChatrooms}
           setChatroomUpdated={setChatroomUpdated}
+          avatarSwitch={avatarSwitch}
+          setAvatarSwitch={setAvatarSwitch}
         />
       </Col>
       <Col
-        lg={{ span: 4, order: 3 }}
+        lg={{ span: avatarSwitch ? 6 : 4, order: 3 }}
         md={{ span: 4, order: 3 }}
         xs={{ span: 12, order: 3 }}
         className="dashboard-con-col3"
       >
-        <SettingsCol3 user={user} setUserUpdated={setUserUpdated} />
+        <SettingsCol3 user={user} setUserUpdated={setUserUpdated} avatarSwitch={avatarSwitch} setAvatarSwitch={setAvatarSwitch} />
       </Col>
     </>
   );

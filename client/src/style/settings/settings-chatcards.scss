@@ -11,7 +11,7 @@
     // BOTH MOBILE AND DESKTOP
 
     .dash-settings-chatrooms {
-      @include hidden-scroll;
+      // @include hidden-scroll;
       flex-direction: column;
       // height: 35rem;
       gap: 1rem;
@@ -22,9 +22,18 @@
     }
 
     .dash-settings-chatrooms {
+      .settings-chatrooms-con {
+          @include hidden-scroll;
+          flex-direction: column;
+          gap: 1rem;
+        }
+        .settings-chatrooms-con::-webkit-scrollbar {
+      display: none;
+    }
       hr {
         color: $olfred;
         margin-bottom: 0.5rem;
+
       }
 
       .col2-chatroom-con {
@@ -64,6 +73,7 @@
       .chat-settings-members-container {
         gap: 0.5rem;
         padding-bottom: 0.5rem;
+        flex-wrap: wrap;
       }
 
       .chat-settings-current-members {
@@ -106,10 +116,15 @@
         @include grey-input-field;
       }
 
-      .chat-settings-add-member-user {
+      .chat-settings-addable-members {
+        flex-wrap: wrap;
+        gap: 0.3rem;
+
+        .chat-settings-add-member-user {
         color: $white;
         background-color: $olfred;
         padding: 0.2rem 0.5rem;
+        margin-top: 0.2rem;
         border-radius: 15px;
 
         &:hover {
@@ -117,6 +132,10 @@
           cursor: pointer;
         }
       }
+        
+      }
+
+      
 
       .chat-settings-default-colors {
         gap: 0.5rem;
@@ -189,7 +208,7 @@
       }
     }
 
-    s //   ONLY ON WIDTH > MEDIUM (DESKTOP)
+     //   ONLY ON WIDTH > MEDIUM (DESKTOP)
 
         &.page-dashboard-desktop {
     }
@@ -197,7 +216,7 @@
     //   ONLY ON WIDTH < MEDIUM (MOBILE)
 
     &.page-dashboard-mobile {
-      overflow: scroll;
+      // overflow: scroll;
     }
   }
 }

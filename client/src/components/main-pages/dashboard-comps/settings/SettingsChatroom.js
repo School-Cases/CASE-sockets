@@ -70,7 +70,7 @@ export const SettingsChatroom = ({
       theme: newRoomTheme,
     });
     setChatroomUpdated(true);
-    setUpdateMessage(res.message);
+    setUpdateMessage([roomId, res.message]);
   };
 
   const fetchDeleteChatroom = async (signal, roomId) => {
@@ -223,7 +223,7 @@ const MemberChatroomSettings = ({
           onChange={(e) => setSearchUsersInput(e.target.value)}
         />
       </div>
-      <div>
+      <div className="flex chat-settings-addable-members">
         <If condition={searchUsersInput !== ""}>
           {notRoomMembers.map((m) => {
             return (
@@ -396,7 +396,7 @@ const AdminChatroomSettings = ({
           onChange={(e) => setSearchUsersInput(e.target.value)}
         />
       </div>
-      <div>
+      <div className="flex chat-settings-addable-members">
         <If condition={searchUsersInput !== ""}>
           {notRoomMembers.map((m) => {
             return (
