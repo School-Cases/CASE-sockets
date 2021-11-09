@@ -45,7 +45,6 @@ export const HomeCol3Chat = ({
   const [chatState, setChatState] = useState(true);
 
   const [showGoBotArrow, setShowGoBotArrow] = useState(false);
-
     const [chatScrollTop, setChatScrollTop] = useState(null);
 
   // fetches
@@ -155,6 +154,7 @@ export const HomeCol3Chat = ({
   useEffect(async () => {
     const abortController = new AbortController();
     if (activeChatroom)
+      setChatState(true);
       await fetchChatroomUsersAndMessages(abortController.signal);
     return () => abortController.abort();
   }, [activeChatroom]);
@@ -419,9 +419,9 @@ const Message = ({
             m.sender._id === user._id ? "message-right" : "message-left"
           } ${showReactions ? "active" : ""} ${
             !msgAva.includes(m) ? "noava" : ""
-          }`}
+          } ${mesReactions.length > 0 ? "reac" : ""}`}
         >
-          <section className="flex reactions-con">
+          <section className={`flex reactions-con`}>
             <If condition={m.sender._id === user._id}>
               <If
                 condition={
@@ -467,7 +467,7 @@ const Message = ({
               </div>
             </If>
             <div
-              className="flex message-wrapper"
+              className={`flex message-wrapper`}
               onClick={() =>
                 showMessageDetails
                   ? showMessageDetails === m

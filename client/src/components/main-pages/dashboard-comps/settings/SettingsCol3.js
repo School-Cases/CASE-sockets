@@ -103,7 +103,13 @@ export const SettingsCol3 = ({ user, setUserUpdated, avatarSwitch, setAvatarSwit
           className="change-avatar-button"
           onClick={() => setAvatarSwitch(!avatarSwitch)}
         >
-          Change
+          Change{" "}
+          <If condition={!avatarSwitch}>
+            <i class="fas fa-caret-down"></i>
+          </If>
+          <If condition={avatarSwitch}>
+            <i class="fas fa-caret-up"></i>
+          </If>
         </button>
       </div>
       <If condition={avatarSwitch}>
@@ -126,10 +132,11 @@ export const SettingsCol3 = ({ user, setUserUpdated, avatarSwitch, setAvatarSwit
         >
           SAVE
         </button>
-        <If condition={updateMessage}>
-          <div>{updateMessage}</div>
-        </If>
+        
       </div>
+      <If condition={updateMessage}>
+          <div>{updateMessage} <i className="fas fa-check"></i></div>
+        </If>
     </div>
   );
 };

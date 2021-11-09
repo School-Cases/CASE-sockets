@@ -135,7 +135,7 @@ export const HomeCol3CreateChatroom = ({
               //     </If>
               //   </div>
               // </div>
-              <div>
+              <div className="amem-con">
                 <div className="flex chat-settings-current-members">
                   <div className="current-members">{m.name} </div>
                   <If condition={newRoomAdmins.includes(m._id)}>
@@ -223,7 +223,7 @@ export const HomeCol3CreateChatroom = ({
           CREATE
         </button>
         <If condition={createMessage}>
-          <div>{createMessage}</div>
+          <div>{createMessage} <i className="fas fa-check"></i></div>
         </If>
       </section>
     </section>

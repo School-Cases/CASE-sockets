@@ -131,13 +131,18 @@
         }
 
         .add-user-user-container {
-          width: 30%;
-          justify-content: space-between;
+              gap: 0.3rem;
+              flex-wrap: wrap;
+        }
+
+        .amem-con {
+          margin-bottom: 0.2rem;
         }
 
         .chat-settings-members-container {
           gap: 0.5rem;
           padding-bottom: 0.5rem;
+          flex-wrap: wrap;
         }
 
         .chat-settings-current-members {
@@ -185,6 +190,8 @@
           background-color: $olfred;
           padding: 0.2rem 0.5rem;
           border-radius: 15px;
+              margin-top: 0.2rem;
+
 
           &:hover {
             background-color: $blueC;

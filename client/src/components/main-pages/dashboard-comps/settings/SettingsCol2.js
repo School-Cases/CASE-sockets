@@ -25,11 +25,11 @@ export const SettingsCol2 = ({
   const [activeChatroom, setActiveChatroom] = useState(null);
   const [searchChatrooms, setSearchChatrooms] = useState("");
 
-  const [updateMessage, setUpdateMessage] = useState(null);
+  const [updateMessage, setUpdateMessage] = useState([null, null]);
 
   // useEffects
   useEffect(() => {
-    if (updateMessage) setTimeout(() => setUpdateMessage(null), 4000);
+    if (updateMessage[0]) setTimeout(() => setUpdateMessage([null, null]), 4000);
   }, [updateMessage]);
 
   useEffect(() => {
@@ -45,6 +45,7 @@ export const SettingsCol2 = ({
           onInput={(e) => setSearchChatrooms(e.target.value)}
         />
       </section>
+      <section className="flex height100 settings-chatrooms-con">
       {userChatrooms.map((room) => {
         return (
           <If condition={room.name.includes(searchChatrooms)}>
@@ -64,8 +65,10 @@ export const SettingsCol2 = ({
                 </If>
               </h5>
               <If condition={updateMessage}>
-                <div>{updateMessage}</div>
+              <If condition={updateMessage[0] === room._id}>
+                <div>{updateMessage[1]} <i className="fas fa-check"></i></div>
               </If>
+              </If> 
               <If condition={room === activeChatroom}>
                 <SettingsChatroom
                   ws={ws}
@@ -80,6 +83,7 @@ export const SettingsCol2 = ({
           </If>
         );
       })}
+      </section>
     </section>
   );
 };

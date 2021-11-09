@@ -88,6 +88,7 @@
             flex-direction: column;
             position: relative;
             padding-right: 0.4rem;
+            padding-top: 0.4rem;
             // position: relative;
 
             .arr-con {
@@ -127,6 +128,10 @@
               flex-direction: column;
               // margin-bottom: 1rem;
               max-width: 70%;
+
+              &.reac {
+                    padding-bottom: 0.5rem;
+              }
 
               .msg-details-name {
                 padding-top: 0.6rem;
@@ -225,14 +230,26 @@
                   // left: -7rem;
                   right: 0;
 
-                  i {
+                  div {
+
+                    &:hover {
+                      cursor: pointer;
+                      transform: scale(1.1)
+                    }
+                    i {
                     display: table;
                     height: min-content;
                     // background-color: white;
                     padding: 0.23rem;
                     border-radius: 111px;
                     color: $olfred;
+
+
                   }
+                    
+                  }
+
+                  
                 }
 
                 .reactions-added-con {
@@ -292,6 +309,13 @@
                   padding: 0.2rem;
                   left: 0;
 
+                  div {
+                    &:hover {
+                      cursor: pointer;
+                      transform: scale(1.1)
+                    }
+
+
                   i {
                     display: table;
                     height: min-content;
@@ -299,6 +323,9 @@
                     padding: 0.23rem;
                     border-radius: 111px;
                     color: $olfred;
+
+                  }
+
                   }
                 }
 

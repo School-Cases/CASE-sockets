@@ -70,7 +70,7 @@ export const SettingsChatroom = ({
       theme: newRoomTheme,
     });
     setChatroomUpdated(true);
-    setUpdateMessage(res.message);
+    setUpdateMessage([roomId, res.message]);
   };
 
   const fetchDeleteChatroom = async (signal, roomId) => {
