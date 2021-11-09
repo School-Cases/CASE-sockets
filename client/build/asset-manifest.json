@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.9aeac0d8.chunk.css",
+    "main.css": "/static/css/main.12952770.chunk.css",
     "main.js": "/static/js/main.94b4c390.chunk.js",
     "main.js.map": "/static/js/main.94b4c390.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.3b9bb285.js",
@@ -12,7 +12,7 @@
     "static/js/3.2b09c1fa.chunk.js.map": "/static/js/3.2b09c1fa.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.c1256375.chunk.css.map": "/static/css/2.c1256375.chunk.css.map",
-    "static/css/main.9aeac0d8.chunk.css.map": "/static/css/main.9aeac0d8.chunk.css.map",
+    "static/css/main.12952770.chunk.css.map": "/static/css/main.12952770.chunk.css.map",
     "static/js/2.aa26545b.chunk.js.LICENSE.txt": "/static/js/2.aa26545b.chunk.js.LICENSE.txt",
     "static/media/temp.scss": "/static/media/Olf-pattern.e6f1c7b4.png"
   },
@@ -20,7 +20,7 @@
     "static/js/runtime-main.3b9bb285.js",
     "static/css/2.c1256375.chunk.css",
     "static/js/2.aa26545b.chunk.js",
-    "static/css/main.9aeac0d8.chunk.css",
+    "static/css/main.12952770.chunk.css",
     "static/js/main.94b4c390.chunk.js"
   ]
 }
