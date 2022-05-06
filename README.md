@@ -1,4 +1,4 @@
-# case Chat
+# case Chat (WebSockets)
 (school case)
 
 ---
@@ -8,4 +8,4 @@ Krav:
 * Använd ws biblotektet
 * Applikationen ska vara hostad (via linode, heroku eller dylikt) *note: nertagen*
 ---
-Note: My first project using sockets
+Note: My first project using sockets.
