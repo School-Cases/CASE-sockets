@@ -29,9 +29,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 (async () => {
   try {
-    await mongoose.connect(
-      "mongodb+srv://Olof:desperados@cluster0.nmgfg.mongodb.net/caseChat?retryWrites=true&w=majority"
-    );
+    await mongoose.connect(process.env.DB_URI);
     console.log("MongoDB has connected");
   } catch (err) {
     console.log(err);
