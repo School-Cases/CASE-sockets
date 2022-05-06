@@ -1,7 +1,10 @@
-# case Chat (WebSockets)
+# case sockets
 (school case)
 
 ---
+Uppgift:
+* Create a chatapp that uses WebSockets.
+
 Krav:
 
 * Signifikant funktionalitet i applikationen ska vara baserad på websockets
